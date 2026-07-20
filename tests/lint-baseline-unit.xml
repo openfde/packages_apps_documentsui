@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.4.0-alpha08" type="baseline" client="" dependencies="true" name="" variant="all" version="8.4.0-alpha08">
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 37.1 (current min is 30): `android.provider.DocumentsContract#buildTrashDocumentsUri`"
+        errorLine1="        Uri uri = DocumentsContract.buildTrashDocumentsUri(mAuthority);"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/tests/common/com/android/documentsui/DocumentsProviderHelper.java"
+            line="454"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 31): `android.os.UserManager#isProfile`"
+        errorLine1="        when(mMockUserManager.isProfile()).thenReturn(false);"
+        errorLine2="                              ~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/tests/unit/com/android/documentsui/UserManagerStateTest.java"
+            line="920"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Class requires API level 33 (current min is 31): `android.app.admin.DevicePolicyResourcesManager`"
+        errorLine1="                DevicePolicyResourcesManager.class);"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/tests/unit/com/android/documentsui/UserManagerStateTest.java"
+            line="924"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 31): `android.app.admin.DevicePolicyManager#getResources`"
+        errorLine1="        when(mDevicePolicyManager.getResources()).thenReturn(devicePolicyResourcesManager);"
+        errorLine2="                                  ~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/tests/unit/com/android/documentsui/UserManagerStateTest.java"
+            line="925"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 31): `android.app.admin.DevicePolicyResourcesManager#getString`"
+        errorLine1="        when(devicePolicyResourcesManager.getString(eq(PERSONAL_TAB), any())).thenReturn("
+        errorLine2="                                          ~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/tests/unit/com/android/documentsui/UserManagerStateTest.java"
+            line="926"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 31): `android.os.UserManager#isProfile`"
+        errorLine1="        when(mMockUserManager.isProfile()).thenReturn(false);"
+        errorLine2="                              ~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/tests/unit/com/android/documentsui/UserManagerStateTest.java"
+            line="1005"
+            column="31"/>
+    </issue>
+
+</issues>

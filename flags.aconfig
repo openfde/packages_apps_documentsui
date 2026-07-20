@@ -1,0 +1,163 @@
+package: "com.android.documentsui.flags"
+container: "system"
+
+flag {
+    name: "use_material3"
+    namespace: "documentsui"
+    description: "Use Material 3 theme and styles."
+    bug: "401974530"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "desktop_ux_phase_2_ro"
+    namespace: "documentsui"
+    description: "Desktop UX bug fixes and improvements, phase 2"
+    bug: "432658978"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "use_search_v2_read_only"
+    namespace: "documentsui"
+    description: "Enables the next generation search functionality."
+    bug: "408892602"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "zip_ng_ro"
+    namespace: "documentsui"
+    description: "Enables the next generation ZIP functionality."
+    bug: "411269957"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "desktop_file_handling_ro"
+    namespace: "documentsui"
+    description: "Enables desktop file handling."
+    bug: "406599215"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "visual_signals_ro"
+    namespace: "documentsui"
+    description: "Enables in-app progress display of file operations"
+    bug: "401974530"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "use_peek_preview_ro"
+    namespace: "documentsui"
+    description: "Enables the Peek previewing capability as a substitute for the Inspector."
+    bug: "411269618"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "enable_trash_flow_ro"
+    namespace: "documentsui"
+    description: "Enables the documents trash flow"
+    bug: "409265240"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "support_visible_background_user"
+    namespace: "documentsui"
+    description: "Enables support for visible background users."
+    bug: "393987170"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "home_screen_files_ro"
+    namespace: "documentsui"
+    description: "Enables the home screen folder and its files."
+    bug: "438288106"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "single_click_to_select"
+    namespace: "documentsui"
+    description: "Enables single mouse-click to select files"
+    bug: "389814214"
+    is_fixed_read_only: true
+}
+
+flag {
+ name: "use_file_summary"
+ namespace: "documentsui"
+ description: "Enables displaying the file summary for local files in the directory list."
+ bug: "436732697"
+ is_fixed_read_only: true
+}
+
+flag {
+    name: "use_local_search_provider"
+    namespace: "documentsui"
+    description: "Enables local search provider feature"
+    bug: "436732697"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "use_allfiles_root_for_recents"
+    namespace: "documentsui"
+    description: "Enables use of MediaDocumentProvider files_root for the Recents view"
+    bug: "444316005"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "cloud_features"
+    namespace: "documentsui"
+    description: "Enables features for the cloud storage root"
+    bug: "451775371"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "drags_from_other_apps"
+    namespace: "documentsui"
+    description: "Enables handling of system-level drag events from other apps."
+    bug: "440196110"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "use_approved_document_handler"
+    namespace: "documentsui"
+    description: "Enables approved document handler on DocumentsUI."
+    bug: "440464827"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "use_new_open_with"
+    namespace: "documentsui"
+    description: "Enables the new open-with flow that relies on implicit routing to ResolverActivity."
+    bug: "459640815"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "get_info_dialog"
+    namespace: "documentsui"
+    description: "Replaces the Inspector activity with a Get Info dialog"
+    bug: "458494432"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "include_remote_roots_in_recents"
+    namespace: "documentsui"
+    description: "Enables remote Roots such as cloud storage providers to show files in Recents"
+    bug: "447970143"
+    is_fixed_read_only: true
+}
+

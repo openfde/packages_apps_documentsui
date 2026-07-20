@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2013 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="missing_rename_error" msgid="9098952207447981103">"អ្នកត្រូវប្ដូរឈ្មោះវា"</string>
+    <string name="hidden_file_rename_warning" msgid="5427365657393208836">"ឯកសារដែលមាន . នៅខាងដើមនៃឈ្មោះរបស់ឯកសារទាំងនេះត្រូវបានលាក់"</string>
+    <string name="rename_invalid_character" msgid="5795828095376129943">"តួអក្សរ​មិនត្រឹមត្រូវ៖ "</string>
+    <string name="add_folder_name_error" msgid="6014615052491406810">"អ្នកត្រូវបញ្ចូលឈ្មោះថត"</string>
+    <string name="files_label" msgid="771781190045103748">"ឯកសារ"</string>
+    <string name="downloads_label" msgid="5462789470049501103">"ដោនឡូត"</string>
+    <!-- no translation found for app_label (8089292432455111409) -->
+    <skip />
+    <string name="summary_consent_title" msgid="649526095415341516"></string>
+    <string name="summary_consent_message" msgid="5608129539202973666"></string>
+    <string name="summary_consent_ok_button" msgid="7813177426978382632">"បើក"</string>
+    <string name="summary_consent_cancel_button" msgid="2971058893677958570">"កុំ​សួរ​ខ្ញុំ​ម្ដងទៀត"</string>
+    <string name="summary_consent_remind_later_button" msgid="1499532238918418225">"កុំទាន់"</string>
+    <!-- no translation found for launcher_label (799410258349837668) -->
+    <skip />
+    <string name="title_open" msgid="3165686459158020921">"បើកពី"</string>
+    <string name="title_save" msgid="4384490653102710025">"រក្សាទុកទៅ"</string>
+    <string name="menu_create_dir" msgid="2413624798689091042">"ថត​ថ្មី"</string>
+    <string name="menu_grid" msgid="1453636521731880680">"ទិដ្ឋភាព​ក្រឡា​"</string>
+    <string name="menu_list" msgid="6714267452146410402">"ទិដ្ឋភាព​បញ្ជី"</string>
+    <string name="menu_search" msgid="1876699106790719849">"ស្វែងរក"</string>
+    <string name="menu_settings" msgid="6520844520117939047">"ការ​កំណត់​ឧបករណ៍​ផ្ទុក"</string>
+    <string name="manage_device" msgid="329180710072251010">"គ្រប់គ្រង​ឧបករណ៍"</string>
+    <string name="menu_open" msgid="9092138100049759315">"បើក"</string>
+    <string name="menu_open_with" msgid="5507647065467520229">"បើកដោយប្រើ"</string>
+    <string name="menu_open_in_new_window" msgid="6686563636123311276">"បើកក្នុងផ្ទាំងវិនដូថ្មី"</string>
+    <string name="menu_save" msgid="5195367497138965168">"រក្សាទុក"</string>
+    <string name="menu_share" msgid="4307140947108068356">"ចែករំលែក​"</string>
+    <string name="menu_delete" msgid="1022254131543256626">"លុប"</string>
+    <string name="menu_permanently_delete" msgid="7144967435018939304">"លុបចោលរហូត"</string>
+    <string name="menu_move_to_trash" msgid="1809017212900920775">"ផ្លាស់ទី​ទៅ​ធុងសំរាម"</string>
+    <string name="menu_restore_from_trash" msgid="6335501796145576127">"ស្ដារ"</string>
+    <string name="menu_select_all" msgid="7600576812185570403">"ជ្រើស​រើសទាំងអស់"</string>
+    <string name="menu_deselect_all" msgid="7729916068862742979">"ដក​ការជ្រើសរើស​ទាំងអស់"</string>
+    <string name="menu_select" msgid="1366061076507142387">"ជ្រើសរើស"</string>
+    <string name="menu_sort" msgid="3362419226163725275">"តម្រៀប​តាម..."</string>
+    <string name="menu_copy" msgid="7404820171352314754">"ចម្លងទៅ…"</string>
+    <string name="menu_move" msgid="2310760789561129882">"ផ្លាស់ទីទៅ…"</string>
+    <string name="menu_compress" msgid="37539111904724188">"បង្ហាប់"</string>
+    <string name="menu_zip" msgid="5734673122376258045">"Zip"</string>
+    <string name="menu_extract" msgid="8171946945982532262">"ស្រង់​ទៅ…"</string>
+    <string name="menu_extract_all" msgid="7335680068521252718">"ស្រង់ចេញទាំងអស់…"</string>
+    <string name="menu_extract_here" msgid="7120939831786325360">"ដកស្រង់"</string>
+    <string name="menu_browse" msgid="6007716414766674967">"រុករក"</string>
+    <string name="menu_rename" msgid="1883113442688817554">"ប្ដូរឈ្មោះ"</string>
+    <string name="menu_inspect" msgid="7279855349299446224">"ទទួល​ព័ត៌មាន"</string>
+    <string name="menu_show_hidden_files" msgid="5140676344684492769">"បង្ហាញឯកសារ​ដែលបានលាក់"</string>
+    <string name="menu_hide_hidden_files" msgid="5654495713350153702">"កុំបង្ហាញ​ឯកសារដែល​បានលាក់"</string>
+    <string name="menu_refresh" msgid="1724946627254685997">"ផ្ទុក​ឡើងវិញ"</string>
+    <string name="option_show_summary_column" msgid="1008012395393952119">"បង្ហាញជួរឈរការពណ៌នា"</string>
+    <string name="option_hide_summary_column" msgid="8091410079217079948">"កុំបង្ហាញជួរឈរការពណ៌នា"</string>
+    <string name="menu_view_in_owner" msgid="7228948660557554770">"មើល​នៅក្នុង <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
+    <string name="menu_new_window" msgid="2947837751796109126">"ផ្ទាំងវិនដូថ្មី"</string>
+    <string name="menu_cut_to_clipboard" msgid="2878752142015026229">"កាត់"</string>
+    <string name="menu_copy_to_clipboard" msgid="5064081159073330776">"ចម្លង"</string>
+    <string name="menu_paste_from_clipboard" msgid="360947260414135827">"ដាក់ចូល"</string>
+    <string name="menu_paste_into_folder" msgid="8000644546983240101">"បិទភ្ជាប់ទៅក្នុងថត"</string>
+    <string name="menu_advanced_show" msgid="7558626506462906726">"បង្ហាញទំហំផ្ទុកខាងក្នុង"</string>
+    <string name="menu_advanced_hide" msgid="6488381508009246334">"លាក់​ឧបករណ៍​​ផ្ទុក​ខាងក្នុង"</string>
+    <string name="button_select" msgid="240863497069321364">"ជ្រើស"</string>
+    <string name="button_copy" msgid="8219059853840996027">"ចម្លង"</string>
+    <string name="button_compress" msgid="8951561310857223966">"បង្ហាប់"</string>
+    <string name="button_extract" msgid="1038674453689912247">"ស្រង់"</string>
+    <string name="button_move" msgid="8596460499325291272">"ផ្លាស់ទី"</string>
+    <string name="button_dismiss" msgid="7235249361023803349">"ច្រានចោល"</string>
+    <string name="button_retry" msgid="4011461781916631389">"ព្យាយាម​ម្តង​ទៀត"</string>
+    <string name="button_clear" msgid="5412304437764369441">"សម្អាត"</string>
+    <string name="button_show_provider" msgid="6905880493806292753">"បង្ហាញ​នៅក្នុង​ក្រុមហ៊ុន​ផ្តល់សេវា"</string>
+    <string name="button_back" msgid="1888621708934742182">"ថយក្រោយ"</string>
+    <string name="button_show_in_folder" msgid="6674673478637689386">"បង្ហាញនៅក្នុងថត"</string>
+    <string name="button_open_trash" msgid="8152584341121216006">"បើក​ធុងសំរាម"</string>
+    <string name="not_sorted" msgid="7813496644889115530">"Not sorted"</string>
+    <string name="sort_dimension_name" msgid="6325591541414177579">"ឈ្មោះ"</string>
+    <string name="sort_dimension_summary" msgid="8050531309626240067">"ការពណ៌នា"</string>
+    <string name="sort_dimension_file_type" msgid="5779709622922085381">"ប្រភេទ"</string>
+    <string name="sort_dimension_size" msgid="2190547351159472884">"ទំហំ"</string>
+    <string name="sort_dimension_date" msgid="4231005651895254033">"បានកែសម្រួល"</string>
+    <string name="sort_dimension_name_ascending" msgid="3715725253270614742">"ឈ្មោះឯកសារ (A ដល់ Z)"</string>
+    <string name="sort_dimension_file_type_ascending" msgid="3466973933402894292">"ប្រភេទ (A ដល់ Z)"</string>
+    <string name="sort_dimension_size_ascending" msgid="2617359017800057762">"ទំហំ (តូចបំផុតមុនគេ)"</string>
+    <string name="sort_dimension_date_ascending" msgid="7920068979386920559">"បានកែប្រែ (ចាស់បំផុតមុនគេ)"</string>
+    <string name="sort_dimension_name_descending" msgid="1514525521100423342">"ឈ្មោះឯកសារ (Z ដល់ A)"</string>
+    <string name="sort_dimension_file_type_descending" msgid="3344796059784511100">"ប្រភេទ (Z ដល់ A)"</string>
+    <string name="sort_dimension_size_descending" msgid="2367030017597348938">"ទំហំ (ធំបំផុតមុនគេ)"</string>
+    <string name="sort_dimension_date_descending" msgid="5466839955763127113">"បានកែប្រែ (ថ្មីបំផុតមុនគេ)"</string>
+    <string name="sort_dimension_dialog_title" msgid="3048641573962982157">"តម្រៀបតាម"</string>
+    <string name="sort_dimension_button_title" msgid="1898606989130896126">"តម្រៀបតាម <xliff:g id="LABEL">%s</xliff:g>"</string>
+    <string name="directory_items" msgid="6645621978998614003">"ចំនួន​ធាតុ"</string>
+    <string name="sort_direction_ascending" msgid="5882787683763248102">"ឡើង"</string>
+    <string name="sort_direction_descending" msgid="1729187589765894076">"ចុះ"</string>
+    <string name="open_external_app" msgid="7107920381038980086">"បើក <xliff:g id="APPNAME">%1$s</xliff:g>"</string>
+    <string name="drawer_open" msgid="8071673398187261741">"បង្ហាញ roots"</string>
+    <string name="drawer_close" msgid="4263880768630848848">"លាក់ roots"</string>
+    <string name="save_error" msgid="8631128801982095782">"បានបរាជ័យក្នុងការរក្សាទុកឯកសារ"</string>
+    <string name="create_error" msgid="3092144450044861994">"បាន​បរាជ័យ​ក្នុង​ការ​បង្កើត​ថត"</string>
+    <string name="query_error" msgid="6625421453613879336">"មិនអាចដំណើរការមាតិកាបានទេនៅពេលនេះ"</string>
+    <string name="quiet_mode_error_title" msgid="554319751414657910">"កម្មវិធី​ការងារ​ត្រូវបានផ្អាក"</string>
+    <string name="quiet_mode_button" msgid="8051436551926677305">"បើក​កម្មវិធី​ការងារ"</string>
+    <string name="profile_quiet_mode_error_title" msgid="7126962749634841843">"កម្មវិធី<xliff:g id="PROFILE">%1$s</xliff:g>ត្រូវបានផ្អាក"</string>
+    <string name="profile_quiet_mode_button" msgid="6791235010992920102">"បើកកម្មវិធី<xliff:g id="PROFILE">%1$s</xliff:g>"</string>
+    <string name="cant_select_work_files_error_title" msgid="6688716319549644354">"មិនអាច​ជ្រើសរើស​ឯកសារ​ការងារ​បានទេ"</string>
+    <string name="cant_select_work_files_error_message" msgid="683480676150690641">"អ្នកគ្រប់គ្រង​ផ្នែក​ព័ត៌មានវិទ្យា​របស់អ្នក​មិនអនុញ្ញាត​ឱ្យអ្នក​ចូលប្រើ​ឯកសារ​ការងារ​ពីកម្មវិធី​ផ្ទាល់ខ្លួនទេ"</string>
+    <string name="cant_select_personal_files_error_title" msgid="3200697170148617742">"មិនអាច​ជ្រើសរើស​ឯកសារ​ផ្ទាល់ខ្លួន​បានទេ"</string>
+    <string name="cant_select_personal_files_error_message" msgid="4105905035459118209">"អ្នកគ្រប់គ្រង​ផ្នែក​ព័ត៌មានវិទ្យា​របស់អ្នក​មិនអនុញ្ញាត​ឱ្យអ្នក​ចូលប្រើ​ឯកសារ​ផ្ទាល់ខ្លួនពី​កម្មវិធី​ការងារទេ"</string>
+    <string name="cant_select_cross_profile_files_error_title" msgid="17010948874969413">"មិនអាចជ្រើសរើសឯកសារ<xliff:g id="PROFILE">%1$s</xliff:g>បានទេ"</string>
+    <string name="cant_select_cross_profile_files_error_message" msgid="3815829574883844944">"អ្នកគ្រប់គ្រង​ផ្នែកព័ត៌មានវិទ្យារបស់អ្នកមិនអនុញ្ញាតឱ្យអ្នកចូលប្រើឯកសារ<xliff:g id="PROFILE_0">%1$s</xliff:g>ពីកម្មវិធី<xliff:g id="PROFILE_1">%2$s</xliff:g>ទេ"</string>
+    <string name="cant_save_to_work_error_title" msgid="1351323070040641358">"មិនអាច​រក្សាទុក​ទៅកម្រង​ព័ត៌មាន​ការងារ​បានទេ"</string>
+    <string name="cant_save_to_work_error_message" msgid="4975583233814059890">"អ្នកគ្រប់គ្រង​ផ្នែកព័ត៌មាន​វិទ្យារបស់អ្នក​មិនអនុញ្ញាតឱ្យអ្នក​រក្សាទុក​ឯកសារ​ផ្ទាល់ខ្លួន​ទៅកម្រង​ព័ត៌មាន​ការងារ​របស់អ្នកទេ"</string>
+    <string name="cant_save_to_personal_error_title" msgid="858327493694069780">"មិនអាច​រក្សាទុក​កម្រងព័ត៌មាន​ផ្ទាល់ខ្លួន​បានទេ"</string>
+    <string name="cant_save_to_personal_error_message" msgid="6991758723736381751">"អ្នកគ្រប់គ្រង​ផ្នែក​ព័ត៌មានវិទ្យា​របស់អ្នក​មិនអនុញ្ញាតឱ្យអ្នក​រក្សាទុក​ឯកសារ​ការងារ​ទៅកម្រង​ព័ត៌មាន​ផ្ទាល់ខ្លួន​របស់អ្នកទេ"</string>
+    <string name="cant_save_to_cross_profile_error_title" msgid="5158984057654779022">"មិនអាចរក្សាទុកទៅកម្រងព័ត៌មាន<xliff:g id="PROFILE">%1$s</xliff:g>ទេ"</string>
+    <string name="cant_save_to_cross_profile_error_message" msgid="5845240315510422749">"អ្នកគ្រប់គ្រង​ផ្នែកព័ត៌មានវិទ្យារបស់អ្នកមិនអនុញ្ញាតឱ្យអ្នករក្សាទុកឯកសារ<xliff:g id="PROFILE_0">%1$s</xliff:g>ទៅកម្រងព័ត៌មាន<xliff:g id="PROFILE_1">%2$s</xliff:g>របស់អ្នកទេ"</string>
+    <string name="cross_profile_action_not_allowed_title" msgid="6611281348716476478">"សកម្មភាពនេះ​មិនត្រូវបាន​អនុញ្ញាតទេ"</string>
+    <string name="cross_profile_action_not_allowed_message" msgid="7331275433061690947">"ដើម្បី​ស្វែងយល់​បន្ថែម សូម​ទាក់ទង​អ្នកគ្រប់គ្រងផ្នែក​ព័ត៌មានវិទ្យា​របស់អ្នក"</string>
+    <string name="root_recent" msgid="1080156975424341623">"ថ្មីៗ"</string>
+    <string name="root_trash" msgid="1869929519939073178">"ធុង​សំរាម"</string>
+    <string name="root_available_bytes" msgid="8269870862691408864">"ទំនេរ <xliff:g id="SIZE">%1$s</xliff:g>"</string>
+    <string name="root_type_service" msgid="6521366147466512289">"សេវាកម្មឧបករណ៍ផ្ទុក"</string>
+    <string name="root_type_shortcut" msgid="6059343175525442279">"ផ្លូវកាត់"</string>
+    <string name="root_type_device" msgid="1713604128005476585">"ឧបករណ៍"</string>
+    <string name="root_type_apps" msgid="8646073235029886342">"កម្ម​វិធី​​ច្រើន​ទៀត"</string>
+    <string name="empty" msgid="5300254272613103004">"គ្មានធាតុ​"</string>
+    <string name="no_results" msgid="2371026325236359209">"គ្មានលទ្ធផលត្រូវគ្នាក្នុង %1$s ទេ"</string>
+    <string name="toast_no_application" msgid="7555319548595113121">"មិនអាចបើកឯកសារបានទេ"</string>
+    <string name="toast_view_in_archives_unsupported" msgid="1923221390170964845">"មិនអាចបើក​ឯកសារ​នៅក្នុងបណ្ណសារបានទេ"</string>
+    <string name="toast_failed_delete" msgid="3453846588205817591">"មិនអាចលុបឯកសារមួយចំនួន"</string>
+    <string name="toast_share_over_limit" msgid="5805442886537093015">"មិនអាច​ចែករំលែក​ឯកសារ​ច្រើន​ជាង <xliff:g id="COUNT">%1$d</xliff:g> បាន​ទេ"</string>
+    <string name="toast_action_not_allowed" msgid="1329382474450572415">"សកម្មភាពមិនត្រូវបានអនុញ្ញាត"</string>
+    <string name="toast_op_not_allowed_for_shortcuts" msgid="8644996352874874167">"មិនអនុញ្ញាតឱ្យធ្វើសកម្មភាពនេះទេ"</string>
+    <string name="no_application_dialog_title" msgid="693344961697142788">"រកមិនឃើញកម្មវិធីទេ"</string>
+    <string name="no_application_dialog_message" msgid="5444094365658346573">"មិនមានការដំឡើងកម្មវិធី​ដែលអាចប្រើបានទេ។ សាកល្បងដំឡើងកម្មវិធីពី Play Store។"</string>
+    <string name="no_application_dialog_button" msgid="5317480122655874659">"ស្វែងរក​នៅលើ Play Store"</string>
+    <string name="share_via" msgid="8725082736005677161">"ចែករំលែក​តាម"</string>
+    <string name="copy_notification_title" msgid="52256435625098456">"កំពុងចម្លងឯកសារ"</string>
+    <string name="compress_notification_title" msgid="6830195148113751021">"កំពុង​បង្ហាប់​ឯកសារ"</string>
+    <string name="zip_notification_title" msgid="2858653527172763548">"កំពុងបង្ហាប់ឯកសារ"</string>
+    <string name="extract_notification_title" msgid="5067393961754430469">"កំពុង​ស្រង់​ឯកសារ"</string>
+    <string name="move_notification_title" msgid="3173424987049347605">"កំពុងផ្លាស់ទីឯកសារ"</string>
+    <string name="delete_notification_title" msgid="2512757431856830792">"កំពុងលុបឯកសារ"</string>
+    <string name="move_to_trash_notification_title" msgid="6134372996525273852">"កំពុងដាក់ឯកសារទៅក្នុងធុងសំរាម"</string>
+    <string name="restore_from_trash_notification_title" msgid="6818405564188548805">"ការស្ដារឯកសារ"</string>
+    <string name="copy_remaining" msgid="5390517377265177727">"នៅសល់ <xliff:g id="DURATION">%s</xliff:g>"</string>
+    <plurals name="copy_begin" formatted="false" msgid="151184708996738192">
+      <item quantity="other">កំពុង​ចម្លងធាតុ <xliff:g id="COUNT_1">%1$d</xliff:g> ។</item>
+      <item quantity="one">កំពុង​ចម្លងធាតុ <xliff:g id="COUNT_0">%1$d</xliff:g> ។</item>
+    </plurals>
+    <plurals name="compress_begin" formatted="false" msgid="3534158317098678895">
+      <item quantity="other">កំពុង​បង្ហាប់​ឯកសារ <xliff:g id="COUNT_1">%1$d</xliff:g> ។</item>
+      <item quantity="one">កំពុង​បង្ហាប់​ឯកសារ <xliff:g id="COUNT_0">%1$d</xliff:g> ។</item>
+    </plurals>
+    <plurals name="extract_begin" formatted="false" msgid="1006380679562903749">
+      <item quantity="other">កំពុង​ស្រង់​ឯកសារ​ <xliff:g id="COUNT_1">%1$d</xliff:g>។</item>
+      <item quantity="one">កំពុង​ស្រង់​ឯកសារ <xliff:g id="COUNT_0">%1$d</xliff:g>។</item>
+    </plurals>
+    <plurals name="move_begin" formatted="false" msgid="1464229874265756956">
+      <item quantity="other">កំពុង​ផ្លាស់ទី​ធាតុ <xliff:g id="COUNT_1">%1$d</xliff:g> ។</item>
+      <item quantity="one">កំពុង​ផ្លាស់ទី​ធាតុ <xliff:g id="COUNT_0">%1$d</xliff:g> ។</item>
+    </plurals>
+    <plurals name="deleting" formatted="false" msgid="1729138001178158901">
+      <item quantity="other">កំពុង​លុបធាតុ <xliff:g id="COUNT_1">%1$d</xliff:g> ។</item>
+      <item quantity="one">កំពុង​លុបធាតុ <xliff:g id="COUNT_0">%1$d</xliff:g> ។</item>
+    </plurals>
+    <string name="trashing" msgid="1363875848930103999">"{count,plural, =1{កំពុងដាក់ឯកសារ # ទៅក្នុងធុង​សំរាម}other{កំពុងដាក់ឯកសារ # ទៅក្នុងធុងសំរាម}}"</string>
+    <string name="restoring_from_trash" msgid="5480701724791535806">"{count,plural, =1{កំពុង​ស្ដារ​ឯកសារ #}other{កំពុងស្ដារឯកសារ #}}"</string>
+    <string name="undo" msgid="2902438994196400565">"មិនធ្វើវិញ"</string>
+    <string name="copy_preparing" msgid="4759516490222449324">"កំពុងរៀបចំ..."</string>
+    <string name="compress_preparing" msgid="7401605598969019696">"កំពុងរៀបចំ..."</string>
+    <string name="extract_preparing" msgid="4796626960061745796">"កំពុងរៀបចំ..."</string>
+    <string name="move_preparing" msgid="6504239656430530761">"កំពុងរៀបចំ..."</string>
+    <string name="delete_preparing" msgid="7339349837842802508">"កំពុងរៀបចំ..."</string>
+    <string name="move_to_trash_preparing" msgid="6180195603212537441">"កំពុងរៀបចំ..."</string>
+    <string name="restore_from_trash_preparing" msgid="2829747628222239861">"កំពុងរៀបចំ..."</string>
+    <string name="delete_progress" msgid="2627631054702306423">"<xliff:g id="COUNT_0">%1$d</xliff:g> / <xliff:g id="TOTALCOUNT">%2$d</xliff:g>"</string>
+    <string name="move_to_trash_progress" msgid="7117416860391196406">"<xliff:g id="COUNT_0">%1$d</xliff:g> / <xliff:g id="TOTALCOUNT">%2$d</xliff:g>"</string>
+    <string name="restore_from_trash_progress" msgid="6003816126633922428">"<xliff:g id="COUNT_0">%1$d</xliff:g> / <xliff:g id="TOTALCOUNT">%2$d</xliff:g>"</string>
+    <string name="copy_error_notification_title" msgid="5426120176307563562">"{count,plural, =1{មិនអាចចម្លងធាតុ <xliff:g id="COUNT_0">{count}</xliff:g> បានទេ}other{មិនអាចចម្លងធាតុ <xliff:g id="COUNT_1">{count}</xliff:g> បានទេ}}"</string>
+    <string name="copy_error_2" msgid="2553643062672015237">"{count,plural, =1{មិនអាចចម្លងឯកសារ # បានទេ}other{មិនអាចចម្លងឯកសារ # បានទេ}}"</string>
+    <string name="compress_error_notification_title" msgid="7238511273511460182">"{count,plural, =1{មិនអាចបង្ហាប់ធាតុ <xliff:g id="COUNT_0">{count}</xliff:g> បានទេ}other{មិនអាចបង្ហាប់ធាតុ <xliff:g id="COUNT_1">{count}</xliff:g> បានទេ}}"</string>
+    <string name="compress_error_2" msgid="7035005747251809554">"{count,plural, =1{មិន​អាច​បង្ហាប់ឯកសារ # ​បាន​ទេ}other{មិន​អាច​បង្ហាប់ឯកសារ # ​បាន​ទេ}}"</string>
+    <string name="extract_error_2" msgid="6428683221773394140">"{count,plural, =1{មិនអាចដកស្រង់ឯកសារ # បានទេ}other{មិនអាចដកស្រង់ឯកសារ # បានទេ}}"</string>
+    <string name="move_error_notification_title" msgid="7094494564254143696">"{count,plural, =1{មិនអាចផ្លាស់ទីធាតុ <xliff:g id="COUNT_0">{count}</xliff:g> បានទេ}other{មិនអាចផ្លាស់ទីធាតុ <xliff:g id="COUNT_1">{count}</xliff:g> បានទេ}}"</string>
+    <string name="move_error_2" msgid="8089293906168239907">"{count,plural, =1{មិនអាចផ្លាស់ទីឯកសារ # បានទេ}other{មិនអាចផ្លាស់ទីឯកសារ # បានទេ}}"</string>
+    <string name="delete_error_notification_title" msgid="6510460288416352803">"{count,plural, =1{មិនអាចលុបធាតុ <xliff:g id="COUNT_0">{count}</xliff:g> បានទេ}other{មិនអាចលុបធាតុ <xliff:g id="COUNT_1">{count}</xliff:g> បានទេ}}"</string>
+    <string name="delete_error_2" msgid="5368270399330057918">"{count,plural, =1{មិនអាចលុបឯកសារ # បានទេ}other{មិនអាចលុបឯកសារ # បានទេ}}"</string>
+    <string name="trash_error_2" msgid="5039906473394301366">"{count,plural, =1{មិនអាចដាក់ឯកសារ # ទៅក្នុងធុង​សំរាមបានទេ}other{មិនអាចដាក់ឯកសារ # ទៅក្នុងធុង​សំរាមបានទេ}}"</string>
+    <string name="restore_error_2" msgid="3095191316757396713">"{count,plural, =1{មិនអាចស្ដារឯកសារ # បានទេ}other{មិនអាចស្ដារឯកសារ # បានទេ}}"</string>
+    <string name="notification_touch_for_details" msgid="2385563502445129570">"ប៉ះដើម្បីមើលព័ត៌មានលម្អិត"</string>
+    <string name="close" msgid="905969391788869975">"បិទ​"</string>
+    <plurals name="copy_failure_alert_content" formatted="false" msgid="5570549471912990536">
+      <item quantity="other">ឯកសារ​ទាំងនេះ​មិនត្រូវ​បាន​ចម្លង​ទេ៖ <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">ឯកសារ​នេះ​មិនត្រូវ​បាន​ចម្លង​ទេ៖ <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="copy_failure_alert_title" msgid="7723812563283375273">"{count,plural, =1{ឯកសារនេះមិនត្រូវបានចម្លងទេ៖}other{ឯកសារទាំងនេះមិនត្រូវបានចម្លងទេ៖}}"</string>
+    <plurals name="compress_failure_alert_content" formatted="false" msgid="5760632881868842400">
+      <item quantity="other">ឯកសារ​ទាំងនេះ​មិន​ត្រូវ​បាន​បង្ហាប់ទេ៖ <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">ឯកសារ​នេះ​មិន​ត្រូវ​បាន​បង្ហាប់ទេ៖ <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="compress_failure_alert_title" msgid="4443538179586440935">"{count,plural, =1{ឯកសារនេះមិនត្រូវបានបង្ហាប់ទេ៖}other{ឯកសារទាំងនេះមិនត្រូវបានបង្ហាប់ទេ៖}}"</string>
+    <plurals name="extract_failure_alert_content" formatted="false" msgid="7572748127571720803">
+      <item quantity="other">ឯកសារ​ទាំងនេះ​មិន​ត្រូវ​បាន​ស្រង់​ទេ៖ <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">ឯកសារ​នេះ​មិន​ត្រូវ​បាន​ស្រង់​ទេ៖ <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="extract_failure_alert_title" msgid="1720241850610374">"{count,plural, =1{ឯកសារនេះមិនត្រូវបានដកស្រង់ទេ៖}other{ឯកសារទាំងនេះមិនត្រូវបានដកស្រង់ទេ៖}}"</string>
+    <plurals name="move_failure_alert_content" formatted="false" msgid="2747390342670799196">
+      <item quantity="other">ឯកសារ​ទាំងនេះ​មិន​ត្រូវ​បាន​ផ្លាស់ទី​ទេ៖ <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">ឯកសារ​នេះ​មិន​ត្រូវ​បាន​ផ្លាស់ទី​ទេ៖ <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="move_failure_alert_title" msgid="4574011719660769064">"{count,plural, =1{ឯកសារនេះមិនត្រូវបានផ្លាស់ទីទេ៖}other{ឯកសារទាំងនេះមិនត្រូវបានផ្លាស់ទីទេ៖}}"</string>
+    <plurals name="delete_failure_alert_content" formatted="false" msgid="6122372614839711711">
+      <item quantity="other">ឯកសារ​ទាំងនេះ​មិន​ត្រូវ​បាន​លុប​ទេ៖ <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">ឯកសារ​នេះ​មិន​ត្រូវ​បាន​លុប​ទេ៖ <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="delete_failure_alert_title" msgid="1416471664552009873">"{count,plural, =1{ឯកសារ​នេះ​មិន​ត្រូវ​បាន​លុប​ទេ៖}other{ឯកសារ​ទាំងនេះ​មិន​ត្រូវ​បាន​លុប​ទេ៖}}"</string>
+    <string name="trash_failure_alert_title" msgid="5133847817235721185">"{count,plural, =1{ឯកសារនេះមិនត្រូវបានដាក់ក្នុងធុងសំរាមទេ៖}other{ឯកសារទាំងនេះមិនត្រូវបានដាក់ក្នុងធុងសំរាមទេ៖}}"</string>
+    <string name="restore_from_trash_failure_alert_title" msgid="8539033885115121134">"{count,plural, =1{ឯកសារនេះមិនត្រូវបានស្ដារទេ៖}other{ឯកសារទាំងនេះមិនត្រូវបានស្ដារទេ៖}}"</string>
+    <plurals name="copy_converted_warning_content" formatted="false" msgid="7433742181712126588">
+      <item quantity="other">ឯកសារ​ទាំងនេះ​មិនត្រូវ​បាន​បម្លែង​ទៅ​ទម្រង់​ផ្សេង​ទេ៖ <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">ឯកសារ​នេះ​មិនត្រូវ​បាន​បម្លែង​ទៅ​ទម្រង់​ផ្សេង​ទេ៖ <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="copy_converted_warning_title" msgid="312091919227984842">"{count,plural, =1{ឯកសារ​នេះ​ត្រូវ​បាន​បំប្លែង​ទៅជា​ទម្រង់​ផ្សេងទៀត៖}other{ឯកសារ​ទាំងនេះ​ត្រូវ​បាន​បំប្លែង​ទៅជា​ទម្រង់​ផ្សេងទៀត៖}}"</string>
+    <string name="clipboard_files_added" msgid="168194813269188197">"{count,plural, =1{បានបញ្ចូលធាតុ # ទៅឃ្លីបបត}other{បានបញ្ចូលធាតុ # ទៅឃ្លីបបត}}"</string>
+    <string name="read_only_label" msgid="894442752344379606">"បាន​តែ​អាន"</string>
+    <string name="read_only_explanation" msgid="213951358525192590">"អ្នកអាចមើលឯកសារទាំងនេះបាន ប៉ុន្តែសកម្មភាពមួយចំនួនមិនអាចប្រើបានទេ"</string>
+    <string name="cannot_extract_in_read_only_folder" msgid="8234900543730064252">"បណ្ណសារនេះស្ថិតនៅក្នុងទីតាំងដែលបានតែអានប៉ុណ្ណោះ និងមិនអាចដកស្រង់នៅទីនេះបានទេ។"</string>
+    <string name="file_operation_rejected" msgid="4301554203329008794">"មិនស្គាល់ប្រតិបត្តិការឯកសារនេះទេ។"</string>
+    <string name="file_operation_error" msgid="2234357335716533795">"មិនអាចធ្វើប្រតិបត្តិការឯកសារនេះបានទេ។"</string>
+    <string name="rename_error" msgid="6700093173508118635">"បានបរាជ័យក្នុងការប្តូរឈ្មោះឯកសារ"</string>
+    <string name="menu_eject_root" msgid="9215040039374893613">"ដកចេញ"</string>
+    <string name="notification_copy_files_converted_title" msgid="6916768494891833365">"ឯកសារមួយចំនួនត្រូវបានបម្លែង"</string>
+    <string name="copy_specific_file_in_progress" msgid="2492589332201937030">"កំពុងចម្លង “<xliff:g id="FILENAME">{filename}</xliff:g>” ទៅ “<xliff:g id="DIRECTORY">{directory}</xliff:g>”"</string>
+    <string name="copy_in_progress" msgid="6872096819249174615">"{count,plural, =1{កំពុងចម្លងឯកសារ # ទៅ “<xliff:g id="DIRECTORY_0">{directory}</xliff:g>”}other{កំពុងចម្លងឯកសារ # ទៅ “<xliff:g id="DIRECTORY_1">{directory}</xliff:g>”}}"</string>
+    <string name="extract_specific_file_in_progress" msgid="1162381859640495308">"កំពុងដកស្រង់ “<xliff:g id="FILENAME">{filename}</xliff:g>” ទៅ “<xliff:g id="DIRECTORY">{directory}</xliff:g>”"</string>
+    <string name="extract_in_progress" msgid="4629395179865084830">"{count,plural, =1{កំពុងដកស្រង់ឯកសារ # ទៅ “<xliff:g id="DIRECTORY_0">{directory}</xliff:g>”}other{កំពុងដកស្រង់ឯកសារ # ទៅ “<xliff:g id="DIRECTORY_1">{directory}</xliff:g>”}}"</string>
+    <string name="move_specific_file_in_progress" msgid="6369336484584073740">"កំពុងផ្លាស់ទី “<xliff:g id="FILENAME">{filename}</xliff:g>” ទៅ “<xliff:g id="DIRECTORY">{directory}</xliff:g>”"</string>
+    <string name="move_in_progress" msgid="326356777470353315">"{count,plural, =1{កំពុងផ្លាស់ទីឯកសារ # ទៅ “<xliff:g id="DIRECTORY_0">{directory}</xliff:g>”}other{កំពុងផ្លាស់ទីឯកសារ # ទៅ “<xliff:g id="DIRECTORY_1">{directory}</xliff:g>”}}"</string>
+    <string name="delete_specific_file_in_progress" msgid="7262273537447952230">"កំពុងលុប “<xliff:g id="FILENAME">{filename}</xliff:g>”"</string>
+    <string name="delete_in_progress" msgid="7743890721129810508">"{count,plural, =1{កំពុងលុបឯកសារ #}other{កំពុងលុបឯកសារ #}}"</string>
+    <string name="trash_specific_file_in_progress" msgid="8266568481798889707">"កំពុងដាក់ “<xliff:g id="FILENAME">{filename}</xliff:g>” ទៅក្នុងធុង​សំរាម"</string>
+    <string name="trash_in_progress" msgid="2509104069807418022">"{count,plural, =1{កំពុងដាក់ឯកសារ # ទៅក្នុងធុង​សំរាម}other{កំពុងដាក់ឯកសារ # ទៅក្នុងធុងសំរាម}}"</string>
+    <string name="restore_specific_file_in_progress" msgid="6034897285865039861">"កំពុងស្ដារ “<xliff:g id="FILENAME">{filename}</xliff:g>”"</string>
+    <string name="restore_in_progress" msgid="9063203913920540783">"{count,plural, =1{កំពុង​ស្ដារ​ឯកសារ #}other{កំពុងស្ដារឯកសារ #}}"</string>
+    <string name="compress_specific_file_in_progress" msgid="7855233703746784378">"កំពុងបង្ហាប់ “<xliff:g id="FILENAME">{filename}</xliff:g>”"</string>
+    <string name="compress_in_progress" msgid="5311444499230611877">"{count,plural, =1{កំពុងបង្ហាប់ឯកសារ #}other{កំពុងបង្ហាប់ឯកសារ #}}"</string>
+    <string name="job_progress_icon_label" msgid="1387365706178067075">"បង្ហាញដំណើរការឯកសារ"</string>
+    <string name="job_progress_panel_title" msgid="1640388840961608168">"ដំណើរវិវឌ្ឍន៍នៃឯកសារ"</string>
+    <string name="job_progress_panel_dismiss_all" msgid="5858398094668912463">"ច្រានចោលទាំងអស់"</string>
+    <string name="job_progress_item_completed" msgid="3933347715328014840">"បានបញ្ចប់"</string>
+    <string name="job_progress_item_canceled" msgid="8915289522101993231">"បាន​បោះបង់"</string>
+    <string name="job_progress_item_see_details" msgid="2069387639574541325">"មើលព័ត៌មានលម្អិត"</string>
+    <string name="job_progress_item_byte_progress" msgid="5457665342067136443">"<xliff:g id="CURRENTBYTES">%1$s</xliff:g> នៃ <xliff:g id="TOTALBYTES">%2$s</xliff:g>"</string>
+    <string name="copy_completed" msgid="3749037014674785400">"បានចម្លង"</string>
+    <string name="move_completed" msgid="3981250605092729273">"បានផ្លាស់ទី"</string>
+    <string name="delete_completed" msgid="4149401155614626199">"បាន​លុប"</string>
+    <string name="compress_completed" msgid="6522047921428919799">"បានបង្ហាប់"</string>
+    <string name="extract_completed" msgid="8824595789915249972">"បានដកស្រង់"</string>
+    <string name="trash_completed" msgid="5527806383436622529">"ក្នុងធុងសំរាម"</string>
+    <string name="restore_completed" msgid="4705296829051759784">"បានស្ដារ"</string>
+    <string name="copy_failed" msgid="3700193913993844675">"មិនអាច​ចម្លងបានទេ"</string>
+    <string name="move_failed" msgid="7692364307225994220">"មិនអាចផ្លាស់ទីបានទេ"</string>
+    <string name="delete_failed" msgid="2642684566325252513">"មិនអាច​លុប​បានទេ"</string>
+    <string name="compress_failed" msgid="7397502181042157261">"មិនអាចបង្ហាប់បានទេ"</string>
+    <string name="extract_failed" msgid="8372397499452831323">"មិនអាចដកស្រង់ចេញបានទេ"</string>
+    <string name="trash_failed" msgid="4655759218201171408">"មិនអាចដាក់ក្នុងធុងសំរាម"</string>
+    <string name="restore_failed" msgid="1967876571708544126">"មិនអាចស្ដារបានទេ"</string>
+    <string name="expand_label" msgid="5683357671239615207">"ពង្រីក"</string>
+    <string name="collapse_label" msgid="4530974883269531062">"បង្រួម"</string>
+    <string name="open_external_dialog_request" msgid="8173558471322861268">"ផ្តល់សិទ្ធិឲ្យ <xliff:g id="APPNAME"><b>^1</b></xliff:g> ដើម្បីចូលដំណើរការថត <xliff:g id="DIRECTORY"><i>^2</i></xliff:g> នៅលើ <xliff:g id="STORAGE"><i>^3</i></xliff:g> ឬ?"</string>
+    <string name="open_external_dialog_request_primary_volume" msgid="2240992164087948176">"ផ្តល់សិទ្ធិឲ្យ <xliff:g id="APPNAME"><b>^1</b></xliff:g> ដើម្បីចូលដំណើរការថត <xliff:g id="DIRECTORY"><i>^2</i></xliff:g> ឬ?"</string>
+    <string name="open_external_dialog_root_request" msgid="6776729293982633">"ផ្តល់សិទ្ធិឲ្យ <xliff:g id="APPNAME"><b>^1</b></xliff:g> ដើម្បីចូលដំណើរការទិន្នន័យរបស់អ្នក រាប់បញ្ចូលទាំងរូបថត និងវីដេអូ នៅលើ <xliff:g id="STORAGE"><i>^2</i></xliff:g> ឬ?"</string>
+    <string name="allow" msgid="1275746941353040309">"អនុញ្ញាត"</string>
+    <string name="deny" msgid="5127201668078153379">"បដិសេធ"</string>
+    <plurals name="elements_selected" formatted="false" msgid="4448165978637163692">
+      <item quantity="other">បានជ្រើស <xliff:g id="COUNT_1">%1$d</xliff:g></item>
+      <item quantity="one">បានជ្រើស <xliff:g id="COUNT_0">%1$d</xliff:g></item>
+    </plurals>
+    <string name="clear_selection" msgid="5965968983023105329">"សម្អាត​ការ​ជ្រើសរើស"</string>
+    <string name="document_click_action" msgid="8073338575301415356">"បើក"</string>
+    <string name="selected_document_click_action" msgid="792826130200234885">"ដក​ការ​ជ្រើសរើស"</string>
+    <string name="document_long_click_action" msgid="3789836661597702666">"ជ្រើសរើស"</string>
+    <string name="selected_document_long_click_action" msgid="666372407184527109">"អូស"</string>
+    <string name="document_long_click_action_picker" msgid="943888101827856784">"ជ្រើសរើសច្រើន"</string>
+    <plurals name="elements_dragged" formatted="false" msgid="5932571296037626279">
+      <item quantity="other">ធាតុ <xliff:g id="COUNT_1">%1$d</xliff:g></item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> ធាតុ</item>
+    </plurals>
+    <string name="delete_forever_dialog_title" msgid="799779565921010957">"លុបចោល​រហូត​ឬ?"</string>
+    <string name="delete_forever_confirmation_message" msgid="514849549688443881">"{count,plural, =1{“<xliff:g id="NAME">{name}</xliff:g>” នឹងត្រូវបានលុបចោលរហូត។ មិន​អាច​ត្រឡប់​សកម្មភាពនេះ​វិញ​បាន​ទេ។}other{ធាតុ # នឹងត្រូវបាន​លុបចោលរហូត។ មិន​អាច​ត្រឡប់​សកម្មភាពនេះ​វិញ​បាន​ទេ។}}"</string>
+    <string name="delete_forever_from_trash_confirmation_message" msgid="2152471525710826703">"{count,plural, =1{“<xliff:g id="NAME">{name}</xliff:g>” នឹងត្រូវបានលុបចោលរហូត។ មិន​អាច​ត្រឡប់​សកម្មភាពនេះ​វិញ​បាន​ទេ។}other{ធាតុ # នៅក្នុង​ធុងសំរាម​នឹងត្រូវបាន​លុបចោល​រហូត។ មិន​អាច​ត្រឡប់​សកម្មភាពនេះ​វិញ​បាន​ទេ។}}"</string>
+    <string name="images_shortcut_label" msgid="2545168016070493574">"រូបភាព"</string>
+    <string name="archive_loading_failed" msgid="7243436722828766996">"មិន​អាច​បើក​ប័ណ្ណសារ​សម្រាប់​ការ​រុករក​បានទេ​ ដោយសារ​ឯកសារ​ខូច​ ឬ​មិន​ស្គាល់​ទម្រង់​ឯកសារ​។"</string>
+    <string name="name_conflict" msgid="28407269328862986">"ឯកសារ​ដែល​មាន​ឈ្មោះ​នេះ​មានរួចហើយ។"</string>
+    <string name="authentication_required" msgid="8030880723643436099">"ដើម្បី​មើល​បញ្ជីនេះ សូម​ចូលទៅ <xliff:g id="NAME">%1$s</xliff:g>"</string>
+    <string name="cant_display_content" msgid="8633226333229417237">"មិនអាច​បង្ហាញ​មាតិកា​បានទេ"</string>
+    <string name="sign_in" msgid="6253762676723505592">"ចូល"</string>
+    <string name="new_archive_file_name" msgid="1604650338077249838">"បណ្ណសារ<xliff:g id="EXTENSION">%s</xliff:g>"</string>
+    <string name="new_archive_file_name_2" msgid="6787685985722032255">"ទុក​ក្នុង​បណ្ណសារ"</string>
+    <string name="overwrite_file_confirmation_title" msgid="4314969202559855159">"ជំនួសឯកសារឬ?"</string>
+    <string name="overwrite_file_confirmation_message" msgid="7780746502731666434">"ឯកសារដែលបានដាក់​ឈ្មោះថា \"<xliff:g id="NAME">%1$s</xliff:g>\" មានរួចហើយ។"</string>
+    <string name="overwrite_file_confirmation_positive_button" msgid="5343276672335028419">"ជំនួស"</string>
+    <string name="continue_in_background" msgid="1974214559047793331">"បន្ត​នៅផ្ទៃ​ខាងក្រោយ"</string>
+    <plurals name="selected_count" formatted="false" msgid="7555250236512981129">
+      <item quantity="other">បាន​ជ្រើសរើស <xliff:g id="COUNT_1">%1$d</xliff:g></item>
+      <item quantity="one">បាន​ជ្រើសរើស <xliff:g id="COUNT_0">%1$d</xliff:g></item>
+    </plurals>
+    <string name="root_info_header_recent" msgid="5654901877295332262">"ឯកសារ​ថ្មីៗ"</string>
+    <string name="root_info_header_global_search" msgid="4904078222280496152">"ឯកសារ"</string>
+    <string name="root_info_header_downloads" msgid="8848161246921154115">"ឯកសារនៅក្នុងថតទាញយក"</string>
+    <string name="root_info_header_storage" msgid="2989014130584927442">"ឯកសារ​នៅលើ <xliff:g id="DEVICE">%1$s</xliff:g>"</string>
+    <string name="root_info_header_folder" msgid="5851172222368049864">"ឯកសារនៅក្នុង <xliff:g id="FOLDER">%1$s</xliff:g>"</string>
+    <string name="root_info_header_app" msgid="2125422047558420885">"ឯកសារ​ពី <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="root_info_header_app_with_summary" msgid="3223302581236069702">"ឯកសារ​ពី <xliff:g id="LABEL">%1$s</xliff:g> / <xliff:g id="SUMMARY">%2$s</xliff:g>"</string>
+    <string name="root_info_header_image_recent" msgid="7494373563753926014">"រូបភាព​ថ្មីៗ"</string>
+    <string name="root_info_header_image_global_search" msgid="7307009823489854697">"រូបភាព"</string>
+    <string name="root_info_header_image_downloads" msgid="7072252612657612307">"រូបភាពនៅក្នុងថតទាញយក"</string>
+    <string name="root_info_header_image_storage" msgid="5086740886360075930">"រូបភាព​នៅលើ <xliff:g id="DEVICE">%1$s</xliff:g>"</string>
+    <string name="root_info_header_image_folder" msgid="5980430877636279667">"រូបភាពនៅក្នុង <xliff:g id="FOLDER">%1$s</xliff:g>"</string>
+    <string name="root_info_header_image_app" msgid="4858114210851525359">"រូបភាព​ពី <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="root_info_header_image_app_with_summary" msgid="6404842960923224778">"រូបភាព​ពី <xliff:g id="LABEL">%1$s</xliff:g> / <xliff:g id="SUMMARY">%2$s</xliff:g>"</string>
+    <string name="chip_title_images" msgid="7838299046109841015">"រូបភាព"</string>
+    <string name="chip_title_audio" msgid="1032801828748235436">"សំឡេង"</string>
+    <string name="chip_title_videos" msgid="7011260091979776447">"វីដេអូ"</string>
+    <string name="chip_title_documents" msgid="7432457563000753983">"ឯកសារ"</string>
+    <string name="chip_title_large_files" msgid="7740269190493883980">"ឯកសារទំហំធំ"</string>
+    <string name="chip_title_from_this_week" msgid="4961536405220379672">"សប្ដាហ៍​នេះ"</string>
+    <string name="input_hint_new_folder" msgid="5579927005544975259">"ឈ្មោះ"</string>
+    <string name="input_hint_rename" msgid="4501630494874065128">"ឈ្មោះ"</string>
+    <string name="preview_file" msgid="4056622696305432343">"មើលឯកសារ <xliff:g id="FILENAME">%1$s</xliff:g> សាកល្បង"</string>
+    <string name="preview_work_file" msgid="4495643735563487273">"មើល​ឯកសារ​ការងារ <xliff:g id="FILENAME">%1$s</xliff:g> សាកល្បង"</string>
+    <string name="preview_cross_profile_file" msgid="7457849216193029610">"មើលឯកសារ<xliff:g id="PROFILE">%1$s</xliff:g> <xliff:g id="FILENAME">%2$s</xliff:g> សាកល្បង"</string>
+    <string name="apps_row_title" msgid="3340490016663092925">"រុករក​ឯកសារ​នៅក្នុង​កម្មវិធី​ផ្សេងទៀត"</string>
+    <string name="anonymous_application" msgid="7633027057951625862">"អនាមិក"</string>
+    <string name="open_tree_button" msgid="6402871398424497776">"ប្រើថតនេះ"</string>
+    <string name="open_tree_dialog_title" msgid="4851450731067189325">"អនុញ្ញាតឱ្យ <xliff:g id="APPNAME">%1$s</xliff:g> ចូលប្រើថតឬ?"</string>
+    <string name="open_tree_dialog_message" msgid="962249605918827059">"អនុញ្ញាតឱ្យចូលប្រើសម្រាប់ \"<xliff:g id="DIRECTORY">%1$s</xliff:g>\"។"</string>
+    <string name="directory_blocked_header_title" msgid="1164584889578740066">"មិនអាចប្រើ​ថតនេះ​បានទេ"</string>
+    <string name="directory_blocked_header_subtitle" msgid="2829150911849033408">"ដើម្បី​ការពារ​ឯកជនភាព​របស់អ្នក សូម​ជ្រើសរើស​ថតផ្សេងទៀត"</string>
+    <string name="create_new_folder_button" msgid="8859613309559794890">"បង្កើត​ថត​ថ្មី"</string>
+    <string name="search_bar_hint" msgid="146031513183888721">"ស្វែងរកឧបករណ៍នេះ"</string>
+    <string name="search_bar_generic_hint" msgid="8923500515355253888">"ស្វែងរក"</string>
+    <string name="search_results" msgid="7662182646512984171">"លទ្ធផលស្វែងរក"</string>
+    <string name="search_bar_clear" msgid="2072000748823434188">"សម្អាតអក្សរ"</string>
+    <string name="search_location_root_folder" msgid="4280523560213522303">"ថតដើម"</string>
+    <string name="search_location_everywhere" msgid="747799487494833887">"គ្រប់ទីកន្លែង"</string>
+    <string name="search_last_modified_any_time" msgid="6027501367865939696">"ពេលណាក៏បាន"</string>
+    <string name="search_last_modified_1_day" msgid="7775353928859139915">"ថ្ងៃនេះ"</string>
+    <string name="search_last_modified_2_days" msgid="7885735119033678756">"ម្សិលមិញ"</string>
+    <string name="search_last_modified_7_days" msgid="7634290601544418836">"សប្ដាហ៍មុន"</string>
+    <string name="search_last_modified_30_days" msgid="4936787546211708940">"ខែមុន"</string>
+    <string name="search_last_modified_365_days" msgid="7147134152974373466">"ឆ្នាំមុន"</string>
+    <string name="search_file_type_all" msgid="6613664493134355781">"ប្រភេទទាំងអស់"</string>
+    <string name="delete_search_history" msgid="2202015025607694515">"លុប​ប្រវត្តិស្វែងរក <xliff:g id="TEXT">%1$s</xliff:g>"</string>
+    <string name="personal_tab" msgid="3878576287868528503">"ផ្ទាល់ខ្លួន"</string>
+    <string name="work_tab" msgid="7265359366883747413">"ការងារ"</string>
+    <string name="a11y_work" msgid="7504431382825242153">"ការងារ"</string>
+    <string name="drag_from_another_app" msgid="8310249276199969905">"អ្នកមិនអាច​ផ្លាស់ទី​ឯកសារ​ពីកម្មវិធី​ផ្សេងទៀត​បានទេ។"</string>
+    <string name="grid_mode_showing" msgid="2803166871485028508">"បង្ហាញក្នុងមុខងារ​ក្រឡា។"</string>
+    <string name="list_mode_showing" msgid="1225413902295895166">"បង្ហាញក្នុង​មុខងារបញ្ជី។"</string>
+    <string name="bullet" msgid="5606740650312122766">"•"</string>
+    <string name="file_name_hint" msgid="7843637320487415838">"ឈ្មោះឯកសារ"</string>
+    <string name="peek_no_preview" msgid="8717084152736749464">"មិន​អាច​មើល​សាកល្បង​បាន​ទេ"</string>
+    <string name="peek_metadata_header_title" msgid="6196387248590120756">"ព័ត៌មាន​លម្អិត"</string>
+    <string name="peek_metadata_general_info_title" msgid="5805064715498467299">"ព័ត៌មាន​ទូទៅ"</string>
+    <string name="peek_metadata_size" msgid="2377426288276139988">"ទំហំ"</string>
+    <string name="peek_metadata_type" msgid="1386923517471758392">"វាយបញ្ចូល"</string>
+    <string name="peek_metadata_date_modified" msgid="5403086549396155362">"កាលបរិច្ឆេទ​ដែលបាន​កែប្រែ"</string>
+    <string name="get_info_positive_button" msgid="667388202590744953">"យល់ព្រម"</string>
+    <string name="get_info_unknown_file_type" msgid="7976646447316381912">"មិនស្គាល់"</string>
+    <string name="a11y_peek_navigation_icon" msgid="6692873662104342476">"លាក់ការមើលឯកសារសាកល្បង"</string>
+    <string name="a11y_peek_image_preview" msgid="3917148390186060263">"ការមើលរូបភាព <xliff:g id="FILENAME">%s</xliff:g> សាកល្បង"</string>
+    <string name="a11y_peek_hide_info_button" msgid="918293386310947930">"លាក់ផ្ទាំងព័ត៌មាន"</string>
+    <string name="a11y_peek_show_info_button" msgid="9028075652389911413">"បង្ហាញផ្ទាំងព័ត៌មាន"</string>
+    <string name="trash_page_empty_title" msgid="7738038596025884023">"ធុង​សំរាម​គឺ​ទទេ"</string>
+    <string name="empty_trash_banner_message" msgid="2993707579621525486">"ធាតុនៅក្នុង​ធុងសំរាម​លើសពី 30 ថ្ងៃ​នឹង​ត្រូវបាន​លុបចេញ​ដោយស្វ័យប្រវត្តិ"</string>
+    <string name="empty_trash_banner_button" msgid="1519946484798771236">"សម្អាត​ធុង​សំរាម"</string>
+    <string name="empty_trash_dialog_title" msgid="4514618908297336521">"សម្អាត​ធុង​សំរាម​ឬ?"</string>
+    <string name="empty_trash_dialog_message" msgid="520865296928962854">"ធាតុ​ទាំងអស់​នៅក្នុង​ធុងសំរាម​នឹងត្រូវបាន​លុបចោល​រហូត។ មិនអាចត្រឡប់សកម្មភាពនេះវិញ​បានទេ។"</string>
+    <string name="empty_trash_dialog_action_button" msgid="4265315882979882955">"លុបចោលរហូត"</string>
+    <string name="file_open_in_trash_dialog_title" msgid="2243034805337666376">"{count,plural, =1{ធាតុស្ថិតនៅក្នុងធុង​សំរាម}other{ធាតុស្ថិតនៅក្នុងធុង​សំរាម}}"</string>
+    <string name="file_open_in_trash_dialog_message" msgid="907046525752260366">"{count,plural, =1{ដើម្បីចូលប្រើធាតុនេះ សូមស្ដារវា ឬអូសវាចេញពីធុងសំរាម}other{ដើម្បីចូលប្រើធាតុទាំងនេះ សូមស្ដារធាតុទាំងនេះ ឬអូសធាតុទាំងនេះចេញពីធុងសំរាម}}"</string>
+    <string name="file_open_in_trash_dialog_restore_action_button" msgid="3361861500466913305">"ស្ដារ"</string>
+    <string name="you_are_offline_banner_message" msgid="4188603129472293852">"បច្ចុប្បន្ននេះ អ្នកគ្មាន​អ៊ីនធឺណិត​ទេ។ មិនអាចប្រើឯកសារ និងមុខងារមួយចំនួនបានទេ។ ភ្ជាប់ទៅអ៊ីនធឺណិត ដើម្បីទទួលបានសិទ្ធិចូលប្រើពេញលេញ។"</string>
+</resources>

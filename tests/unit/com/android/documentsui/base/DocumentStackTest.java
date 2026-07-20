@@ -1,0 +1,284 @@
+/*
+ * Copyright (C) 2016 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.documentsui.base;
+
+import static com.android.documentsui.flags.Flags.FLAG_HOME_SCREEN_FILES_RO;
+import static com.android.documentsui.flags.Flags.FLAG_USE_MATERIAL3;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
+
+import static org.junit.Assert.assertNotEquals;
+
+import android.net.Uri;
+import android.platform.test.annotations.EnableFlags;
+import android.provider.DocumentsContract;
+
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
+
+import com.android.documentsui.testing.Parcelables;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Objects;
+
+@RunWith(AndroidJUnit4.class)
+@SmallTest
+public class DocumentStackTest {
+    private static final RootInfo ROOT_1;
+    private static final RootInfo ROOT_2;
+
+    private static final DocumentInfo DIR_1;
+    private static final DocumentInfo DIR_2;
+
+    private DocumentStack mStack;
+
+    static {
+        ROOT_1 = new RootInfo();
+        ROOT_1.rootId = "home";
+        ROOT_2 = new RootInfo();
+        ROOT_2.rootId = "downloads";
+
+        DIR_1 = createDir("first");
+        DIR_2 = createDir("second");
+    }
+
+    private static DocumentInfo createDir(String docId) {
+        DocumentInfo info = new DocumentInfo();
+        info.authority = "authority";
+        info.documentId = docId;
+        info.displayName = docId;
+        info.mimeType = DocumentsContract.Document.MIME_TYPE_DIR;
+        info.deriveFields();
+        return info;
+    }
+
+    @Before
+    public void setUp() {
+        mStack = new DocumentStack();
+    }
+
+    @Test
+    public void testInitialStateEmpty() {
+        assertFalse(mStack.hasLocationChanged());
+        assertTrue(mStack.isEmpty());
+        assertEquals(0, mStack.size());
+        assertNull(mStack.getRoot());
+    }
+
+    @Test
+    public void testPushDocument_ModifiesStack() {
+        mStack.push(DIR_1);
+        assertEquals(1, mStack.size());
+        assertEquals(DIR_1, mStack.peek());
+
+        mStack.push(DIR_2);
+        assertEquals(2, mStack.size());
+        assertEquals(DIR_2, mStack.peek());
+
+        mStack.push(DIR_1); // DIR_1 again
+        assertEquals(3, mStack.size());
+        assertEquals(DIR_1, mStack.peek());
+    }
+
+    @Test
+    public void testPopDocument_ModifiesStack() {
+        mStack.push(DIR_1);
+        mStack.push(DIR_2);
+        assertEquals(2, mStack.size());
+
+        assertEquals(DIR_2, mStack.pop());
+        assertEquals(1, mStack.size());
+        assertEquals(DIR_1, mStack.peek());
+
+        assertEquals(DIR_1, mStack.pop());
+        assertEquals(0, mStack.size());
+    }
+
+    @Test
+    public void testPopTo() {
+        mStack.push(DIR_1);
+        mStack.push(DIR_2);
+        mStack = new DocumentStack(mStack);
+        assertEquals(2, mStack.size());
+        assertFalse(mStack.hasLocationChanged());
+
+        assertFalse(mStack.popTo(Uri.parse("content://unknown")));
+        assertEquals(2, mStack.size());
+        assertFalse(mStack.hasLocationChanged());
+
+        assertTrue(mStack.popTo(DIR_2.derivedUri));
+        assertEquals(2, mStack.size());
+        assertFalse(mStack.hasLocationChanged());
+
+        assertTrue(mStack.popTo(DIR_1.derivedUri));
+        assertEquals(1, mStack.size());
+        assertTrue(mStack.hasLocationChanged());
+
+        mStack = new DocumentStack(mStack);
+        assertEquals(1, mStack.size());
+        assertFalse(mStack.hasLocationChanged());
+
+        assertFalse(mStack.popTo(DIR_2.derivedUri));
+        assertEquals(1, mStack.size());
+        assertFalse(mStack.hasLocationChanged());
+    }
+
+    @Test
+    public void testGetDocument() {
+        mStack.push(DIR_1);
+        mStack.push(DIR_2);
+
+        assertEquals(DIR_1, mStack.get(0));
+        assertEquals(DIR_2, mStack.get(1));
+    }
+
+    @Test
+    public void testChangeRoot() {
+        mStack.changeRoot(ROOT_1);
+
+        assertEquals(ROOT_1, mStack.getRoot());
+    }
+
+    @Test
+    public void testChangeRoot_ClearsStack() {
+        mStack.push(DIR_1);
+
+        mStack.changeRoot(ROOT_1);
+
+        assertTrue(mStack.isEmpty());
+        assertEquals(0, mStack.size());
+    }
+
+    @Test
+    public void testReset() {
+        mStack.changeRoot(ROOT_1);
+        mStack.push(DIR_1);
+
+        mStack.reset();
+
+        assertNull(mStack.getRoot());
+        assertTrue(mStack.isEmpty());
+        assertEquals(0, mStack.size());
+    }
+
+    @Test
+    public void testCopyConstructor() {
+        mStack.changeRoot(ROOT_1);
+        mStack.push(DIR_1);
+        mStack.push(DIR_2);
+
+        DocumentStack stack = new DocumentStack(mStack);
+
+        assertEquals(2, stack.size());
+        assertEquals(DIR_1, stack.get(0));
+        assertEquals(DIR_2, stack.get(1));
+        assertEquals(ROOT_1, stack.getRoot());
+    }
+
+    @Test
+    public void testCopyConstructor_MakesDeepCopy() {
+        mStack.changeRoot(ROOT_1);
+        mStack.push(DIR_1);
+        mStack.push(DIR_2);
+
+        DocumentStack stack = new DocumentStack(mStack);
+
+        mStack.changeRoot(ROOT_2);
+
+        assertEquals(2, stack.size());
+        assertEquals(DIR_1, stack.get(0));
+        assertEquals(DIR_2, stack.get(1));
+        assertEquals(ROOT_1, stack.getRoot());
+    }
+
+    @Test
+    public void testPushDocument_ChangesLocation() {
+        mStack.push(DIR_1);
+
+        assertTrue(mStack.hasLocationChanged());
+    }
+
+    @Test
+    public void testParceling() {
+        mStack.changeRoot(ROOT_1);
+        mStack.push(DIR_1);
+        mStack.push(DIR_2);
+
+        Parcelables.assertParcelable(mStack, 0, (DocumentStack left, DocumentStack right) -> {
+            if (!Objects.equals(left.getRoot(), right.getRoot()) || left.size() != right.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < left.size(); ++i) {
+                if (!Objects.equals(left.get(i), right.get(i))) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    }
+
+    @Test
+    public void testIsRecent() {
+        final RootInfo rootRecent = new RootInfo();
+        mStack.changeRoot(rootRecent);
+
+        assertEquals(1, mStack.size());
+        assertTrue(mStack.isRecents());
+        assertNotNull(mStack.peek().derivedUri);
+    }
+
+    @Test
+    @EnableFlags({FLAG_HOME_SCREEN_FILES_RO, FLAG_USE_MATERIAL3})
+    public void testGetTitleDifferentRootAndPeekUri() {
+        RootInfo root = new RootInfo();
+        root.title = "root-title";
+        root.documentId = "new-doc-id";
+        DocumentInfo doc = new DocumentInfo();
+        doc.derivedUri = Uri.parse("diff-uri");
+        doc.displayName = "document-display-name";
+        mStack.changeRoot(root);
+        mStack.push(doc);
+
+        assertNotEquals(root.getUri(), doc.derivedUri);
+        assertEquals(mStack.getTitle(), doc.displayName);
+    }
+
+    @Test
+    @EnableFlags({FLAG_HOME_SCREEN_FILES_RO, FLAG_USE_MATERIAL3})
+    public void testGetTitleFromRoot() {
+        RootInfo root = new RootInfo();
+        root.title = "root-title";
+        root.documentId = "new-doc-id";
+        DocumentInfo doc = new DocumentInfo();
+        doc.derivedUri = root.getUri();
+        doc.displayName = "document-display-name";
+        mStack.changeRoot(root);
+        mStack.push(doc);
+
+        assertEquals(root.getUri(), doc.derivedUri);
+        assertEquals(mStack.getTitle(), doc.displayName);
+    }
+}

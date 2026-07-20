@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2025 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <!-- Toast shown when the file operation is not supported [CHAR LIMIT=48] -->
+    <string name="file_operation_rejected_m3">Action not supported</string>
+
+    <!-- Inline sync state icon descriptions -->
+    <string name="sync_error_description_m3">Couldn’t sync</string>
+    <string name="upload_description_m3">Available to sync</string>
+    <string name="uploading_description_m3">Uploading...</string>
+    <string name="downloading_description_m3">Downloading...</string>
+    <string name="synced_description_m3">Synced</string>
+
+    <!-- Text shown when a file search returns no items [CHAR LIMIT=32] -->
+    <string name="no_results_m3">No matching results</string>
+</resources>

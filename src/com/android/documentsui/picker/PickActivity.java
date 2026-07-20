@@ -1,0 +1,710 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.documentsui.picker;
+
+import static android.view.KeyEvent.META_CTRL_ON;
+
+import static com.android.documentsui.base.State.ACTION_CREATE;
+import static com.android.documentsui.base.State.ACTION_GET_CONTENT;
+import static com.android.documentsui.base.State.ACTION_OPEN;
+import static com.android.documentsui.base.State.ACTION_OPEN_TREE;
+import static com.android.documentsui.base.State.ACTION_PICK_COPY_DESTINATION;
+import static com.android.documentsui.util.FlagUtils.isDesktopUxPhase2FlagEnabled;
+import static com.android.documentsui.util.FlagUtils.isMovingContentIntoPrivateSpaceEnabled;
+import static com.android.documentsui.util.FlagUtils.isUseMaterial3FlagEnabled;
+import static com.android.documentsui.util.Material3Config.getRes;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.os.UserHandle;
+import android.os.UserManager;
+import android.provider.DocumentsContract;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup.MarginLayoutParams;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.android.documentsui.ActionModeController;
+import com.android.documentsui.BaseActivity;
+import com.android.documentsui.DocsSelectionHelper;
+import com.android.documentsui.DocumentsApplication;
+import com.android.documentsui.FocusManager;
+import com.android.documentsui.Injector;
+import com.android.documentsui.MenuManager.DirectoryDetails;
+import com.android.documentsui.Metrics;
+import com.android.documentsui.ProfileTabsController;
+import com.android.documentsui.ProviderExecutor;
+import com.android.documentsui.R;
+import com.android.documentsui.SelectionBarController;
+import com.android.documentsui.SharedInputHandler;
+import com.android.documentsui.UserManagerProvider;
+import com.android.documentsui.base.DocumentInfo;
+import com.android.documentsui.base.Features;
+import com.android.documentsui.base.MimeTypes;
+import com.android.documentsui.base.RootInfo;
+import com.android.documentsui.base.Shared;
+import com.android.documentsui.base.State;
+import com.android.documentsui.base.UserId;
+import com.android.documentsui.dirlist.AppsRowManager;
+import com.android.documentsui.dirlist.DirectoryFragment;
+import com.android.documentsui.services.FileOperationService;
+import com.android.documentsui.sidebar.RootsFragment;
+import com.android.documentsui.ui.DialogController;
+import com.android.documentsui.ui.MessageBuilder;
+import com.android.documentsui.util.CrossProfileUtils;
+import com.android.documentsui.util.VersionUtils;
+import com.android.modules.utils.build.SdkLevel;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class PickActivity extends BaseActivity implements ActionHandler.Addons {
+
+    static final String PREFERENCES_SCOPE = "picker";
+
+    private static final String TAG = "PickActivity";
+
+    @VisibleForTesting protected Injector<ActionHandler<PickActivity>> mInjector;
+    private SharedInputHandler mSharedInputHandler;
+
+    public PickActivity() {
+        super(getRes(R.layout.pick_activity), TAG);
+    }
+
+    // make these methods visible in this package to work around compiler bug http://b/62218600
+    @Override
+    protected boolean focusSidebar() {
+        return super.focusSidebar();
+    }
+
+    @Override
+    protected boolean popDir() {
+        return super.popDir();
+    }
+
+    @Override
+    protected int getBottomPadding() {
+        if (isUseMaterial3FlagEnabled()) {
+            return getResources().getDimensionPixelSize(R.dimen.picker_saver_padding_bottom);
+        }
+        return 0;
+    }
+
+    @Override
+    protected void setContainer() {
+        if (isDesktopUxPhase2FlagEnabled()) {
+            // Set the bottom padding for the picker saver container (i.e. which is located at the
+            // bottom of the right section) because we don't want bottom padding on the navigation
+            // tree area.
+            View pickerSaverContainer = findViewById(getRes(R.id.container_save));
+            pickerSaverContainer.setPadding(0, 0, 0, getBottomPadding());
+
+            // PickActivity is not rendered as a full window activity, instead the UI was wrapped
+            // in a dialog with margins (check onCreate()), so no need to cater root container
+            // padding like what we have in BaseActivity. Instead we need to handle the overlap on
+            // the margin because that's the area which might be overlapped with navigation bar.
+            View root = findViewById(getRes(R.id.coordinator_layout));
+            final int horizontalMargin =
+                    getResources()
+                            .getDimensionPixelSize(R.dimen.pick_dialog_window_margin_horizontal);
+            final int verticalMargin =
+                    getResources()
+                            .getDimensionPixelSize(R.dimen.pick_dialog_window_margin_vertical);
+            ViewCompat.setOnApplyWindowInsetsListener(
+                    root,
+                    (v, insets) -> {
+                        // System bars includes both status bar (top) and navigation bar (bottom)
+                        // and also others, the insets will only have non-zero values when the app
+                        // might be overlapped with these areas (i.e. in fullscreen mode),
+                        // otherwise (i.e. in window mode) they will all be 0.
+                        Insets systemBarInsets =
+                                insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                        MarginLayoutParams mlp = (MarginLayoutParams) v.getLayoutParams();
+                        mlp.leftMargin = horizontalMargin + systemBarInsets.left;
+                        mlp.rightMargin = horizontalMargin + systemBarInsets.right;
+                        mlp.topMargin = verticalMargin + systemBarInsets.top;
+                        mlp.bottomMargin = verticalMargin + systemBarInsets.bottom;
+                        v.setLayoutParams(mlp);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    });
+        } else {
+            super.setContainer();
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle icicle) {
+        // With desktop UX phase 2 enabled, PickActivity uses PickDialogTheme in the manifest which
+        // we don't want to override here.
+        if (!isDesktopUxPhase2FlagEnabled()) {
+            setTheme(getRes(R.style.DocumentsTheme));
+        }
+        Features features = Features.create(this);
+
+        mInjector = new Injector<>(
+                features,
+                new Config(),
+                new MessageBuilder(this),
+                DialogController.create(features, this),
+                DocumentsApplication.getFileTypeLookup(this),
+                (Collection<RootInfo> roots) -> {},
+                new UserManagerProvider() {
+                    @Override
+                    @RequiresApi(Build.VERSION_CODES.S)
+                    public List<UserId> getUserIds(Context context) {
+                        return DocumentsApplication.getUserManagerState(context).getUserIds();
+                    }
+                });
+        initInjector();
+        super.onCreate(icicle);
+
+        // The customizations here plus the PickDialogTheme style PickActivity styled as a dialog.
+        // * Margins: by default the root view (coordinator_layout) will occupy the whole activity
+        //            window, adding additional margins here between the root view and the window
+        //            so we can show the overlay and a visual border around the root view (handled
+        //            by setContainer() above).
+        // * Dialog corner radius: this is achieved by the custom background, ClipToOutline
+        //                         makes sure the content inside the root view will be clipped
+        //                         to the corner radius.
+        // * Semi-transparent overlay: this is handled by the window side, check PickDialogTheme.
+        // * Dialog shadow: this is achieved by the elevation.
+        if (isDesktopUxPhase2FlagEnabled()) {
+            View coordinatorLayout = findViewById(getRes(R.id.coordinator_layout));
+            int elevation = getResources().getInteger(R.integer.pick_dialog_window_elevation);
+            coordinatorLayout.setElevation(elevation);
+            coordinatorLayout.setBackgroundResource(R.drawable.pick_dialog_background);
+            coordinatorLayout.setClipToOutline(true);
+        }
+
+        mInjector.selectionMgr = DocsSelectionHelper.create();
+
+        mInjector.focusManager =
+                new FocusManager(
+                        mInjector.features,
+                        mInjector.selectionMgr,
+                        mDrawer,
+                        this::focusSidebar,
+                        getColor(getRes(R.color.primary)));
+
+        mInjector.menuManager =
+                new MenuManager(
+                        mSearchManager,
+                        mState,
+                        new DirectoryDetails(this),
+                        mInjector.getModel()::getItemCount,
+                        getApplicationContext(),
+                        features,
+                        mInjector,
+                        null);
+
+        if (isUseMaterial3FlagEnabled()) {
+            mInjector.selectionBarController =
+                    new SelectionBarController(
+                            findViewById(getRes(R.id.toolbar)),
+                            findViewById(getRes(R.id.selection_bar)),
+                            mInjector.focusManager,
+                            mInjector.menuManager,
+                            mInjector.selectionMgr);
+        } else {
+            mInjector.actionModeController =
+                    new ActionModeController(
+                            this,
+                            mInjector.selectionMgr,
+                            mNavigator,
+                            mInjector.menuManager,
+                            mInjector.messages);
+        }
+
+        mInjector.profileTabsController = new ProfileTabsController(
+                mInjector.selectionMgr,
+                getProfileTabsAddon());
+
+        mInjector.pickResult = getPickResult(icicle);
+
+        Runnable closeSelectionBarRunnable =
+                (isUseMaterial3FlagEnabled()
+                        ? mInjector.selectionBarController::closeSelectionBar
+                        : () -> {});
+
+        mInjector.actions =
+                new ActionHandler<>(
+                        this,
+                        mState,
+                        mProviders,
+                        mDocs,
+                        mSearchManager,
+                        ProviderExecutor::forAuthority,
+                        mInjector,
+                        LastAccessedStorage.create(),
+                        mPeekViewManager,
+                        mInjector.actionModeController,
+                        closeSelectionBarRunnable,
+                        DocumentsApplication.getClipStore(this));
+
+        mInjector.searchManager = mSearchManager;
+
+        Intent intent = getIntent();
+
+        mAppsRowManager = getAppsRowManager();
+        mInjector.appsRowManager = mAppsRowManager;
+
+        mSharedInputHandler =
+                new SharedInputHandler(
+                        this,
+                        mInjector.focusManager,
+                        mInjector.selectionMgr,
+                        mInjector.searchManager::cancelSearch,
+                        this::popDir,
+                        mInjector.features,
+                        mDrawer,
+                        this::onSearchKeyboardShortcut);
+        setupLayout(intent);
+        mInjector.actions.initLocation(intent);
+        Metrics.logPickerLaunchedFrom(Shared.getCallingPackageName(this));
+    }
+
+    private AppsRowManager getAppsRowManager() {
+        boolean shouldShowByDefault =
+                !isUseMaterial3FlagEnabled()
+                        || getResources().getBoolean(R.bool.show_apps_row);
+        return mConfigStore.isPrivateSpaceInDocsUIEnabled()
+                ? new AppsRowManager(
+                mInjector.actions,
+                mState.supportsCrossProfile(),
+                mUserManagerState,
+                mConfigStore,
+                shouldShowByDefault)
+                : new AppsRowManager(
+                        mInjector.actions,
+                        mState.supportsCrossProfile(),
+                        mUserIdManager,
+                        mConfigStore,
+                        shouldShowByDefault);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // log the case of user picking nothing.
+        mInjector.actions.getUpdatePickResultTask().safeExecute();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelable(Shared.EXTRA_PICK_RESULT, mInjector.pickResult);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mInjector.pickResult.setPickStartTime(SystemClock.uptimeMillis());
+    }
+
+    @Override
+    protected void onPause() {
+        mInjector.pickResult.increaseDuration(SystemClock.uptimeMillis());
+        super.onPause();
+    }
+
+    private static PickResult getPickResult(Bundle icicle) {
+        if (icicle != null) {
+            PickResult result = icicle.getParcelable(Shared.EXTRA_PICK_RESULT);
+            return result;
+        }
+
+        return new PickResult();
+    }
+
+    private void setupLayout(Intent intent) {
+        if (mState.action == ACTION_CREATE) {
+            final String mimeType = intent.getType();
+            final String title = intent.getStringExtra(Intent.EXTRA_TITLE);
+            SaveFragment.show(getSupportFragmentManager(), mimeType, title);
+        } else if (mState.action == ACTION_OPEN_TREE ||
+                mState.action == ACTION_PICK_COPY_DESTINATION) {
+            PickDirectoryFragment.show(getSupportFragmentManager());
+        } else if (isUseMaterial3FlagEnabled() && (mState.action == ACTION_OPEN
+                || mState.action == ACTION_GET_CONTENT)) {
+            PickFilesFragment.show(getSupportFragmentManager(), mState.action);
+        } else if (!isUseMaterial3FlagEnabled()) {
+            // If PickDirectoryFragment, PickFilesFragment or SaveFragment does not show,
+            // Set save container background to transparent for edge to edge nav bar.
+            // However when the use_material3 flag is on, the file path bar is at the bottom of the
+            // layout and hence the edge to edge nav bar is no longer required.
+            View saveContainer = findViewById(getRes(R.id.container_save));
+            saveContainer.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+        final Intent moreApps = new Intent(intent);
+        moreApps.setComponent(null);
+        moreApps.setPackage(null);
+        // Clear the selector to prevent a malicious selector from launching an arbitrary activity.
+        moreApps.setSelector(null);
+        if (mState.supportsCrossProfile) {
+            if (mConfigStore.isPrivateSpaceInDocsUIEnabled() && SdkLevel.isAtLeastS()) {
+                mState.canForwardToProfileIdMap =
+                        mUserManagerState.getCanForwardToProfileIdMapForAllowedUsers(
+                                moreApps, mState);
+            } else if (CrossProfileUtils.getCrossProfileResolveInfo(UserId.CURRENT_USER,
+                    getPackageManager(), moreApps, getApplicationContext(),
+                    mConfigStore.isPrivateSpaceInDocsUIEnabled()) != null) {
+                mState.canShareAcrossProfile = true;
+            }
+        }
+
+        if (mState.action == ACTION_GET_CONTENT
+                || mState.action == ACTION_OPEN
+                || mState.action == ACTION_CREATE
+                || mState.action == ACTION_OPEN_TREE
+                || mState.action == ACTION_PICK_COPY_DESTINATION) {
+            RootsFragment.show(getSupportFragmentManager(),
+                    /* includeApps= */ mState.action == ACTION_GET_CONTENT,
+                    /* intent= */ moreApps);
+            if (isUseMaterial3FlagEnabled()) {
+                View navRailRoots = findViewById(getRes(R.id.nav_rail_container_roots));
+                if (navRailRoots != null) {
+                    // Medium layout, populate navigation rail layout.
+                    RootsFragment.showNavRail(getSupportFragmentManager(),
+                            /* includeApps= */ mState.action == ACTION_GET_CONTENT,
+                            /* intent= */ moreApps);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void includeState(State state) {
+        final Intent intent = getIntent();
+
+        String defaultMimeType = (intent.getType() == null) ? "*/*" : intent.getType();
+        state.initAcceptMimes(intent, defaultMimeType);
+
+        final String action = intent.getAction();
+        if (Intent.ACTION_OPEN_DOCUMENT.equals(action)) {
+            state.action = ACTION_OPEN;
+        } else if (Intent.ACTION_CREATE_DOCUMENT.equals(action)) {
+            state.action = ACTION_CREATE;
+        } else if (Intent.ACTION_GET_CONTENT.equals(action)) {
+            state.action = ACTION_GET_CONTENT;
+        } else if (Intent.ACTION_OPEN_DOCUMENT_TREE.equals(action)) {
+            state.action = ACTION_OPEN_TREE;
+        } else if (Shared.ACTION_PICK_COPY_DESTINATION.equals(action)) {
+            state.action = ACTION_PICK_COPY_DESTINATION;
+        }
+
+        if (state.action == ACTION_OPEN || state.action == ACTION_GET_CONTENT) {
+            state.allowMultiple = intent.getBooleanExtra(
+                    Intent.EXTRA_ALLOW_MULTIPLE, false);
+        }
+
+        String packageName = Shared.getCallingPackageName(this);
+        if (isMovingContentIntoPrivateSpaceEnabled()
+                && hasCrossUsersPermissions(packageName)) {
+            setExcludedUsers(state, intent);
+        }
+        if (state.action == ACTION_OPEN || state.action == ACTION_GET_CONTENT
+                || state.action == ACTION_CREATE) {
+            state.openableOnly = intent.hasCategory(Intent.CATEGORY_OPENABLE);
+        }
+
+        if (state.action == ACTION_PICK_COPY_DESTINATION) {
+            state.copyOperationSubType = intent.getIntExtra(
+                    FileOperationService.EXTRA_OPERATION_TYPE,
+                    FileOperationService.OPERATION_COPY);
+        } else if (Features.CROSS_PROFILE_TABS && VersionUtils.isAtLeastR()) {
+            // We show tabs on PickActivity except copying/moving, which does not support
+            // cross-profile action.
+            state.supportsCrossProfile = true;
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawer.update();
+        mNavigator.update();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public String getDrawerTitle() {
+        String title;
+        try {
+            // Internal use case, we will send string id instead of string text.
+            title = getResources().getString(
+                    getIntent().getIntExtra(DocumentsContract.EXTRA_PROMPT, -1));
+        } catch (Resources.NotFoundException e) {
+            // 3rd party use case, it should send string text.
+            title = getIntent().getStringExtra(DocumentsContract.EXTRA_PROMPT);
+            if (title == null) {
+                if (mState.action == ACTION_OPEN
+                        || mState.action == ACTION_GET_CONTENT
+                        || mState.action == ACTION_OPEN_TREE) {
+                    title = getResources().getString(R.string.title_open);
+                } else if (mState.action == ACTION_CREATE
+                        || mState.action == ACTION_PICK_COPY_DESTINATION) {
+                    title = getResources().getString(R.string.title_save);
+                } else {
+                    // If all else fails, just call it "Documents".
+                    title = getResources().getString(R.string.app_label);
+                }
+            }
+        }
+        return title;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        mInjector.menuManager.updateOptionMenu(menu);
+
+        final DocumentInfo cwd = getCurrentDirectory();
+
+        if (mState.action == ACTION_CREATE) {
+            final FragmentManager fm = getSupportFragmentManager();
+            SaveFragment.get(fm).prepareForDirectory(cwd);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mInjector.pickResult.increaseActionCount();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void refreshDirectory(int anim) {
+        final FragmentManager fm = getSupportFragmentManager();
+        final RootInfo root = getCurrentRoot();
+        final DocumentInfo cwd = getCurrentDirectory();
+
+        setInitialStack(mState.stack);
+
+        if (mState.stack.isRecents()) {
+            DirectoryFragment.showRecentsOpen(fm, anim);
+
+            // In recents we pick layout mode based on the mimetype,
+            // picking GRID for visual types. We intentionally don't
+            // consult a user's saved preferences here since they are
+            // set per root (not per root and per mimetype).
+            boolean visualMimes = MimeTypes.mimeMatches(
+                    MimeTypes.VISUAL_MIMES, mState.acceptMimes);
+            mState.derivedMode = visualMimes ? State.MODE_GRID : State.MODE_LIST;
+        } else {
+            // Normal boring directory
+            DirectoryFragment.showDirectory(fm, root, cwd, anim);
+        }
+
+        // Forget any replacement target
+        if (mState.action == ACTION_CREATE) {
+            final SaveFragment save = SaveFragment.get(fm);
+            if (save != null) {
+                save.setReplaceTarget(null);
+            }
+        }
+
+        if (mState.action == ACTION_OPEN_TREE ||
+                mState.action == ACTION_PICK_COPY_DESTINATION) {
+            final PickDirectoryFragment pick = PickDirectoryFragment.get(fm);
+            if (pick != null) {
+                pick.setPickTarget(mState.action,
+                        mState.copyOperationSubType, mState.restrictScopeStorage, cwd);
+            }
+        }
+    }
+
+    @Override
+    protected void onDirectoryCreated(DocumentInfo doc) {
+        assert (doc.isDirectory());
+        mInjector.actions.openContainerDocument(doc);
+    }
+
+    @Override
+    public void onDocumentPicked(DocumentInfo doc) {
+        final FragmentManager fm = getSupportFragmentManager();
+        // Do not inline-open archives, as otherwise it would be impossible to pick
+        // archive files. Note, that picking files inside archives is not supported.
+        if (doc.isDirectory()) {
+            mInjector.actions.openContainerDocument(doc);
+            mSearchManager.recordHistory();
+        } else if (mState.action == ACTION_OPEN || mState.action == ACTION_GET_CONTENT) {
+            // Explicit file picked, return
+            if (!canShare(Collections.singletonList(doc))) {
+                // A final check to make sure we can share the uri before returning it.
+                Log.e(TAG, "The document cannot be shared");
+                mInjector.dialogs.showActionNotAllowed();
+                return;
+            }
+            mInjector.pickResult.setHasCrossProfileUri(!UserId.CURRENT_USER.equals(doc.userId));
+            mInjector.actions.finishPicking(doc.getDocumentUri());
+            mSearchManager.recordHistory();
+        } else if (mState.action == ACTION_CREATE) {
+            // Replace selected file
+            SaveFragment.get(fm).setReplaceTarget(doc);
+        }
+    }
+
+    @Override
+    public void onDocumentsPicked(List<DocumentInfo> docs) {
+        if (mState.action == ACTION_OPEN || mState.action == ACTION_GET_CONTENT) {
+            if (!canShare(docs)) {
+                // A final check to make sure we can share these uris before returning them.
+                Log.e(TAG, "One or more document cannot be shared");
+                mInjector.dialogs.showActionNotAllowed();
+                return;
+            }
+            final int size = docs.size();
+            final Uri[] uris = new Uri[size];
+            boolean hasCrossProfileUri = false;
+            for (int i = 0; i < docs.size(); i++) {
+                DocumentInfo doc = docs.get(i);
+                uris[i] = doc.getDocumentUri();
+                if (!UserId.CURRENT_USER.equals(doc.userId)) {
+                    hasCrossProfileUri = true;
+                }
+            }
+            mInjector.pickResult.setHasCrossProfileUri(hasCrossProfileUri);
+            mInjector.actions.finishPicking(uris);
+            mSearchManager.recordHistory();
+        }
+    }
+
+    @Override
+    protected boolean canInspectDirectory() {
+        if (isUseMaterial3FlagEnabled()) {
+            return super.canInspectDirectory();
+        }
+        return false;
+    }
+
+    private boolean canShare(List<DocumentInfo> docs) {
+        for (DocumentInfo doc : docs) {
+            if (!mState.canInteractWith(doc.userId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @CallSuper
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return mSharedInputHandler.onKeyDown(keyCode, event)
+                || super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyShortcut(int keyCode, KeyEvent event) {
+        if (isUseMaterial3FlagEnabled()
+                && event.hasModifiers(META_CTRL_ON)
+                && keyCode == KeyEvent.KEYCODE_SPACE) {
+            mInjector.actions.toggleFocusedItemSelection();
+            return true;
+        }
+
+        return super.onKeyShortcut(keyCode, event);
+    }
+
+    @Override
+    public void setResult(int resultCode, Intent intent, int notUsed) {
+        setResult(resultCode, intent);
+    }
+
+    public static PickActivity get(Fragment fragment) {
+        return (PickActivity) fragment.getActivity();
+    }
+
+    @Override
+    public Injector<ActionHandler<PickActivity>> getInjector() {
+        return mInjector;
+    }
+
+    private boolean hasCrossUsersPermissions(String packageName) {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        return packageManager.checkPermission(
+                Manifest.permission.INTERACT_ACROSS_USERS, packageName)
+                == PackageManager.PERMISSION_GRANTED
+                || packageManager.checkPermission(
+                Manifest.permission.INTERACT_ACROSS_USERS_FULL, packageName)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void setExcludedUsers(State state, Intent intent) {
+        try {
+            ArrayList<UserHandle> excludedUsersArray = intent.getParcelableArrayListExtra(
+                    DocumentsContract.EXTRA_EXCLUDED_USERS, UserHandle.class);
+            // Validate if we are not excluding all the users
+            if (excludedUsersArray != null && !excludedUsersArray.isEmpty()) {
+                List<UserHandle> allUsers = getApplicationContext().getSystemService(
+                        UserManager.class).getAllProfiles();
+                Set<Integer> excludedIdsSet = excludedUsersArray.stream()
+                        .map(UserHandle::getIdentifier)
+                        .collect(Collectors.toSet());
+
+                // Check if the set of excluded IDs contains every available user ID.
+                boolean allUsersAreExcluded = true;
+                if (allUsers.isEmpty()) {
+                    allUsersAreExcluded = false;
+                } else {
+                    for (UserHandle user : allUsers) {
+                        if (!excludedIdsSet.contains(user.getIdentifier())) {
+                            allUsersAreExcluded = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (!allUsersAreExcluded) {
+                    state.excludedUserIds = excludedIdsSet;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to get excluded users from intent", e);
+        }
+    }
+}

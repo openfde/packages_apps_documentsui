@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2024 The Android Open Source Project
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<!-- The file row (item_doc_list) uses ratio-based layout for Name/Type/Size/Date columns but
+     excluding the preview icon, so the table_header here needs to do the same. In order to make
+     the header and row are vertically aligned, we need to make sure the available width for
+     allocation are the same (thus the ratio-based width calculated by layout_weight will also be
+     the same), hence usage of the "list_container_padding_m3" (the padding after the preview icon)
+     and the placeholder view below.
+ -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/table_header"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/doc_header_height_m3"
+    android:layout_marginStart="@dimen/list_header_outer_margin"
+    android:layout_marginEnd="@dimen/list_header_outer_margin"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/list_item_padding_start"
+    android:paddingEnd="@dimen/list_item_padding_end"
+    android:visibility="gone">
+
+    <!-- Column headers -->
+    <com.android.documentsui.sorting.HeaderCell
+        android:id="@android:id/title"
+        android:background="@drawable/header_cell_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/list_header_inner_padding"
+        android:animateLayoutChanges="true">
+
+        <include layout="@layout/shared_cell_content_m3" />
+    </com.android.documentsui.sorting.HeaderCell>
+
+    <com.android.documentsui.sorting.HeaderCell
+        android:id="@android:id/summary"
+        android:background="@drawable/header_cell_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:layout_marginEnd="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/list_header_inner_padding"
+        android:animateLayoutChanges="true">
+
+        <include layout="@layout/shared_cell_content_m3" />
+    </com.android.documentsui.sorting.HeaderCell>
+
+    <com.android.documentsui.sorting.HeaderCell
+        android:id="@+id/file_type"
+        android:background="@drawable/header_cell_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/list_header_inner_padding"
+        android:animateLayoutChanges="true">
+
+        <include layout="@layout/shared_cell_content_m3" />
+    </com.android.documentsui.sorting.HeaderCell>
+
+    <com.android.documentsui.sorting.HeaderCell
+        android:id="@+id/size"
+        android:background="@drawable/header_cell_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/list_header_inner_padding"
+        android:animateLayoutChanges="true">
+
+        <include layout="@layout/shared_cell_content_m3" />
+    </com.android.documentsui.sorting.HeaderCell>
+
+    <com.android.documentsui.sorting.HeaderCell
+        android:id="@+id/date"
+        android:background="@drawable/header_cell_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/list_header_inner_padding"
+        android:animateLayoutChanges="true">
+
+        <include layout="@layout/shared_cell_content_m3" />
+    </com.android.documentsui.sorting.HeaderCell>
+
+    <!-- Placeholder for preview icon in picker mode, have the same size as @id/preview_icon in
+         item_doc_list.xml, aim to align the file row columns with the able header columns.
+     -->
+    <View
+        android:id="@+id/preview_icon_placeholder"
+        android:layout_width="@dimen/list_item_preview_icon_size"
+        android:layout_height="@dimen/list_item_preview_icon_size" />
+</LinearLayout>

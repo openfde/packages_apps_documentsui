@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues
+    format="6"
+    by="lint 8.4.0-alpha08"
+    type="baseline"
+    client=""
+    dependencies="true"
+    name=""
+    variant="all"
+    version="8.4.0-alpha08">
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 30): `android.content.Intent#getParcelableArrayListExtra`"
+        errorLine1="            final ArrayList&lt;DocumentInfo&gt; failedDocs = intent.getParcelableArrayListExtra("
+        errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/files/FilesActivity.java"
+            line="339"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 30): `android.content.Intent#getParcelableArrayListExtra`"
+        errorLine1="            final ArrayList&lt;Uri&gt; failedUris = intent.getParcelableArrayListExtra("
+        errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/files/FilesActivity.java"
+            line="341"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 30): `android.os.Bundle#getParcelable`"
+        errorLine1="                savedInstanceState.getParcelable(Shared.EXTRA_DOC, DocumentInfo::class.java)"
+        errorLine2="                                   ~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/files/NoApplicationFragment.kt"
+            line="93"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 33 (current min is 30): `android.content.Intent#getParcelableArrayListExtra`"
+        errorLine1="            ArrayList&lt;UserHandle&gt; excludedUsersArray = intent.getParcelableArrayListExtra("
+        errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/picker/PickActivity.java"
+            line="635"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 37.1 (current min is 30): `android.provider.DocumentsContract#restoreDocumentFromTrash`"
+        errorLine1="            DocumentsContract.restoreDocumentFromTrash("
+        errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/services/RestoreJob.kt"
+            line="158"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 37.1 (current min is 30): `android.provider.DocumentsContract#buildTrashDocumentsUri`"
+        errorLine1="            return DocumentsContract.buildTrashDocumentsUri(authority)"
+        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/loaders/TrashFileLoader.kt"
+            line="132"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 37.1 (current min is 30): `android.provider.DocumentsContract#trashDocument`"
+        errorLine1="            DocumentsContract.trashDocument(ContentResolver.wrap(getClient(doc)), doc.derivedUri)"
+        errorLine2="                              ~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/services/TrashJob.kt"
+            line="142"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 31 (current min is 30): `android.os.UserManager#isUserForeground`"
+        errorLine1="        return getUserManager(context).isUserForeground();"
+        errorLine2="                                       ~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/base/UserId.java"
+            line="230"
+            column="40"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 35 (current min is 30): `java.util.List#removeLast` (Prior to API level 35, this call would resolve to a Kotlin stdlib extension function. You can use `removeAt(pathItems.lastIndex)` instead.)"
+        errorLine1="            pathItems.removeLast().setOnClickListener(null)"
+        errorLine2="                      ~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/breadcrumbs/BreadcrumbView.kt"
+            line="95"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level CUR_DEVELOPMENT/10000 (current min is 36): `android.content.ContentProviderClient#setDetectNotRespondingOnCancel`"
+        errorLine1="            client.setDetectNotRespondingOnCancel("
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/apps/DocumentsUI/src/com/android/documentsui/DocumentsApplication.java"
+            line="109"
+            column="20"/>
+    </issue>
+
+</issues>

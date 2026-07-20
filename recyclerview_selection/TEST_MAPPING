@@ -1,0 +1,12 @@
+{
+  "presubmit": [
+    {
+      "name": "recyclerview_selection_tests"
+    }
+  ],
+  "desktop-postsubmit": [
+    {
+      "name": "recyclerview_selection_tests"
+    }
+  ]
+}

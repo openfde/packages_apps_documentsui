@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2013 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="missing_rename_error" msgid="9098952207447981103">"Duhet ta riemërtosh këtë"</string>
+    <string name="hidden_file_rename_warning" msgid="5427365657393208836">"Skedarët me . në fillim të emrit të tyre janë të fshehur"</string>
+    <string name="rename_invalid_character" msgid="5795828095376129943">"Karakter i pavlefshëm: "</string>
+    <string name="add_folder_name_error" msgid="6014615052491406810">"Duhet të shtosh një emër dosjeje"</string>
+    <string name="files_label" msgid="771781190045103748">"Skedarët"</string>
+    <string name="downloads_label" msgid="5462789470049501103">"Shkarkimet"</string>
+    <!-- no translation found for app_label (8089292432455111409) -->
+    <skip />
+    <string name="summary_consent_title" msgid="649526095415341516"></string>
+    <string name="summary_consent_message" msgid="5608129539202973666"></string>
+    <string name="summary_consent_ok_button" msgid="7813177426978382632">"Aktivizo"</string>
+    <string name="summary_consent_cancel_button" msgid="2971058893677958570">"Mos më pyet përsëri"</string>
+    <string name="summary_consent_remind_later_button" msgid="1499532238918418225">"Jo tani"</string>
+    <!-- no translation found for launcher_label (799410258349837668) -->
+    <skip />
+    <string name="title_open" msgid="3165686459158020921">"Hap nga"</string>
+    <string name="title_save" msgid="4384490653102710025">"Ruaje te"</string>
+    <string name="menu_create_dir" msgid="2413624798689091042">"Dosje e re"</string>
+    <string name="menu_grid" msgid="1453636521731880680">"Pamje rrjetë"</string>
+    <string name="menu_list" msgid="6714267452146410402">"Pamje liste"</string>
+    <string name="menu_search" msgid="1876699106790719849">"Kërko"</string>
+    <string name="menu_settings" msgid="6520844520117939047">"Cilësimet e hapësirës ruajtëse"</string>
+    <string name="manage_device" msgid="329180710072251010">"Menaxho pajisjen"</string>
+    <string name="menu_open" msgid="9092138100049759315">"Hap"</string>
+    <string name="menu_open_with" msgid="5507647065467520229">"Hap me"</string>
+    <string name="menu_open_in_new_window" msgid="6686563636123311276">"Hape në një dritare të re"</string>
+    <string name="menu_save" msgid="5195367497138965168">"Ruaj"</string>
+    <string name="menu_share" msgid="4307140947108068356">"Ndaj"</string>
+    <string name="menu_delete" msgid="1022254131543256626">"Fshi"</string>
+    <string name="menu_permanently_delete" msgid="7144967435018939304">"Fshi përgjithmonë"</string>
+    <string name="menu_move_to_trash" msgid="1809017212900920775">"Zhvendos te koshi"</string>
+    <string name="menu_restore_from_trash" msgid="6335501796145576127">"Restauro"</string>
+    <string name="menu_select_all" msgid="7600576812185570403">"Zgjidhi të gjitha"</string>
+    <string name="menu_deselect_all" msgid="7729916068862742979">"Anulo zgjedhjen për të gjitha"</string>
+    <string name="menu_select" msgid="1366061076507142387">"Zgjidh"</string>
+    <string name="menu_sort" msgid="3362419226163725275">"Rendit sipas..."</string>
+    <string name="menu_copy" msgid="7404820171352314754">"Kopjo te..."</string>
+    <string name="menu_move" msgid="2310760789561129882">"Zhvendos te..."</string>
+    <string name="menu_compress" msgid="37539111904724188">"Ngjish"</string>
+    <string name="menu_zip" msgid="5734673122376258045">"Kodi ZIP"</string>
+    <string name="menu_extract" msgid="8171946945982532262">"Nxirre te…"</string>
+    <string name="menu_extract_all" msgid="7335680068521252718">"Nxirri të gjitha…"</string>
+    <string name="menu_extract_here" msgid="7120939831786325360">"Nxirr"</string>
+    <string name="menu_browse" msgid="6007716414766674967">"Shfleto"</string>
+    <string name="menu_rename" msgid="1883113442688817554">"Riemërto"</string>
+    <string name="menu_inspect" msgid="7279855349299446224">"Merr informacione"</string>
+    <string name="menu_show_hidden_files" msgid="5140676344684492769">"Shfaq skedarët e fshehur"</string>
+    <string name="menu_hide_hidden_files" msgid="5654495713350153702">"Mos shfaq skedarët e fshehur"</string>
+    <string name="menu_refresh" msgid="1724946627254685997">"Rifresko"</string>
+    <string name="option_show_summary_column" msgid="1008012395393952119">"Shfaq kolonën e përshkrimit"</string>
+    <string name="option_hide_summary_column" msgid="8091410079217079948">"Mos shfaq kolonën e përshkrimit"</string>
+    <string name="menu_view_in_owner" msgid="7228948660557554770">"Shikoje në <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
+    <string name="menu_new_window" msgid="2947837751796109126">"Dritare e re"</string>
+    <string name="menu_cut_to_clipboard" msgid="2878752142015026229">"Prit"</string>
+    <string name="menu_copy_to_clipboard" msgid="5064081159073330776">"Kopjo"</string>
+    <string name="menu_paste_from_clipboard" msgid="360947260414135827">"Ngjit"</string>
+    <string name="menu_paste_into_folder" msgid="8000644546983240101">"Ngjit te dosja"</string>
+    <string name="menu_advanced_show" msgid="7558626506462906726">"Trego hapësirën e brendshme ruajtëse"</string>
+    <string name="menu_advanced_hide" msgid="6488381508009246334">"Fshih hapësirën ruajtëse të brendshme"</string>
+    <string name="button_select" msgid="240863497069321364">"Zgjidh"</string>
+    <string name="button_copy" msgid="8219059853840996027">"Kopjo"</string>
+    <string name="button_compress" msgid="8951561310857223966">"Ngjish"</string>
+    <string name="button_extract" msgid="1038674453689912247">"Nxirr"</string>
+    <string name="button_move" msgid="8596460499325291272">"Lëviz"</string>
+    <string name="button_dismiss" msgid="7235249361023803349">"Hiqe"</string>
+    <string name="button_retry" msgid="4011461781916631389">"Provo përsëri"</string>
+    <string name="button_clear" msgid="5412304437764369441">"Pastro"</string>
+    <string name="button_show_provider" msgid="6905880493806292753">"Shfaq te ofruesi"</string>
+    <string name="button_back" msgid="1888621708934742182">"Prapa"</string>
+    <string name="button_show_in_folder" msgid="6674673478637689386">"Shfaq në dosje"</string>
+    <string name="button_open_trash" msgid="8152584341121216006">"Hap koshin"</string>
+    <string name="not_sorted" msgid="7813496644889115530">"Nuk janë të renditura"</string>
+    <string name="sort_dimension_name" msgid="6325591541414177579">"Emri"</string>
+    <string name="sort_dimension_summary" msgid="8050531309626240067">"Përshkrimi"</string>
+    <string name="sort_dimension_file_type" msgid="5779709622922085381">"Lloji"</string>
+    <string name="sort_dimension_size" msgid="2190547351159472884">"Madhësia"</string>
+    <string name="sort_dimension_date" msgid="4231005651895254033">"Modifikuar"</string>
+    <string name="sort_dimension_name_ascending" msgid="3715725253270614742">"Emri i skedarit (A-Zh)"</string>
+    <string name="sort_dimension_file_type_ascending" msgid="3466973933402894292">"Lloji (A-Zh)"</string>
+    <string name="sort_dimension_size_ascending" msgid="2617359017800057762">"Madhësia (më e vogla në fillim)"</string>
+    <string name="sort_dimension_date_ascending" msgid="7920068979386920559">"Modifikuar (më e vjetra në fillim)"</string>
+    <string name="sort_dimension_name_descending" msgid="1514525521100423342">"Emri i skedarit (Zh-A)"</string>
+    <string name="sort_dimension_file_type_descending" msgid="3344796059784511100">"Lloji (Zh-A)"</string>
+    <string name="sort_dimension_size_descending" msgid="2367030017597348938">"Madhësia (më e madhja në fillim)"</string>
+    <string name="sort_dimension_date_descending" msgid="5466839955763127113">"Modifikuar (më e reja në fillim)"</string>
+    <string name="sort_dimension_dialog_title" msgid="3048641573962982157">"Rendit sipas"</string>
+    <string name="sort_dimension_button_title" msgid="1898606989130896126">"Renditur sipas <xliff:g id="LABEL">%s</xliff:g>"</string>
+    <string name="directory_items" msgid="6645621978998614003">"Numri i artikujve"</string>
+    <string name="sort_direction_ascending" msgid="5882787683763248102">"Në rritje"</string>
+    <string name="sort_direction_descending" msgid="1729187589765894076">"Në zbritje"</string>
+    <string name="open_external_app" msgid="7107920381038980086">"Hap <xliff:g id="APPNAME">%1$s</xliff:g>"</string>
+    <string name="drawer_open" msgid="8071673398187261741">"Trego rrënjët"</string>
+    <string name="drawer_close" msgid="4263880768630848848">"Fshih rrënjët"</string>
+    <string name="save_error" msgid="8631128801982095782">"Ruajtja e dokumentit dështoi"</string>
+    <string name="create_error" msgid="3092144450044861994">"Krijimi i dosjes dështoi"</string>
+    <string name="query_error" msgid="6625421453613879336">"Përmbajtja nuk mund të ngarkohet për momentin"</string>
+    <string name="quiet_mode_error_title" msgid="554319751414657910">"Aplikacionet e punës janë vendosur në pauzë"</string>
+    <string name="quiet_mode_button" msgid="8051436551926677305">"Aktivizo aplikacionet e punës"</string>
+    <string name="profile_quiet_mode_error_title" msgid="7126962749634841843">"Aplikacionet e profilit \"<xliff:g id="PROFILE">%1$s</xliff:g>\" janë vendosur në pauzë"</string>
+    <string name="profile_quiet_mode_button" msgid="6791235010992920102">"Aktivizo aplikacionet e profilit \"<xliff:g id="PROFILE">%1$s</xliff:g>\""</string>
+    <string name="cant_select_work_files_error_title" msgid="6688716319549644354">"Nuk mund të zgjedhësh skedarë pune"</string>
+    <string name="cant_select_work_files_error_message" msgid="683480676150690641">"Administratori i teknologjisë së informacionit nuk të lejon të kesh qasje te skedarët e punës nga një aplikacion personal"</string>
+    <string name="cant_select_personal_files_error_title" msgid="3200697170148617742">"Nuk mund të zgjedhësh skedarë personalë"</string>
+    <string name="cant_select_personal_files_error_message" msgid="4105905035459118209">"Administratori yt i teknologjisë së informacionit nuk të lejon të kesh qasje te skedarët personalë nga një aplikacion i punës"</string>
+    <string name="cant_select_cross_profile_files_error_title" msgid="17010948874969413">"Skedarët e profilit \"<xliff:g id="PROFILE">%1$s</xliff:g>\" nuk mund të zgjidhen"</string>
+    <string name="cant_select_cross_profile_files_error_message" msgid="3815829574883844944">"Administratori yt i teknologjisë së informacionit nuk të lejon të kesh qasje te skedarët e profilit \"<xliff:g id="PROFILE_0">%1$s</xliff:g>\" nga një aplikacion i profilit \"<xliff:g id="PROFILE_1">%2$s</xliff:g>\""</string>
+    <string name="cant_save_to_work_error_title" msgid="1351323070040641358">"Nuk mund të ruhen në profilin tënd të punës"</string>
+    <string name="cant_save_to_work_error_message" msgid="4975583233814059890">"Administratori yt i teknologjisë së informacionit nuk të lejon të ruash skedarët personalë në profilin tënd të punës"</string>
+    <string name="cant_save_to_personal_error_title" msgid="858327493694069780">"Nuk mund të ruhen në profilin tënd personal"</string>
+    <string name="cant_save_to_personal_error_message" msgid="6991758723736381751">"Administratori yt i teknologjisë së informacionit nuk të lejon të ruash skedarët e punës në profilin tënd personal"</string>
+    <string name="cant_save_to_cross_profile_error_title" msgid="5158984057654779022">"Nuk mund të ruash te profili \"<xliff:g id="PROFILE">%1$s</xliff:g>\""</string>
+    <string name="cant_save_to_cross_profile_error_message" msgid="5845240315510422749">"Administratori yt i teknologjisë së informacionit nuk të lejon të ruash skedarët e profilit \"<xliff:g id="PROFILE_0">%1$s</xliff:g>\" te profili \"<xliff:g id="PROFILE_1">%2$s</xliff:g>\""</string>
+    <string name="cross_profile_action_not_allowed_title" msgid="6611281348716476478">"Ky veprim nuk lejohet"</string>
+    <string name="cross_profile_action_not_allowed_message" msgid="7331275433061690947">"Për të mësuar më shumë, kontakto me administratorin tënd të teknologjisë së informacionit"</string>
+    <string name="root_recent" msgid="1080156975424341623">"Të fundit"</string>
+    <string name="root_trash" msgid="1869929519939073178">"Koshi"</string>
+    <string name="root_available_bytes" msgid="8269870862691408864">"Të lira: <xliff:g id="SIZE">%1$s</xliff:g>"</string>
+    <string name="root_type_service" msgid="6521366147466512289">"Shërbimet e hapësirës ruajtëse"</string>
+    <string name="root_type_shortcut" msgid="6059343175525442279">"Shkurtoret"</string>
+    <string name="root_type_device" msgid="1713604128005476585">"Pajisjet"</string>
+    <string name="root_type_apps" msgid="8646073235029886342">"Aplikacione të tjera"</string>
+    <string name="empty" msgid="5300254272613103004">"Nuk ka artikuj"</string>
+    <string name="no_results" msgid="2371026325236359209">"Nuk ka asnjë përputhje te %1$s"</string>
+    <string name="toast_no_application" msgid="7555319548595113121">"Skedari nuk mund të hapet"</string>
+    <string name="toast_view_in_archives_unsupported" msgid="1923221390170964845">"Skedarët në arkiva nuk mund të hapen"</string>
+    <string name="toast_failed_delete" msgid="3453846588205817591">"E pamundur të fshihen disa dokumente"</string>
+    <string name="toast_share_over_limit" msgid="5805442886537093015">"Nuk mund të ndahen më shumë se <xliff:g id="COUNT">%1$d</xliff:g> skedarë"</string>
+    <string name="toast_action_not_allowed" msgid="1329382474450572415">"Veprimi nuk lejohet"</string>
+    <string name="toast_op_not_allowed_for_shortcuts" msgid="8644996352874874167">"Veprimi nuk lejohet"</string>
+    <string name="no_application_dialog_title" msgid="693344961697142788">"Nuk u gjet asnjë aplikacion"</string>
+    <string name="no_application_dialog_message" msgid="5444094365658346573">"Nuk ka aplikacione të mbështetura të instaluara. Provo të instalosh një nga \"Dyqani i Play\"."</string>
+    <string name="no_application_dialog_button" msgid="5317480122655874659">"Kërko në \"Dyqanin e Play\""</string>
+    <string name="share_via" msgid="8725082736005677161">"Ndaj nëpërmjet"</string>
+    <string name="copy_notification_title" msgid="52256435625098456">"Po kopjon skedarët"</string>
+    <string name="compress_notification_title" msgid="6830195148113751021">"Skedarët po ngjishen"</string>
+    <string name="zip_notification_title" msgid="2858653527172763548">"Skedarët po ngjishen"</string>
+    <string name="extract_notification_title" msgid="5067393961754430469">"Po nxjerr skedarët"</string>
+    <string name="move_notification_title" msgid="3173424987049347605">"Po zhvendos skedarët"</string>
+    <string name="delete_notification_title" msgid="2512757431856830792">"Po fshin skedarët"</string>
+    <string name="move_to_trash_notification_title" msgid="6134372996525273852">"Skedarët po zhvendosen te koshi"</string>
+    <string name="restore_from_trash_notification_title" msgid="6818405564188548805">"Skedarët po restaurohen"</string>
+    <string name="copy_remaining" msgid="5390517377265177727">"<xliff:g id="DURATION">%s</xliff:g> të mbetura"</string>
+    <plurals name="copy_begin" formatted="false" msgid="151184708996738192">
+      <item quantity="other"><xliff:g id="COUNT_1">%1$d</xliff:g> artikuj po kopjohen.</item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> artikull po kopjohet.</item>
+    </plurals>
+    <plurals name="compress_begin" formatted="false" msgid="3534158317098678895">
+      <item quantity="other">Po ngjesh <xliff:g id="COUNT_1">%1$d</xliff:g> skedarë.</item>
+      <item quantity="one">Po ngjesh <xliff:g id="COUNT_0">%1$d</xliff:g> skedar.</item>
+    </plurals>
+    <plurals name="extract_begin" formatted="false" msgid="1006380679562903749">
+      <item quantity="other">Po nxjerr <xliff:g id="COUNT_1">%1$d</xliff:g> skedarë.</item>
+      <item quantity="one">Po nxjerr <xliff:g id="COUNT_0">%1$d</xliff:g> skedar.</item>
+    </plurals>
+    <plurals name="move_begin" formatted="false" msgid="1464229874265756956">
+      <item quantity="other"><xliff:g id="COUNT_1">%1$d</xliff:g> artikuj po zhvendosen.</item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> artikull po zhvendoset.</item>
+    </plurals>
+    <plurals name="deleting" formatted="false" msgid="1729138001178158901">
+      <item quantity="other"><xliff:g id="COUNT_1">%1$d</xliff:g> artikuj po fshihen.</item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> artikull po fshihet.</item>
+    </plurals>
+    <string name="trashing" msgid="1363875848930103999">"{count,plural, =1{# skedar po zhvendoset te koshi}other{# skedarë po zhvendosen te koshi}}"</string>
+    <string name="restoring_from_trash" msgid="5480701724791535806">"{count,plural, =1{Po restaurohet # skedar}other{Po restaurohen # skedarë}}"</string>
+    <string name="undo" msgid="2902438994196400565">"Zhbëj"</string>
+    <string name="copy_preparing" msgid="4759516490222449324">"Po përgatitet…"</string>
+    <string name="compress_preparing" msgid="7401605598969019696">"Po përgatitet…"</string>
+    <string name="extract_preparing" msgid="4796626960061745796">"Po përgatitet…"</string>
+    <string name="move_preparing" msgid="6504239656430530761">"Po përgatitet…"</string>
+    <string name="delete_preparing" msgid="7339349837842802508">"Po përgatitet…"</string>
+    <string name="move_to_trash_preparing" msgid="6180195603212537441">"Po përgatitet…"</string>
+    <string name="restore_from_trash_preparing" msgid="2829747628222239861">"Po përgatitet…"</string>
+    <string name="delete_progress" msgid="2627631054702306423">"<xliff:g id="COUNT_0">%1$d</xliff:g> / <xliff:g id="TOTALCOUNT">%2$d</xliff:g>"</string>
+    <string name="move_to_trash_progress" msgid="7117416860391196406">"<xliff:g id="COUNT_0">%1$d</xliff:g> / <xliff:g id="TOTALCOUNT">%2$d</xliff:g>"</string>
+    <string name="restore_from_trash_progress" msgid="6003816126633922428">"<xliff:g id="COUNT_0">%1$d</xliff:g> / <xliff:g id="TOTALCOUNT">%2$d</xliff:g>"</string>
+    <string name="copy_error_notification_title" msgid="5426120176307563562">"{count,plural, =1{<xliff:g id="COUNT_0">{count}</xliff:g> artikull nuk mund të kopjohej}other{<xliff:g id="COUNT_1">{count}</xliff:g> artikuj nuk mund të kopjoheshin}}"</string>
+    <string name="copy_error_2" msgid="2553643062672015237">"{count,plural, =1{# skedar nuk mund të kopjohej}other{# skedarë nuk mund të kopjoheshin}}"</string>
+    <string name="compress_error_notification_title" msgid="7238511273511460182">"{count,plural, =1{<xliff:g id="COUNT_0">{count}</xliff:g> artikull nuk mund të ngjishej}other{<xliff:g id="COUNT_1">{count}</xliff:g> artikuj nuk mund të ngjisheshin}}"</string>
+    <string name="compress_error_2" msgid="7035005747251809554">"{count,plural, =1{# skedar nuk mund të ngjishej}other{# skedarë nuk mund të ngjisheshin}}"</string>
+    <string name="extract_error_2" msgid="6428683221773394140">"{count,plural, =1{# skedar nuk mund të nxirrej}other{# skedarë nuk mund të nxirreshin}}"</string>
+    <string name="move_error_notification_title" msgid="7094494564254143696">"{count,plural, =1{<xliff:g id="COUNT_0">{count}</xliff:g> artikull nuk mund të zhvendosej}other{<xliff:g id="COUNT_1">{count}</xliff:g> artikuj nuk mund të zhvendoseshin}}"</string>
+    <string name="move_error_2" msgid="8089293906168239907">"{count,plural, =1{# skedar nuk mund të zhvendosej}other{# skedarë nuk mund të zhvendoseshin}}"</string>
+    <string name="delete_error_notification_title" msgid="6510460288416352803">"{count,plural, =1{<xliff:g id="COUNT_0">{count}</xliff:g> artikull nuk mund të fshihej}other{<xliff:g id="COUNT_1">{count}</xliff:g> artikuj nuk mund të fshiheshin}}"</string>
+    <string name="delete_error_2" msgid="5368270399330057918">"{count,plural, =1{# skedar nuk mund të fshihej}other{# skedarë nuk mund të fshiheshin}}"</string>
+    <string name="trash_error_2" msgid="5039906473394301366">"{count,plural, =1{# skedar nuk mund të zhvendosej te koshi}other{# skedarë nuk mund të zhvendoseshin te koshi}}"</string>
+    <string name="restore_error_2" msgid="3095191316757396713">"{count,plural, =1{# skedar nuk mund të restaurohej}other{# skedarë nuk mund të restauroheshin}}"</string>
+    <string name="notification_touch_for_details" msgid="2385563502445129570">"Trokit për të parë detajet"</string>
+    <string name="close" msgid="905969391788869975">"Mbyll"</string>
+    <plurals name="copy_failure_alert_content" formatted="false" msgid="5570549471912990536">
+      <item quantity="other">Këta skedarë nuk u kopjuan: <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">Ky skedar nuk u kopjua: <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="copy_failure_alert_title" msgid="7723812563283375273">"{count,plural, =1{Ky skedar nuk u kopjua:}other{Këta skedarë nuk u kopjuan:}}"</string>
+    <plurals name="compress_failure_alert_content" formatted="false" msgid="5760632881868842400">
+      <item quantity="other">Këta skedarë nuk u ngjeshën: <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">Ky skedar nuk u ngjesh: <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="compress_failure_alert_title" msgid="4443538179586440935">"{count,plural, =1{Ky skedar nuk u ngjesh:}other{Këta skedarë nuk u ngjeshën:}}"</string>
+    <plurals name="extract_failure_alert_content" formatted="false" msgid="7572748127571720803">
+      <item quantity="other">Këta skedarë nuk u nxorën: <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">Ky skedar nuk u nxor: <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="extract_failure_alert_title" msgid="1720241850610374">"{count,plural, =1{Ky skedar nuk u nxor:}other{Këta skedarë nuk u nxorën:}}"</string>
+    <plurals name="move_failure_alert_content" formatted="false" msgid="2747390342670799196">
+      <item quantity="other">Këta skedarë nuk u zhvendosën: <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">Ky skedar nuk u zhvendos: <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="move_failure_alert_title" msgid="4574011719660769064">"{count,plural, =1{Ky skedar nuk u zhvendos:}other{Këta skedarë nuk u zhvendosën:}}"</string>
+    <plurals name="delete_failure_alert_content" formatted="false" msgid="6122372614839711711">
+      <item quantity="other">Këta skedarë nuk u fshinë: <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">Ky skedar nuk u fshi: <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="delete_failure_alert_title" msgid="1416471664552009873">"{count,plural, =1{Ky skedar nuk u fshi:}other{Këta skedarë nuk u fshinë:}}"</string>
+    <string name="trash_failure_alert_title" msgid="5133847817235721185">"{count,plural, =1{Ky skedar nuk u zhvendos te koshi:}other{Këta skedarë nuk u zhvendosën te koshi:}}"</string>
+    <string name="restore_from_trash_failure_alert_title" msgid="8539033885115121134">"{count,plural, =1{Ky skedar nuk u restaurua:}other{Këta skedarë nuk u restauruan:}}"</string>
+    <plurals name="copy_converted_warning_content" formatted="false" msgid="7433742181712126588">
+      <item quantity="other">Këta skedarë u konvertuan në një format tjetër: <xliff:g id="LIST_1">%1$s</xliff:g></item>
+      <item quantity="one">Ky skedar u konvertua në një format tjetër: <xliff:g id="LIST_0">%1$s</xliff:g></item>
+    </plurals>
+    <string name="copy_converted_warning_title" msgid="312091919227984842">"{count,plural, =1{Ky skedar u konvertua në një format tjetër:}other{Këta skedarë u konvertuan në një format tjetër:}}"</string>
+    <string name="clipboard_files_added" msgid="168194813269188197">"{count,plural, =1{# artikull u shtua te \"Kujtesa e fragmenteve\"}other{# artikuj u shtuan te \"Kujtesa e fragmenteve\"}}"</string>
+    <string name="read_only_label" msgid="894442752344379606">"Vetëm për lexim"</string>
+    <string name="read_only_explanation" msgid="213951358525192590">"Mund t\'i shikosh këta skedarë, por disa veprime nuk mbështeten"</string>
+    <string name="cannot_extract_in_read_only_folder" msgid="8234900543730064252">"Ky arkiv është në një vendndodhje vetëm për lexim dhe nuk mund të nxirret këtu."</string>
+    <string name="file_operation_rejected" msgid="4301554203329008794">"Veprimi i skedarit nuk mbështetet."</string>
+    <string name="file_operation_error" msgid="2234357335716533795">"Veprimi i skedarit dështoi."</string>
+    <string name="rename_error" msgid="6700093173508118635">"Riemërtimi i dokumentit dështoi"</string>
+    <string name="menu_eject_root" msgid="9215040039374893613">"Nxirr"</string>
+    <string name="notification_copy_files_converted_title" msgid="6916768494891833365">"Disa skedarë u konvertuan"</string>
+    <string name="copy_specific_file_in_progress" msgid="2492589332201937030">"Po kopjohet \"<xliff:g id="FILENAME">{filename}</xliff:g>\" në \"<xliff:g id="DIRECTORY">{directory}</xliff:g>\""</string>
+    <string name="copy_in_progress" msgid="6872096819249174615">"{count,plural, =1{Po kopjohet # skedar në \"<xliff:g id="DIRECTORY_0">{directory}</xliff:g>\"}other{Po kopjohen # skedarë në \"<xliff:g id="DIRECTORY_1">{directory}</xliff:g>\"}}"</string>
+    <string name="extract_specific_file_in_progress" msgid="1162381859640495308">"Po nxirret \"<xliff:g id="FILENAME">{filename}</xliff:g>\" në \"<xliff:g id="DIRECTORY">{directory}</xliff:g>\""</string>
+    <string name="extract_in_progress" msgid="4629395179865084830">"{count,plural, =1{Po nxirret # skedar në \"<xliff:g id="DIRECTORY_0">{directory}</xliff:g>\"}other{Po nxirren # skedarë në \"<xliff:g id="DIRECTORY_1">{directory}</xliff:g>\"}}"</string>
+    <string name="move_specific_file_in_progress" msgid="6369336484584073740">"Po zhvendoset \"<xliff:g id="FILENAME">{filename}</xliff:g>\" në \"<xliff:g id="DIRECTORY">{directory}</xliff:g>\""</string>
+    <string name="move_in_progress" msgid="326356777470353315">"{count,plural, =1{Po zhvendoset # skedar në \"<xliff:g id="DIRECTORY_0">{directory}</xliff:g>\"}other{Po zhvendosen # skedarë në \"<xliff:g id="DIRECTORY_1">{directory}</xliff:g>\"}}"</string>
+    <string name="delete_specific_file_in_progress" msgid="7262273537447952230">"Po fshihet \"<xliff:g id="FILENAME">{filename}</xliff:g>\""</string>
+    <string name="delete_in_progress" msgid="7743890721129810508">"{count,plural, =1{Po fshihet # skedar}other{Po fshihen # skedarë}}"</string>
+    <string name="trash_specific_file_in_progress" msgid="8266568481798889707">"\"<xliff:g id="FILENAME">{filename}</xliff:g>\" po zhvendoset te koshi"</string>
+    <string name="trash_in_progress" msgid="2509104069807418022">"{count,plural, =1{# skedar po zhvendoset te koshi}other{# skedarë po zhvendosen te koshi}}"</string>
+    <string name="restore_specific_file_in_progress" msgid="6034897285865039861">"\"<xliff:g id="FILENAME">{filename}</xliff:g>\" po restaurohet"</string>
+    <string name="restore_in_progress" msgid="9063203913920540783">"{count,plural, =1{Po restaurohet # skedar}other{Po restaurohen # skedarë}}"</string>
+    <string name="compress_specific_file_in_progress" msgid="7855233703746784378">"Po ngjishet \"<xliff:g id="FILENAME">{filename}</xliff:g>\""</string>
+    <string name="compress_in_progress" msgid="5311444499230611877">"{count,plural, =1{Po ngjishet # skedar}other{Po ngjishen # skedarë}}"</string>
+    <string name="job_progress_icon_label" msgid="1387365706178067075">"Shfaq progresin për skedarin"</string>
+    <string name="job_progress_panel_title" msgid="1640388840961608168">"Progresi i skedarit"</string>
+    <string name="job_progress_panel_dismiss_all" msgid="5858398094668912463">"Hiqi të gjitha"</string>
+    <string name="job_progress_item_completed" msgid="3933347715328014840">"Përfundoi"</string>
+    <string name="job_progress_item_canceled" msgid="8915289522101993231">"Anuluar"</string>
+    <string name="job_progress_item_see_details" msgid="2069387639574541325">"Shiko detajet"</string>
+    <string name="job_progress_item_byte_progress" msgid="5457665342067136443">"<xliff:g id="CURRENTBYTES">%1$s</xliff:g> nga <xliff:g id="TOTALBYTES">%2$s</xliff:g>"</string>
+    <string name="copy_completed" msgid="3749037014674785400">"U kopjua"</string>
+    <string name="move_completed" msgid="3981250605092729273">"U zhvendos"</string>
+    <string name="delete_completed" msgid="4149401155614626199">"U fshi"</string>
+    <string name="compress_completed" msgid="6522047921428919799">"U ngjesh"</string>
+    <string name="extract_completed" msgid="8824595789915249972">"U nxor"</string>
+    <string name="trash_completed" msgid="5527806383436622529">"Te koshi"</string>
+    <string name="restore_completed" msgid="4705296829051759784">"U restaurua"</string>
+    <string name="copy_failed" msgid="3700193913993844675">"Kopjimi nuk mund të kryhej"</string>
+    <string name="move_failed" msgid="7692364307225994220">"Zhvendosja nuk mund të kryhej"</string>
+    <string name="delete_failed" msgid="2642684566325252513">"Fshirja nuk mund të kryhej"</string>
+    <string name="compress_failed" msgid="7397502181042157261">"Nuk mund të ngjishej"</string>
+    <string name="extract_failed" msgid="8372397499452831323">"Nxjerrja nuk mund të kryhej"</string>
+    <string name="trash_failed" msgid="4655759218201171408">"Nuk mund të zhvendosej te koshi"</string>
+    <string name="restore_failed" msgid="1967876571708544126">"Nuk mund të restaurohej"</string>
+    <string name="expand_label" msgid="5683357671239615207">"Zgjero"</string>
+    <string name="collapse_label" msgid="4530974883269531062">"Palos"</string>
+    <string name="open_external_dialog_request" msgid="8173558471322861268">"Jepi aplikacionit <xliff:g id="APPNAME"><b>^1</b></xliff:g> qasje te direktoria <xliff:g id="DIRECTORY"><i>^2</i></xliff:g> në <xliff:g id="STORAGE"><i>^3</i></xliff:g>?"</string>
+    <string name="open_external_dialog_request_primary_volume" msgid="2240992164087948176">"T\'i jepet aplikacionit <xliff:g id="APPNAME"><b>^1</b></xliff:g> qasje te direktoria <xliff:g id="DIRECTORY"><i>^2</i></xliff:g>?"</string>
+    <string name="open_external_dialog_root_request" msgid="6776729293982633">"T\'i jepet aplikacionit <xliff:g id="APPNAME"><b>^1</b></xliff:g> qasje te të dhënat, duke përfshirë fotografitë dhe videot, në <xliff:g id="STORAGE"><i>^2</i></xliff:g>?"</string>
+    <string name="allow" msgid="1275746941353040309">"Lejo"</string>
+    <string name="deny" msgid="5127201668078153379">"Refuzo"</string>
+    <plurals name="elements_selected" formatted="false" msgid="4448165978637163692">
+      <item quantity="other"><xliff:g id="COUNT_1">%1$d</xliff:g> të zgjedhura</item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> i zgjedhur</item>
+    </plurals>
+    <string name="clear_selection" msgid="5965968983023105329">"Spastro zgjedhjen"</string>
+    <string name="document_click_action" msgid="8073338575301415356">"hap"</string>
+    <string name="selected_document_click_action" msgid="792826130200234885">"hiq përzgjedhjen"</string>
+    <string name="document_long_click_action" msgid="3789836661597702666">"zgjidh"</string>
+    <string name="selected_document_long_click_action" msgid="666372407184527109">"zvarrit"</string>
+    <string name="document_long_click_action_picker" msgid="943888101827856784">"zgjidh disa"</string>
+    <plurals name="elements_dragged" formatted="false" msgid="5932571296037626279">
+      <item quantity="other"><xliff:g id="COUNT_1">%1$d</xliff:g> artikuj</item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> artikull</item>
+    </plurals>
+    <string name="delete_forever_dialog_title" msgid="799779565921010957">"Të fshihet përgjithmonë?"</string>
+    <string name="delete_forever_confirmation_message" msgid="514849549688443881">"{count,plural, =1{\"<xliff:g id="NAME">{name}</xliff:g>\" do të fshihet përgjithmonë. Kjo nuk mund të zhbëhet.}other{# artikuj do të fshihen përgjithmonë. Kjo nuk mund të zhbëhet.}}"</string>
+    <string name="delete_forever_from_trash_confirmation_message" msgid="2152471525710826703">"{count,plural, =1{\"<xliff:g id="NAME">{name}</xliff:g>\" do të fshihet përgjithmonë. Kjo nuk mund të zhbëhet.}other{# artikuj te koshi do të fshihen përgjithmonë. Kjo nuk mund të zhbëhet.}}"</string>
+    <string name="images_shortcut_label" msgid="2545168016070493574">"Imazhet"</string>
+    <string name="archive_loading_failed" msgid="7243436722828766996">"Arkivi nuk mund të hapet për të shfletuar. Skedari është i dëmtuar ose në një format që nuk mbështetet."</string>
+    <string name="name_conflict" msgid="28407269328862986">"Ekziston një skedar me këtë emër."</string>
+    <string name="authentication_required" msgid="8030880723643436099">"Për të parë këtë kategori, identifikohu në <xliff:g id="NAME">%1$s</xliff:g>"</string>
+    <string name="cant_display_content" msgid="8633226333229417237">"Përmbajtja nuk mund të shfaqet"</string>
+    <string name="sign_in" msgid="6253762676723505592">"Identifikohu"</string>
+    <string name="new_archive_file_name" msgid="1604650338077249838">"arkiva<xliff:g id="EXTENSION">%s</xliff:g>"</string>
+    <string name="new_archive_file_name_2" msgid="6787685985722032255">"Arkivo"</string>
+    <string name="overwrite_file_confirmation_title" msgid="4314969202559855159">"Të zëvendësohet skedari?"</string>
+    <string name="overwrite_file_confirmation_message" msgid="7780746502731666434">"Një skedar me emrin \"<xliff:g id="NAME">%1$s</xliff:g>\" ekziston tashmë."</string>
+    <string name="overwrite_file_confirmation_positive_button" msgid="5343276672335028419">"Zëvendëso"</string>
+    <string name="continue_in_background" msgid="1974214559047793331">"Vazhdo në sfond"</string>
+    <plurals name="selected_count" formatted="false" msgid="7555250236512981129">
+      <item quantity="other"><xliff:g id="COUNT_1">%1$d</xliff:g> të zgjedhura</item>
+      <item quantity="one"><xliff:g id="COUNT_0">%1$d</xliff:g> i zgjedhur</item>
+    </plurals>
+    <string name="root_info_header_recent" msgid="5654901877295332262">"Skedarët më të fundit"</string>
+    <string name="root_info_header_global_search" msgid="4904078222280496152">"Skedarët"</string>
+    <string name="root_info_header_downloads" msgid="8848161246921154115">"Skedarët te \"Shkarkimet\""</string>
+    <string name="root_info_header_storage" msgid="2989014130584927442">"Skedarët në <xliff:g id="DEVICE">%1$s</xliff:g>"</string>
+    <string name="root_info_header_folder" msgid="5851172222368049864">"Skedarët në <xliff:g id="FOLDER">%1$s</xliff:g>"</string>
+    <string name="root_info_header_app" msgid="2125422047558420885">"Skedarët nga <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="root_info_header_app_with_summary" msgid="3223302581236069702">"Skedarët nga <xliff:g id="LABEL">%1$s</xliff:g> / <xliff:g id="SUMMARY">%2$s</xliff:g>"</string>
+    <string name="root_info_header_image_recent" msgid="7494373563753926014">"Imazhet më të fundit"</string>
+    <string name="root_info_header_image_global_search" msgid="7307009823489854697">"Imazhet"</string>
+    <string name="root_info_header_image_downloads" msgid="7072252612657612307">"Imazhet në \"Shkarkimet\""</string>
+    <string name="root_info_header_image_storage" msgid="5086740886360075930">"Imazhet në <xliff:g id="DEVICE">%1$s</xliff:g>"</string>
+    <string name="root_info_header_image_folder" msgid="5980430877636279667">"Imazhet në <xliff:g id="FOLDER">%1$s</xliff:g>"</string>
+    <string name="root_info_header_image_app" msgid="4858114210851525359">"Imazhet nga <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="root_info_header_image_app_with_summary" msgid="6404842960923224778">"Imazhet nga <xliff:g id="LABEL">%1$s</xliff:g> / <xliff:g id="SUMMARY">%2$s</xliff:g>"</string>
+    <string name="chip_title_images" msgid="7838299046109841015">"Imazhet"</string>
+    <string name="chip_title_audio" msgid="1032801828748235436">"Audio"</string>
+    <string name="chip_title_videos" msgid="7011260091979776447">"Videot"</string>
+    <string name="chip_title_documents" msgid="7432457563000753983">"Dokumentet"</string>
+    <string name="chip_title_large_files" msgid="7740269190493883980">"Skedarët e mëdhenj"</string>
+    <string name="chip_title_from_this_week" msgid="4961536405220379672">"Këtë javë"</string>
+    <string name="input_hint_new_folder" msgid="5579927005544975259">"Emri"</string>
+    <string name="input_hint_rename" msgid="4501630494874065128">"Emri"</string>
+    <string name="preview_file" msgid="4056622696305432343">"Shiko paraprakisht skedarin <xliff:g id="FILENAME">%1$s</xliff:g>"</string>
+    <string name="preview_work_file" msgid="4495643735563487273">"Shiko paraprakisht skedarin e punës <xliff:g id="FILENAME">%1$s</xliff:g>"</string>
+    <string name="preview_cross_profile_file" msgid="7457849216193029610">"Shiko paraprakisht skedarin e profilit \"<xliff:g id="PROFILE">%1$s</xliff:g>\": <xliff:g id="FILENAME">%2$s</xliff:g>"</string>
+    <string name="apps_row_title" msgid="3340490016663092925">"Shfleto skedarët në aplikacionet e tjera"</string>
+    <string name="anonymous_application" msgid="7633027057951625862">"Anonim"</string>
+    <string name="open_tree_button" msgid="6402871398424497776">"Përdor këtë dosje"</string>
+    <string name="open_tree_dialog_title" msgid="4851450731067189325">"Të lejohet që \"<xliff:g id="APPNAME">%1$s</xliff:g>\" të ketë qasje te dosja?"</string>
+    <string name="open_tree_dialog_message" msgid="962249605918827059">"Lejo qasjen për \"<xliff:g id="DIRECTORY">%1$s</xliff:g>\"."</string>
+    <string name="directory_blocked_header_title" msgid="1164584889578740066">"Kjo dosje nuk mund të përdoret"</string>
+    <string name="directory_blocked_header_subtitle" msgid="2829150911849033408">"Për të mbrojtur privatësinë tënde, zgjidh një dosje tjetër"</string>
+    <string name="create_new_folder_button" msgid="8859613309559794890">"Krijo dosje të re"</string>
+    <string name="search_bar_hint" msgid="146031513183888721">"Kërko në këtë pajisje"</string>
+    <string name="search_bar_generic_hint" msgid="8923500515355253888">"Kërko"</string>
+    <string name="search_results" msgid="7662182646512984171">"Rezultatet e kërkimit"</string>
+    <string name="search_bar_clear" msgid="2072000748823434188">"Pastro tekstin"</string>
+    <string name="search_location_root_folder" msgid="4280523560213522303">"Dosja kryesore"</string>
+    <string name="search_location_everywhere" msgid="747799487494833887">"Kudo"</string>
+    <string name="search_last_modified_any_time" msgid="6027501367865939696">"Në çdo kohë"</string>
+    <string name="search_last_modified_1_day" msgid="7775353928859139915">"Sot"</string>
+    <string name="search_last_modified_2_days" msgid="7885735119033678756">"Dje"</string>
+    <string name="search_last_modified_7_days" msgid="7634290601544418836">"Javën ne kaluar"</string>
+    <string name="search_last_modified_30_days" msgid="4936787546211708940">"Muajin e kaluar"</string>
+    <string name="search_last_modified_365_days" msgid="7147134152974373466">"Vitin e kaluar"</string>
+    <string name="search_file_type_all" msgid="6613664493134355781">"Të gjitha llojet"</string>
+    <string name="delete_search_history" msgid="2202015025607694515">"Fshi historikun e kërkimeve për <xliff:g id="TEXT">%1$s</xliff:g>"</string>
+    <string name="personal_tab" msgid="3878576287868528503">"Personale"</string>
+    <string name="work_tab" msgid="7265359366883747413">"Puna"</string>
+    <string name="a11y_work" msgid="7504431382825242153">"Puna"</string>
+    <string name="drag_from_another_app" msgid="8310249276199969905">"Nuk mund t\'i zhvendosësh skedarët nga një aplikacion tjetër."</string>
+    <string name="grid_mode_showing" msgid="2803166871485028508">"Po shfaq në modalitetin \"rrjetë\"."</string>
+    <string name="list_mode_showing" msgid="1225413902295895166">"Po shfaq në modalitetin \"listë\"."</string>
+    <string name="bullet" msgid="5606740650312122766">"•"</string>
+    <string name="file_name_hint" msgid="7843637320487415838">"Emri i skedarit"</string>
+    <string name="peek_no_preview" msgid="8717084152736749464">"Pamja paraprake nuk mundësohet."</string>
+    <string name="peek_metadata_header_title" msgid="6196387248590120756">"Detajet"</string>
+    <string name="peek_metadata_general_info_title" msgid="5805064715498467299">"Informacione të përgjithshme"</string>
+    <string name="peek_metadata_size" msgid="2377426288276139988">"Madhësia"</string>
+    <string name="peek_metadata_type" msgid="1386923517471758392">"Lloji"</string>
+    <string name="peek_metadata_date_modified" msgid="5403086549396155362">"Data e modifikimit"</string>
+    <string name="get_info_positive_button" msgid="667388202590744953">"Në rregull"</string>
+    <string name="get_info_unknown_file_type" msgid="7976646447316381912">"Nuk njihet"</string>
+    <string name="a11y_peek_navigation_icon" msgid="6692873662104342476">"Fshih pamjen paraprake të skedarëve"</string>
+    <string name="a11y_peek_image_preview" msgid="3917148390186060263">"Pamja paraprake e imazhit për <xliff:g id="FILENAME">%s</xliff:g>"</string>
+    <string name="a11y_peek_hide_info_button" msgid="918293386310947930">"Fshih panelin e informacioneve"</string>
+    <string name="a11y_peek_show_info_button" msgid="9028075652389911413">"Shfaq panelin e informacioneve"</string>
+    <string name="trash_page_empty_title" msgid="7738038596025884023">"Koshi është bosh"</string>
+    <string name="empty_trash_banner_message" msgid="2993707579621525486">"Artikujt që ndodhen te koshi për më shumë se 30 ditë do të fshihen automatikisht."</string>
+    <string name="empty_trash_banner_button" msgid="1519946484798771236">"Boshatis koshin"</string>
+    <string name="empty_trash_dialog_title" msgid="4514618908297336521">"Të boshatiset koshi?"</string>
+    <string name="empty_trash_dialog_message" msgid="520865296928962854">"Të gjithë artikujt te koshi do të fshihen përgjithmonë. Kjo nuk mund të zhbëhet."</string>
+    <string name="empty_trash_dialog_action_button" msgid="4265315882979882955">"Fshi përgjithmonë"</string>
+    <string name="file_open_in_trash_dialog_title" msgid="2243034805337666376">"{count,plural, =1{Artikulli është te koshi}other{Artikujt janë te koshi}}"</string>
+    <string name="file_open_in_trash_dialog_message" msgid="907046525752260366">"{count,plural, =1{Për t\'u qasur te ky artikull, restauroje ose zvarrite jashtë koshit}other{Për t\'u qasur te këta artikuj, restauroji ata ose zvarriti jashtë koshit}}"</string>
+    <string name="file_open_in_trash_dialog_restore_action_button" msgid="3361861500466913305">"Restauro"</string>
+    <string name="you_are_offline_banner_message" msgid="4188603129472293852">"Aktualisht je offline. Disa skedarë dhe funksionalitete nuk ofrohen. Lidhu me internetin për qasje të plotë."</string>
+</resources>

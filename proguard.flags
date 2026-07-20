@@ -1,0 +1,394 @@
+# Copyright (C) 2017 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Keep
+-keep public class androidx.core.view.accessibility.AccessibilityNodeInfoCompat {
+   public static androidx.core.view.accessibility.AccessibilityNodeInfoCompat obtain();
+}
+
+# This method is marked @hide in DocumentsProvider but we need to implement it for managed mode.
+-keep public class com.android.documentsui.archives.ArchivesProvider {
+   public android.database.Cursor queryChildDocumentsForManage(java.lang.String, java.lang.String[], java.lang.String);
+}
+
+# To prevent class not found exception in org.brotli.dec.Dictionary
+# TODO(b/373579455): Evaluate if <init> needs to be kept.
+-keep final class org.brotli.dec.DictionaryData {
+  void <init>();
+}
+
+# keep rule generated after running trace references on the test app against DocumentsUIGoogle.jar
+# TODO(b/339312616): Remove after a more permanent fix is available
+# On modifying or adding new test run the following command to generate new keep rules and replace
+# the once listed below with the newly generated keep rules:
+# $ java -cp prebuilts/r8/r8.jar com.android.tools.r8.tracereferences.TraceReferences \
+# --lib out/soong/.intermediates/frameworks/base/framework/android_common/combined/framework.jar  \
+# --source $OUT/testcases/DocumentsUIGoogleTests/x86_64/DocumentsUIGoogleTests.apk \
+# --target out/soong/.intermediates/vendor/unbundled_google/packages/DocumentsUIGoogle/DocumentsUIGoogleInternal/android_common/turbine-combined/DocumentsUIGoogleInternal.jar \
+# --keep-rules \
+# --output /tmp/keep.txt
+
+-keep class androidx.appcompat.R$id {
+  int search_src_text;
+}
+-keep class com.android.documentsui.R$bool {
+  int feature_notification_channel;
+  int full_bar_search_view;
+  int is_launcher_enabled;
+  int show_apps_row;
+  int show_media_roots;
+  int show_preview_icon;
+  int show_search_bar;
+  int show_selection_checkmark;
+}
+-keep class com.android.documentsui.R$color {
+  int app_background_color;
+  int primary;
+}
+-keep class com.android.documentsui.R$dimen {
+  int grid_item_radius;
+}
+-keep class com.android.documentsui.R$drawable {
+  int ic_briefcase;
+  int ic_cab_cancel;
+  int ic_eject;
+  int ic_menu_copy;
+  int ic_root_download;
+  int ic_root_homescreen;
+  int ic_sd_storage;
+  int root_list_selector;
+  int work_off;
+}
+-keep class com.android.documentsui.R$id {
+  int action_menu_browse;
+  int action_menu_compress;
+  int action_menu_copy_to;
+  int action_menu_delete;
+  int action_menu_deselect_all;
+  int action_menu_extract_here;
+  int action_menu_extract_to;
+  int action_menu_inspect;
+  int action_menu_move_to;
+  int action_menu_open_with;
+  int action_menu_rename;
+  int action_menu_restore_from_trash;
+  int action_menu_select;
+  int action_menu_select_all;
+  int action_menu_share;
+  int action_menu_sort;
+  int action_menu_view_in_owner;
+  int apps_group;
+  int apps_row;
+  int button;
+  int content;
+  int cross_profile;
+  int cross_profile_content;
+  int cross_profile_progress;
+  int dir_menu_browse;
+  int dir_menu_copy_to_clipboard;
+  int dir_menu_create_dir;
+  int dir_menu_cut_to_clipboard;
+  int dir_menu_delete;
+  int dir_menu_deselect_all;
+  int dir_menu_extract_here;
+  int dir_menu_inspect;
+  int dir_menu_open;
+  int dir_menu_open_in_new_window;
+  int dir_menu_open_with;
+  int dir_menu_paste_from_clipboard;
+  int dir_menu_paste_into_folder;
+  int dir_menu_rename;
+  int dir_menu_select_all;
+  int dir_menu_share;
+  int dir_menu_view_in_owner;
+  int docked_search_toolbar;
+  int drawer_layout;
+  int inspector_details_view;
+  int job_progress_panel_title;
+  int option_menu_create_dir;
+  int option_menu_debug;
+  int option_menu_extract_all;
+  int option_menu_inspect;
+  int option_menu_launcher;
+  int option_menu_new_window;
+  int option_menu_search;
+  int option_menu_select_all;
+  int option_menu_settings;
+  int option_menu_show_hidden_files;
+  int option_menu_sort;
+  int peek_container;
+  int peek_preview_container;
+  int root_menu_eject_root;
+  int root_menu_open_in_new_window;
+  int root_menu_paste_into_folder;
+  int root_menu_settings;
+  int root_menu_inspect;
+  int sub_menu_grid;
+  int sub_menu_list;
+  int table_header;
+  int tabs;
+  int tabs_container;
+  int toolbar;
+}
+-keep class com.android.documentsui.R$layout {
+  int apps_row;
+  int breadcrumb_view_v2;
+  int directory_header;
+  int files_activity;
+  int fixed_layout;
+  int item_doc_list;
+  int nav_rail_layout;
+}
+-keep class com.android.documentsui.R$menu {
+  int dir_context_menu;
+  int file_context_menu;
+  int mixed_context_menu;
+}
+-keep class com.android.documentsui.R$plurals {
+  int elements_dragged;
+}
+-keep class com.android.documentsui.R$string {
+  int cant_select_work_files_error_message;
+  int cant_select_work_files_error_title;
+  int clear_selection;
+  int copy_error_notification_title;
+  int copy_notification_title;
+  int copy_preparing;
+  int copy_remaining;
+  int debug_content_uri;
+  int default_root_uri;
+  int directory_items;
+  int downloads_label;
+  int empty;
+  int local_summary_provider;
+  int menu_copy;
+  int menu_copy_to_clipboard;
+  int menu_inspect;
+  int menu_move;
+  int menu_open_with;
+  int menu_open_in_new_window;
+  int menu_permanently_delete;
+  int menu_rename;
+  int menu_select;
+  int menu_select_all;
+  int menu_share;
+  int menu_sort;
+  int menu_view_in_owner;
+  int menu_zip;
+  int metadata_address;
+  int metadata_album;
+  int metadata_altitude;
+  int metadata_aperture;
+  int metadata_aperture_format;
+  int metadata_artist;
+  int metadata_camera;
+  int metadata_camera_format;
+  int metadata_composer;
+  int metadata_coordinates;
+  int metadata_coordinates_format;
+  int metadata_date_time;
+  int metadata_dimensions;
+  int metadata_dimensions_format;
+  int metadata_duration;
+  int metadata_focal_format;
+  int metadata_focal_length;
+  int metadata_iso_format;
+  int metadata_iso_speed_ratings;
+  int metadata_shutter_speed;
+  int name_conflict;
+  int no_results;
+  int personal_tab;
+  int preferred_root_package;
+  int quiet_mode_button;
+  int quiet_mode_error_title;
+  int rename_error;
+  int search_bar_hint;
+  int search_last_modified_30_days;
+  int search_location_everywhere;
+  int share_via;
+  int sort_dimension_date;
+  int sort_dimension_file_type;
+  int sort_dimension_name;
+  int sort_dimension_size;
+  int sort_direction_ascending;
+  int sort_direction_descending;
+  int trusted_quick_viewer_package;
+  int work_tab;
+}
+-keep class com.android.documentsui.R$style {
+  int DocumentsDefaultTheme;
+  int DocumentsTheme;
+}
+-keep class com.android.documentsui.R$array {
+  int shortcut_authorities;
+  int shortcut_root_ids;
+  int shortcut_parent_doc_ids;
+  int shortcut_titles;
+  int shortcut_icons;
+}
+
+# Keep Apache Commons Compress classes
+-keep class org.apache.commons.compress.** { *; }
+
+# This is used in the unit test
+-keep class com.google.android.material.chip.Chip {
+  public android.graphics.drawable.Drawable getChipIcon();
+}
+
+# This is used in the unit test.
+-keep class com.android.documentsui.breadcrumbs.BreadcrumbController {
+  public void setClickConsumer(java.util.function.IntConsumer);
+}
+-keep class com.android.documentsui.breadcrumbs.BreadcrumbModel {
+  public boolean setFromStack(com.android.documentsui.base.DocumentStack);
+}
+-keep class com.android.documentsui.breadcrumbs.BreadcrumbView {
+  public boolean performPathItemClick(int);
+  public int getPathLength();
+}
+
+-keep class com.android.documentsui.util.Material3Config {
+  static int getRes(int);
+  static void overrideMappingForTest(java.util.Map);
+}
+
+-keep class com.android.documentsui.util.FlagUtils { *; }
+
+-keep class com.android.documentsui.util.VersionUtils { *; }
+
+# The SideSheetBehavior state is not directly accessed from DocumentsUI, but is used in tests
+-keep class com.google.android.material.sidesheet.SideSheetBehavior {
+  public int getState();
+}
+
+# The BottomSheetBehavior state is not directly accessed from DocumentsUI, but is used in tests
+-keep class com.google.android.material.bottomsheet.BottomSheetBehavior {
+  public float getHalfExpandedRatio();
+}
+
+-keep class com.android.documentsui.JobPanelViewModel$Companion {
+  public void setDisableAutoDismiss(boolean);
+}
+
+-keep class com.android.documentsui.dirlist.SelectionMetadata {
+  public java.util.Set mimeTypes();
+}
+
+# This is used in the unit test RecyclerRootsAdapterTest
+-keep class androidx.recyclerview.widget.RecyclerView$AdapterDataObserver {
+  public void onItemRangeChanged(int, int, Object);
+}
+
+# Temporarily add this here because the class is not used in the source code yet, will remove it
+# after adopting the class in the follow-up CL.
+-keep class com.android.documentsui.sidebar.RecyclerRootsAdapter { *; }
+
+-keep class com.android.documentsui.queries.SearchOptionsState {
+  *;
+}
+
+# Temporarily while use_material3 flag isn't fully rolled out.
+-keep interface com.android.documentsui.util.Config {
+  public java.lang.Boolean getForceMaterial3();
+}
+
+-keep class com.android.documentsui.peek.MetadataBottomSheetController {
+  public com.google.android.material.bottomsheet.BottomSheetBehavior getSheetBehavior();
+  public com.google.android.material.bottomsheet.BottomSheetBehavior$BottomSheetCallback getSheetStateListener();
+}
+
+-keep interface com.android.documentsui.UserManagerState {
+  public boolean areHiddenInQuietModeProfilesPresent();
+  public static com.android.documentsui.UserManagerState create(android.content.Context);
+  public java.util.Map getCanForwardToProfileIdMap(android.content.Intent);
+  public java.util.Map getCanForwardToProfileIdMapForAllowedUsers(android.content.Intent, com.android.documentsui.base.State);
+  public java.util.Map getUserIdToBadgeMap();
+  public java.util.Map getUserIdToLabelMap();
+  public java.util.List getUserIds();
+  public void onProfileActionStatusChange(java.lang.String, com.android.documentsui.base.UserId);
+  public void setCurrentStateIntent(android.content.Intent);
+}
+
+-keep class com.android.documentsui.Injector {
+  public <init>(com.android.documentsui.base.Features, com.android.documentsui.ActivityConfig, com.android.documentsui.ui.MessageBuilder, com.android.documentsui.ui.DialogController, com.android.documentsui.base.Lookup, java.util.function.Consumer, com.android.documentsui.Model, com.android.documentsui.UserManagerProvider);
+  com.android.documentsui.ActivityConfig config;
+  com.android.documentsui.ui.DialogController dialogs;
+  com.android.documentsui.FocusManager focusManager;
+  com.android.documentsui.picker.PickResult pickResult;
+  com.android.documentsui.queries.SearchViewManager searchManager;
+  com.android.documentsui.DocsSelectionHelper selectionMgr;
+}
+
+-keep interface com.android.documentsui.UserManagerProvider {
+  public java.util.List getUserIds(android.content.Context);
+}
+
+-keep class com.android.documentsui.files.ActionHandler {
+  public void restoreSelectedDocumentsFromTrash(java.util.List);
+  public boolean sendToApprovedDocHandler(android.content.ComponentName);
+  public android.net.Uri getToSelect();
+}
+
+-keep interface androidx.drawerlayout.widget.DrawerLayout$DrawerListener {
+}
+-keep class androidx.drawerlayout.widget.DrawerLayout$SimpleDrawerListener {
+  public <init>();
+  public void onDrawerClosed(android.view.View);
+  public void onDrawerStateChanged(int);
+}
+-keep class androidx.drawerlayout.widget.DrawerLayout {
+  public void addDrawerListener(androidx.drawerlayout.widget.DrawerLayout$DrawerListener);
+  public void closeDrawer(int);
+  public boolean isDrawerOpen(int);
+  public boolean isDrawerVisible(int);
+  public void openDrawer(int);
+  public void removeDrawerListener(androidx.drawerlayout.widget.DrawerLayout$DrawerListener);
+}
+
+-keep class android.content.Context {
+  public android.content.pm.PackageManager getPackageManager();
+}
+-keep class com.android.documentsui.base.UserId { *; }
+
+-keep class com.android.documentsui.BaseActivity {
+  public int getLayoutId();
+  public void setTickDurationSupplierForTest(java.util.function.Supplier);
+}
+
+-keep class com.android.documentsui.base.RootInfo { *; }
+
+-keep class com.android.documentsui.base.ShortcutInfo { *; }
+-keep class com.android.documentsui.base.SidebarEntryItemInfo { *; }
+-keep class android.provider.Flags {
+  public static boolean enableDocumentsTrashApi();
+  public static boolean enableSyncState();
+}
+-keep class com.android.documentsui.sidebar.BaseSidebarEntryItem { *; }
+-keep class com.android.documentsui.sidebar.ShortcutItem { *; }
+-keep class com.android.documentsui.roots.ProvidersCache { *; }
+# TODO(lucmult): Remove these when they're used by the prod code.
+-keep class com.android.documentsui.dirlist.SummaryProviderManager { *; }
+-keep class com.android.documentsui.dirlist.SummariesViewModel { *; }
+-keep interface com.android.documentsui.SummaryUpdateListener { *; }
+-keep class com.android.documentsui.ModelSummariesUpdate { *; }
+
+-keep class com.android.documentsui.base.PathExtractor { *; }
+
+-keep class com.android.documentsui.services.JobProgress {
+  public <init>(java.lang.String, int, int, java.lang.String, int, boolean);
+  public <init>(java.lang.String, int, int, java.lang.String, int, boolean, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, com.android.documentsui.base.DocumentStack, long, long, long);
+}
+-keep class com.android.documentsui.sidebar.NavRailShortcutItem { *; }
+-keep class com.android.documentsui.approveddochandlers.ApprovedDocHandlers { *; }
+-keep class com.android.documentsui.approveddochandlers.ApprovedDocHandler { *; }

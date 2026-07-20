@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2025 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <!-- PickDialogTheme is defined in the M3 resource folder, and it's used specifically for M3,
+     but it's referenced inside AndroidManifest.xml so without the definition for this style the
+     build fails, hence an empty style definition here for M3 off (it won't be used for M3 off)
+     just for the sake of compilation.
+     Note: adding this in the common XML file will cause duplicate definition when M3 is ON, and
+     since it's used in the AndroidManifest.xml file, the common getRes() trick won't work there.
+     -->
+    <style name="PickDialogTheme" />
+</resources>

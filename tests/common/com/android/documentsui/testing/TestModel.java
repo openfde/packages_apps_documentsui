@@ -1,0 +1,211 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.documentsui.testing;
+
+import android.database.MatrixCursor;
+import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.DocumentsContract.Document;
+import android.webkit.MimeTypeMap;
+
+import androidx.annotation.Nullable;
+
+import com.android.documentsui.DirectoryResult;
+import com.android.documentsui.Model;
+import com.android.documentsui.base.DocumentInfo;
+import com.android.documentsui.base.Features;
+import com.android.documentsui.base.UserId;
+import com.android.documentsui.roots.RootCursorWrapper;
+
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
+public class TestModel extends Model {
+
+    static final String[] COLUMNS = new String[]{
+        RootCursorWrapper.COLUMN_AUTHORITY,
+        RootCursorWrapper.COLUMN_USER_ID,
+        Document.COLUMN_DOCUMENT_ID,
+        Document.COLUMN_FLAGS,
+        Document.COLUMN_DISPLAY_NAME,
+        Document.COLUMN_SIZE,
+        Document.COLUMN_MIME_TYPE,
+        Document.COLUMN_LAST_MODIFIED
+    };
+
+    public final UserId mUserId;
+    private final String mAuthority;
+    private int mLastId = 0;
+    private Random mRand = new Random();
+    private MatrixCursor mCursor;
+    @Nullable private String[] mIds = null;
+    private final Set<String> mSyncInProgressModelIds = new HashSet<>();
+    private boolean mHasLimitedFunctionalityWhenOffline = false;
+
+    public TestModel(UserId userId, String authority, Features features) {
+        super(features);
+        mUserId = userId;
+        mAuthority = authority;
+        reset();
+    }
+
+    @Override
+    public void reset() {
+        // Intentionally not calling super.reset() because of AbstractActionHandlerTest relies
+        // on the model to keep `mIds`.gs
+        mLastId = 0;
+        mCursor = new MatrixCursor(COLUMNS);
+    }
+
+    /**
+     * Clear the model ids to make it become an empty model.
+     */
+    public void clearIds() {
+        super.reset();
+    }
+
+    public void update() {
+        DirectoryResult r = new DirectoryResult();
+        r.setCursor(mCursor);
+        super.update(r);
+    }
+
+    public void setCursorExtras(Bundle bundle) {
+        mCursor.setExtras(bundle);
+    }
+
+    public DocumentInfo createFile(String name) {
+        return createFile(
+                name,
+                Document.FLAG_SUPPORTS_WRITE
+                        | Document.FLAG_SUPPORTS_DELETE
+                        | Document.FLAG_SUPPORTS_RENAME);
+    }
+
+    public DocumentInfo createFile(String name, int flags) {
+        return createDocument(
+                name,
+                guessMimeType(name),
+                flags);
+    }
+
+    public DocumentInfo createFolder(String name) {
+        return createFolder(
+                name,
+                Document.FLAG_SUPPORTS_WRITE
+                        | Document.FLAG_SUPPORTS_DELETE
+                        | Document.FLAG_SUPPORTS_REMOVE
+                        | Document.FLAG_DIR_SUPPORTS_CREATE);
+    }
+
+    public DocumentInfo createFolder(String name, int flags) {
+        return createDocument(
+                name,
+                DocumentsContract.Document.MIME_TYPE_DIR,
+                flags);
+    }
+
+    public DocumentInfo createDocumentForUser(String name, String mimeType, int flags,
+            long lastModified, UserId userId) {
+        DocumentInfo doc = new DocumentInfo();
+        doc.userId = userId;
+        doc.authority = mAuthority;
+        doc.documentId = Integer.toString(++mLastId);
+        doc.derivedUri = DocumentsContract.buildDocumentUri(doc.authority, doc.documentId);
+        doc.displayName = name;
+        doc.mimeType = mimeType;
+        doc.flags = flags;
+        doc.size = mRand.nextInt();
+        doc.lastModified = lastModified;
+
+        addToCursor(doc);
+
+        return doc;
+    }
+
+    public DocumentInfo createDocument(String name, String mimeType, int flags) {
+        return createDocumentForUser(name, mimeType, flags, System.currentTimeMillis(), mUserId);
+    }
+
+    private void addToCursor(DocumentInfo doc) {
+        MatrixCursor.RowBuilder row = mCursor.newRow();
+        row.add(Document.COLUMN_DOCUMENT_ID, doc.documentId);
+        row.add(RootCursorWrapper.COLUMN_AUTHORITY, doc.authority);
+        row.add(RootCursorWrapper.COLUMN_USER_ID, doc.userId);
+        row.add(Document.COLUMN_DISPLAY_NAME, doc.displayName);
+        row.add(Document.COLUMN_MIME_TYPE, doc.mimeType);
+        row.add(Document.COLUMN_FLAGS, doc.flags);
+        row.add(Document.COLUMN_SIZE, doc.size);
+        row.add(Document.COLUMN_LAST_MODIFIED, doc.lastModified);
+    }
+
+    /**
+     * Attempts to guess the MIME type of the file based on its name. If unable to guess, returns
+     * "text/plain".
+     *
+     * @param name The name of the file whose MIME type is guessed.
+     * @return A guessed MIME type of "text/plain".
+     */
+    public static String guessMimeType(String name) {
+        int i = name.indexOf('.');
+
+        while(i != -1) {
+            name = name.substring(i + 1);
+            String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(name);
+            if (type != null) {
+                return type;
+            }
+            i = name.indexOf('.');
+        }
+
+        return "text/plain";
+    }
+
+    public String[] getModelIds() {
+        // Fallback to super if not overwritten.
+        return mIds != null ? mIds : super.getModelIds();
+    }
+
+    public void setModelIds(String[] ids) {
+        mIds = ids;
+    }
+
+    public Set<String> getSyncInProgressModelIds() {
+        return mSyncInProgressModelIds;
+    }
+
+    /** Adds the modelId to the `mSyncInProgressIds` set. */
+    public void addSyncInProgressModelId(String modelId) {
+        mSyncInProgressModelIds.add(modelId);
+    }
+
+    /** Removes the id to the `mSyncInProgressModelIds` set. */
+    public void removeSyncInProgressModelId(String modelId) {
+        mSyncInProgressModelIds.remove(modelId);
+    }
+
+    /** Returns the test value for hasLimitedFunctionalityWhenOffline. */
+    public boolean hasLimitedFunctionalityWhenOffline() {
+        return mHasLimitedFunctionalityWhenOffline;
+    }
+
+    /** Sets the test value for hasLimitedFunctionalityWhenOffline. */
+    public void setHasLimitedFunctionalityWhenOffline(boolean hasLimitedFunctionalityWhenOffline) {
+        mHasLimitedFunctionalityWhenOffline = hasLimitedFunctionalityWhenOffline;
+    }
+}

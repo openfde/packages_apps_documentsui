@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2025 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp"
+    android:height="18dp"
+    android:viewportWidth="18"
+    android:viewportHeight="18">
+    <!-- Center the 18x15 path data within the 18x18 viewport -->
+    <group
+        android:translateY="1.5"> <!-- (18 - 15) / 2 -->
+        <!--
+             White is unused here, the actual color is supplied with android:tint.
+        -->
+        <path
+            android:fillColor="@android:color/white"
+        android:pathData="M9.00098,0.950195C10.5862,0.950195 12.0035,1.50487 13.1699,2.5791H13.1689C13.9771,3.31535 14.5498,4.19218 14.8701,5.18457C15.5191,5.40167 16.1104,5.76765 16.6221,6.2793C17.4983,7.15563 17.9512,8.26348 17.9512,9.5C17.9512,10.7365 17.4983,11.8444 16.6221,12.7207C15.7458,13.597 14.6378,14.0497 13.4014,14.0498H5.00098C3.65339,14.0498 2.45116,13.5584 1.49707,12.6045C0.542933,11.6504 0.0507812,10.4473 0.0507812,9.09961C0.0508734,7.81527 0.506277,6.66105 1.38574,5.72559L1.55273,5.55371C2.11342,5.0012 2.76553,4.60285 3.49121,4.37305C3.85968,3.60285 4.38214,2.92963 5.05371,2.37012L5.25195,2.21191C6.3448,1.36996 7.61667,0.950195 9.00098,0.950195Z" />
+
+    </group>
+</vector>
+

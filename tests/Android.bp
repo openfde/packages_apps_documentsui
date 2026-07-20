@@ -1,0 +1,185 @@
+// Copyright (C) 2019 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+    default_team: "trendy_team_documentsui",
+}
+
+java_defaults {
+    name: "DocumentsUITests-defaults",
+    libs: [
+        "android.test.base.stubs.system",
+        "android.test.mock.stubs.system",
+        "android.test.runner.stubs.system",
+    ],
+
+    static_libs: [
+        "android.provider.flags-aconfig-java-export",
+        "androidx.arch.core_core-testing",
+        "androidx.lifecycle_lifecycle-runtime-testing",
+        "androidx.test.core",
+        "androidx.test.espresso.contrib",
+        "androidx.test.espresso.core",
+        "androidx.test.ext.truth",
+        "androidx.test.rules",
+        "androidx.test.ext.junit",
+        "androidx.test.uiautomator_uiautomator",
+        "docsui-flags-aconfig-java-lib",
+        "flag-junit",
+        "guava",
+        "kotlinx_coroutines_test",
+        "mockito-kotlin-nodeps",
+        "mockito-kotlin2",
+        "mockito-target",
+        "microbenchmark-device-lib",
+        "platform-test-annotations",
+    ],
+    lint: {
+        test: true,
+    },
+}
+
+android_library {
+    name: "DocumentsUIPerfTests-lib",
+    srcs: [
+        "common/com/android/documentsui/**/*.java",
+        "common/com/android/documentsui/**/*.kt",
+        "functional/com/android/documentsui/ActivityTest.java",
+    ],
+    exclude_srcs: [
+        // TestRunner/ArtifactSaverRunnerWithParameters have a dependency on
+        // microbenchmark-device-lib. Since it's not used in this test target,
+        // we exclude instead of adding an unnecessary dependency.
+        "common/com/android/documentsui/ArtifactSaverRunnerWithParameters.kt",
+        "common/com/android/documentsui/TestRunner.kt",
+    ],
+    resource_dirs: [],
+    libs: [
+        "android.test.base.stubs.system",
+        "android.test.mock.stubs.system",
+        "android.test.runner.stubs.system",
+        "DocumentsUI-lib",
+    ],
+
+    static_libs: [
+        "androidx.legacy_legacy-support-v4",
+        "androidx.test.espresso.contrib",
+        "androidx.test.espresso.core",
+        "androidx.test.rules",
+        "androidx.test.uiautomator_uiautomator",
+        "flag-junit",
+        "kotlinx_coroutines_test",
+        "mockito-target",
+        "ub-janktesthelper",
+    ],
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
+}
+
+android_library {
+    name: "DocumentsUIUnitTests-lib",
+    defaults: ["DocumentsUITests-defaults"],
+
+    manifest: "AndroidManifestUnitTests.xml",
+
+    srcs: [
+        "common/**/*.java",
+        "common/**/*.kt",
+        "unit/**/*.java",
+        "unit/**/*.kt",
+    ],
+
+    libs: [
+        "DocumentsUI-lib",
+    ],
+
+    resource_dirs: [
+        "res",
+    ],
+
+    min_sdk_version: "30",
+    target_sdk_version: "33",
+    lint: {
+        baseline_filename: "lint-baseline-unit.xml",
+    },
+}
+
+android_library {
+    name: "DocumentsUITests-lib",
+    defaults: ["DocumentsUITests-defaults"],
+
+    manifest: "AndroidManifest.xml",
+
+    srcs: [
+        "common/**/*.java",
+        "common/**/*.kt",
+        "functional/**/*.java",
+        "functional/**/*.kt",
+        "unit/**/*.java",
+        "unit/**/*.kt",
+    ],
+
+    libs: [
+        "DocumentsUI-lib",
+    ],
+
+    asset_dirs: [
+        "assets",
+    ],
+
+    resource_dirs: [
+        "res",
+    ],
+
+    aaptflags: [
+        // pack some raw file locate in assets folder
+        "-0 .zip",
+    ],
+
+    min_sdk_version: "30",
+    target_sdk_version: "33",
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
+}
+
+android_test {
+    name: "DocumentsUITests",
+    defaults: ["DocumentsUITests-defaults"],
+
+    manifest: "AndroidManifest.xml",
+
+    resource_dirs: [],
+
+    static_libs: [
+        "DocumentsUITests-lib",
+    ],
+
+    jarjar_rules: "jarjar-rules.txt",
+
+    test_suites: [
+        "device-tests",
+        "mts-documentsui",
+    ],
+
+    platform_apis: true,
+
+    certificate: "platform",
+
+    instrumentation_for: "DocumentsUI",
+    min_sdk_version: "30",
+    target_sdk_version: "33",
+}

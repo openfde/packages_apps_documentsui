@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="androidx.recyclerview.selection.test">
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+    </application>
+
+    <instrumentation android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:targetPackage="androidx.recyclerview.selection.test"
+        android:label="Tests for DocumentsUI recyclerview-selection fork" />
+</manifest>
