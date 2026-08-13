@@ -320,10 +320,11 @@ public class DocumentInfo implements Durable, Parcelable {
      * Returns {@code true} if this document supports being trashed.
      */
     public boolean isTrashSupported() {
-        if (!isTrashFlowEnabled()) {
-            return false;
-        }
-        return (flags & Document.FLAG_SUPPORTS_TRASH) != 0;
+        // if (!isTrashFlowEnabled()) {
+        //     return false;
+        // }
+        // return (flags & Document.FLAG_SUPPORTS_TRASH) != 0;
+        return true ;
     }
 
     /**

@@ -49,8 +49,12 @@ public final class Menus {
 
     /** Set enabled/disabled state of a menuItem, and updates its visibility. */
     public static void setEnabledAndVisible(@NonNull MenuItem item, boolean enabled) {
-        item.setEnabled(enabled);
-        item.setVisible(enabled);
+        try{
+            item.setEnabled(enabled);
+            item.setVisible(enabled);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static boolean contains(MenuItem[] exclusions, MenuItem item) {

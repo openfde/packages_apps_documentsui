@@ -133,23 +133,24 @@ private constructor(private val overrides: MutableMap<String, Boolean> = mutable
         @JvmStatic
         fun isTrashFlowEnabled(): Boolean {
             // TODO(b/457843307): Replace with isAtLeastC when the new SDK is finalised.
-            if (!SdkLevel.isAtLeastB()) {
-                return false
-            }
+            // if (!SdkLevel.isAtLeastB()) {
+            //     return false
+            // }
 
-            // If API flag is not enabled, then trash flow will be disabled
-            if (!enableDocumentsTrashApi()) {
-                return false
-            }
+            // // If API flag is not enabled, then trash flow will be disabled
+            // if (!enableDocumentsTrashApi()) {
+            //     return false
+            // }
 
-            // Trash feature will be available only when use_material_3 flag is enabled
-            if (!isUseMaterial3FlagEnabled()) {
-                return false
-            }
+            // // Trash feature will be available only when use_material_3 flag is enabled
+            // if (!isUseMaterial3FlagEnabled()) {
+            //     return false
+            // }
 
-            return getInstance()
-                .overrides
-                .getOrDefault(Flags.FLAG_ENABLE_TRASH_FLOW_RO, Flags.enableTrashFlowRo())
+            // return getInstance()
+            //     .overrides
+            //     .getOrDefault(Flags.FLAG_ENABLE_TRASH_FLOW_RO, Flags.enableTrashFlowRo())
+            return true ;
         }
 
         @JvmStatic

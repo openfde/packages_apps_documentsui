@@ -36,6 +36,11 @@
         <item
             android:id="@+id/dir_menu_delete"
             android:title="@string/menu_permanently_delete" />
+
+                    <item
+            android:id="@+id/dir_menu_move_to_trash"
+            android:title="@string/menu_move_to_trash"
+            android:visible="true" />
     </group>
 
     <group
