@@ -184,7 +184,7 @@ public class DocumentStack implements Durable, Parcelable {
     public void changeRoot(RootInfo root) {
         reset();
         mRoot = root;
-        if (DEBUG) Log.d(TAG, "Changed root of the stack to " + quote(root));
+        if (DEBUG) Log.d(TAG, "Changed root of the stack to " + quote(root) + ",root "+root);
 
         // Add this for keep stack size is 1 on recent root.
         if (root.isRecents()) {

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="raw">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tests/res/raw/archive.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/res/raw/empty_dirs.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/res/raw/images.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/res/raw/no_dirs.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/res/raw/uitest_images.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/res/raw/broken.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

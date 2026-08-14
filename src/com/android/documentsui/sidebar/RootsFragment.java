@@ -138,6 +138,8 @@ public class RootsFragment extends Fragment {
     @Injected
     private ActionHandler mActionHandler;
 
+    private static int openQuickFlag = 1;
+
     private List<SortableItem> mApplicationItemList;
 
     // Weather the fragment is using nav_rail_container_roots as its container (in nav_rail_layout).
@@ -533,6 +535,14 @@ public class RootsFragment extends Fragment {
                 userIds);
         final List<RootItem> otherProviders = new ArrayList<>();
         final List<Item> trashItems = new ArrayList<>();
+
+        RootInfo documentsInfo = null;
+        RootInfo musicInfo = null;
+        RootInfo pictureInfo = null;
+        RootInfo videoInfo = null;
+        RootInfo downloadInfo = null;
+        RootInfo desktopInfo = null;
+
         final boolean hideMediaRoots =
                 isUseMaterial3FlagEnabled()
                         && !context.getResources().getBoolean(R.bool.show_media_roots);
@@ -566,7 +576,7 @@ public class RootsFragment extends Fragment {
 
         for (final RootInfo root : roots) {
             final RootItem item;
-
+            Log.d(TAG, "sortLoadResult: " + root);
             if (root.isExternalStorageHome()) {
                 // No-op.
             } else if (root.isFiles()) {
@@ -587,14 +597,21 @@ public class RootsFragment extends Fragment {
                 // folder via ExternalStorageProvider.
                 Log.d(TAG, "Hiding DownloadStorageProvider root: " + root);
             } else if (root.isLibrary() || root.isDownloads()) {
-                item =
-                        mUseRailAsContainer
+                item = mUseRailAsContainer
                                 ? new NavRailRootItem(root, mActionHandler, maybeShowBadge)
                                 : new RootItem(root, mActionHandler, maybeShowBadge);
-                librariesBuilder.add(item);
+
+                documentsInfo = RootInfo.copyRootInfo(root);
+                musicInfo = RootInfo.copyRootInfo(root);
+                pictureInfo = RootInfo.copyRootInfo(root);
+                videoInfo = RootInfo.copyRootInfo(root);
+                downloadInfo = RootInfo.copyRootInfo(root);
+                desktopInfo = RootInfo.copyRootInfo(root);
+//                librariesBuilder.add(item);
             } else if (root.isStorage()) {
-                item =
-                        mUseRailAsContainer
+
+
+                item = mUseRailAsContainer
                                 ? new NavRailRootItem(root, mActionHandler, maybeShowBadge)
                                 : new RootItem(root, mActionHandler, maybeShowBadge);
                 storageProvidersBuilder.add(item);
@@ -619,6 +636,54 @@ public class RootsFragment extends Fragment {
                                         maybeShowBadge);
                 otherProviders.add(item);
             }
+        }
+
+        if (openQuickFlag == 1) {
+
+            if(desktopInfo != null){
+                desktopInfo.documentId = desktopInfo.rootId = Providers.ROOT_ID_DESKTOP;
+                desktopInfo.title = getString(R.string.fde_desktop);
+//            desktopInfo.derivedIcon = R.mipmap.icon_desktop;
+                otherProviders.add(new RootItem(desktopInfo, mActionHandler, maybeShowBadge));
+            }
+
+            if(musicInfo !=null){
+                musicInfo.documentId = musicInfo.rootId = Providers.ROOT_ID_AUDIO_NEW;
+                musicInfo.title = getString(R.string.fde_music);
+//            musicInfo.derivedIcon = R.mipmap.icon_audio;
+                otherProviders.add(new RootItem(musicInfo, mActionHandler, maybeShowBadge));
+            }
+
+            if(videoInfo !=null){
+                videoInfo.rootId = videoInfo.documentId = Providers.ROOT_ID_VIDEOS_NEW;
+                videoInfo.title = getString(R.string.fde_videos);
+//            videoInfo.derivedIcon = R.mipmap.icon_video;
+                otherProviders.add(new RootItem(videoInfo, mActionHandler, maybeShowBadge));
+            }
+
+
+            if(pictureInfo !=null){
+                pictureInfo.documentId = pictureInfo.rootId = Providers.ROOT_ID_IMAGES_NEW;
+                pictureInfo.title = getString(R.string.fde_pictures);
+//            pictureInfo.derivedIcon = R.mipmap.icon_picture;
+                otherProviders.add(new RootItem(pictureInfo, mActionHandler, maybeShowBadge));
+            }
+
+
+            if(documentsInfo !=null){
+                documentsInfo.documentId = documentsInfo.rootId = Providers.ROOT_ID_DOCUMENTS_NEW;
+                documentsInfo.title = getString(R.string.fde_documents);
+//            documentsInfo.derivedIcon = R.mipmap.icon_document;
+                otherProviders.add(new RootItem(documentsInfo, mActionHandler, maybeShowBadge));
+            }
+
+            if(downloadInfo !=null){
+                downloadInfo.rootId = downloadInfo.documentId = Providers.ROOT_ID_DOWNLOADS_NEW;
+                downloadInfo.title = getString(R.string.fde_downloads);
+//            downloadInfo.derivedIcon = R.mipmap.icon_download;
+                otherProviders.add(new RootItem(downloadInfo, mActionHandler, maybeShowBadge));
+            }
+
         }
 
         final RootComparator comp = new RootComparator();

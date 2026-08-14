@@ -134,7 +134,25 @@ public class DirectoryLoader extends AsyncTaskLoader<DirectoryResult> {
         final String authority = mUri.getAuthority();
 
         final DirectoryResult result = new DirectoryResult();
+
+        if(mDoc == null){
+            mDoc = new DocumentInfo();
+            mDoc.userId = mRoot.userId;
+            mDoc.authority = mRoot.authority;
+            mDoc.documentId = mRoot.documentId;
+            mDoc.mimeType = mRoot.mimeTypes;
+            mDoc.displayName = mRoot.title;
+
+//           try{
+//               mDoc =  DocumentInfo.fromUri(mRoot.userId.getContentResolver(getContext()), mUri, mRoot.userId);
+//           }catch (java.lang.Exception e) {
+//                e.printStackTrace();
+//           }
+        }
+
         result.doc = mDoc;
+
+        Log.d(TAG,"loadInBackgroundTraced  mDoc = " + mDoc + " ,mRoot "+mRoot + " ,mUri "+mUri);
 
         ContentProviderClient client = null;
         Cursor cursor;
@@ -241,6 +259,9 @@ public class DirectoryLoader extends AsyncTaskLoader<DirectoryResult> {
             try (ContentProviderClient userClient =
                          DocumentsApplication.acquireUnstableProviderOrThrow(
                                  userId.getContentResolver(getContext()), authority)) {
+                String strUrl =  "content://com.android.providers.media.documents/document/primary";
+                Uri decodedUri = Uri.parse(Uri.decode(strUrl));
+                Log.d(TAG,"mUri  "+mUri + ",authority "+authority);
                 Cursor c = userClient.query(mUri, /* projection= */null, queryArgs, mSignal);
                 if (c != null) {
                     cursors.add(

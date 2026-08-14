@@ -1463,12 +1463,16 @@ public abstract class AbstractActionHandler<T extends FragmentActivity & CommonA
                 // There maybe no root docInfo
                 DocumentInfo rootDoc = mState.stack.peek();
 
+                Log.d(TAG, "Creating new directory loader for rootDoc: " + DocumentInfo.debugString(rootDoc));
+
                 String authority = rootDoc == null
                         ? mState.stack.getRoot().authority
                         : rootDoc.authority;
                 String documentId = rootDoc == null
                         ? mState.stack.getRoot().documentId
                         : rootDoc.documentId;
+
+                Log.d(TAG, "Creating new directory loader for authority: " + authority + ",documentId "+documentId);
 
                 Uri contentsUri = mSearchMgr.isSearching()
                         ? DocumentsContract.buildSearchDocumentsUri(
@@ -1487,11 +1491,9 @@ public abstract class AbstractActionHandler<T extends FragmentActivity & CommonA
                     contentsUri = DocumentsContract.setManageMode(contentsUri);
                 }
 
-                if (DEBUG) {
-                    Log.d(TAG,
-                            "Creating new directory loader for: "
-                                    + DocumentInfo.debugString(mState.stack.peek()));
-                }
+//                if (DEBUG) {
+                    Log.d(TAG, "Creating new directory loader for: " + DocumentInfo.debugString(mState.stack.peek()));
+//                }
 
                 return new DirectoryLoader(
                         mInjector.features,

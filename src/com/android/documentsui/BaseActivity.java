@@ -954,6 +954,7 @@ public abstract class BaseActivity
 
     @Override
     public void onRootPicked(RootInfo root) {
+        Log.d(TAG,"onRootPicked root "+root);
         final boolean skipRootRefresh =
                 root.equals(getCurrentRoot())
                         && getCurrentShortcut() == null

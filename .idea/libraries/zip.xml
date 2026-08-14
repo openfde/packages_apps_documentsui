@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="zip">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tests/assets/archives/zip/bad-sizes.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/assets/archives/zip/different-encryptions.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/assets/archives/zip/file-dir-same-name.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/assets/archives/zip/bad-crc.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/assets/archives/zip/hello.zip!/" />
+      <root url="jar://$PROJECT_DIR$/tests/assets/archives/zip/empty.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
