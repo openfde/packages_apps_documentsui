@@ -104,6 +104,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import android.provider.Settings;
+import com.android.documentsui.provider.FileUtils;
+
 /**
  * Display list of known storage backend roots.
  * This fragment will be used in:
@@ -124,6 +127,9 @@ public class RootsFragment extends Fragment {
      */
     private static final String EXTRA_CONTAINER_ID = "containerId";
     private static final int CONTEXT_MENU_ITEM_TIMEOUT = 500;
+
+    private static final String LINUX = "linux";
+    private static final String ANDROID = "android";
     private static final String LOADER_REFRESH_ROOT_AND_DIRECTORY_ID = "refreshRootAndDirectory";
 
     private RootsListHandler mListHandler;
@@ -601,20 +607,22 @@ public class RootsFragment extends Fragment {
                                 ? new NavRailRootItem(root, mActionHandler, maybeShowBadge)
                                 : new RootItem(root, mActionHandler, maybeShowBadge);
 
+
+//                librariesBuilder.add(item);
+            } else if (root.isStorage()) {
                 documentsInfo = RootInfo.copyRootInfo(root);
                 musicInfo = RootInfo.copyRootInfo(root);
                 pictureInfo = RootInfo.copyRootInfo(root);
                 videoInfo = RootInfo.copyRootInfo(root);
                 downloadInfo = RootInfo.copyRootInfo(root);
                 desktopInfo = RootInfo.copyRootInfo(root);
-//                librariesBuilder.add(item);
-            } else if (root.isStorage()) {
-
 
                 item = mUseRailAsContainer
-                                ? new NavRailRootItem(root, mActionHandler, maybeShowBadge)
-                                : new RootItem(root, mActionHandler, maybeShowBadge);
-                storageProvidersBuilder.add(item);
+                        ? new NavRailRootItem(root, mActionHandler, maybeShowBadge)
+                        : new RootItem(root, mActionHandler, maybeShowBadge);
+                if (openQuickFlag == 1) {
+                    storageProvidersBuilder.add(item);
+                }
             } else if (isTrashFlowEnabled() && root.isTrash()) {
                 item =
                         mUseRailAsContainer
@@ -639,25 +647,24 @@ public class RootsFragment extends Fragment {
         }
 
         if (openQuickFlag == 1) {
-
             if(desktopInfo != null){
                 desktopInfo.documentId = desktopInfo.rootId = Providers.ROOT_ID_DESKTOP;
                 desktopInfo.title = getString(R.string.fde_desktop);
-//            desktopInfo.derivedIcon = R.mipmap.icon_desktop;
+                desktopInfo.derivedIcon = R.mipmap.icon_desktop;
                 otherProviders.add(new RootItem(desktopInfo, mActionHandler, maybeShowBadge));
             }
 
             if(musicInfo !=null){
                 musicInfo.documentId = musicInfo.rootId = Providers.ROOT_ID_AUDIO_NEW;
                 musicInfo.title = getString(R.string.fde_music);
-//            musicInfo.derivedIcon = R.mipmap.icon_audio;
+                musicInfo.derivedIcon = R.mipmap.icon_audio;
                 otherProviders.add(new RootItem(musicInfo, mActionHandler, maybeShowBadge));
             }
 
             if(videoInfo !=null){
                 videoInfo.rootId = videoInfo.documentId = Providers.ROOT_ID_VIDEOS_NEW;
                 videoInfo.title = getString(R.string.fde_videos);
-//            videoInfo.derivedIcon = R.mipmap.icon_video;
+                videoInfo.derivedIcon = R.mipmap.icon_video;
                 otherProviders.add(new RootItem(videoInfo, mActionHandler, maybeShowBadge));
             }
 
@@ -665,7 +672,7 @@ public class RootsFragment extends Fragment {
             if(pictureInfo !=null){
                 pictureInfo.documentId = pictureInfo.rootId = Providers.ROOT_ID_IMAGES_NEW;
                 pictureInfo.title = getString(R.string.fde_pictures);
-//            pictureInfo.derivedIcon = R.mipmap.icon_picture;
+                pictureInfo.derivedIcon = R.mipmap.icon_picture;
                 otherProviders.add(new RootItem(pictureInfo, mActionHandler, maybeShowBadge));
             }
 
@@ -673,14 +680,14 @@ public class RootsFragment extends Fragment {
             if(documentsInfo !=null){
                 documentsInfo.documentId = documentsInfo.rootId = Providers.ROOT_ID_DOCUMENTS_NEW;
                 documentsInfo.title = getString(R.string.fde_documents);
-//            documentsInfo.derivedIcon = R.mipmap.icon_document;
+                documentsInfo.derivedIcon = R.mipmap.icon_document;
                 otherProviders.add(new RootItem(documentsInfo, mActionHandler, maybeShowBadge));
             }
 
             if(downloadInfo !=null){
                 downloadInfo.rootId = downloadInfo.documentId = Providers.ROOT_ID_DOWNLOADS_NEW;
                 downloadInfo.title = getString(R.string.fde_downloads);
-//            downloadInfo.derivedIcon = R.mipmap.icon_download;
+                downloadInfo.derivedIcon = R.mipmap.icon_download;
                 otherProviders.add(new RootItem(downloadInfo, mActionHandler, maybeShowBadge));
             }
 

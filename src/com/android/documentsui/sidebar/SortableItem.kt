@@ -22,7 +22,7 @@ import com.android.documentsui.base.UserId
  * An overarching class for sidebar items that can be sorted. This is inherited by
  * BaseSidebarEntryItem and AppItem.
  */
-abstract class SortableItem(layoutId: Int, val title: String?, stringId: String?, userId: UserId?) :
+abstract class SortableItem(layoutId: Int, var title: String?, stringId: String?, userId: UserId?) :
     Item(layoutId, stringId, userId) {
     abstract val packageName: String
     abstract val itemType: Int

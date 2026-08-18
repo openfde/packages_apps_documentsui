@@ -120,7 +120,7 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
-
+import com.android.documentsui.provider.FileUtils;
 public abstract class BaseActivity
         extends AppCompatActivity implements CommonAddons, NavigationViewManager.Environment {
 
@@ -295,6 +295,8 @@ public abstract class BaseActivity
         }
 
         super.onCreate(savedInstanceState);
+
+        FileUtils.createDesktopDir();
 
         final Intent intent = getIntent();
 

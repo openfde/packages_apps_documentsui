@@ -103,7 +103,7 @@
     <integer name="config_maximum_search_history">200</integer>
 
     <!-- The Material3 theme is only enabled IFF this config is true AND the flag `use_material3` is enabled. -->
-    <bool name="force_material3">false</bool>
+    <bool name="force_material3">true</bool>
 
     <!-- Dictates whether we show a search icon or a docked search bar in the toolbar. It's false
          on small screens to show the icon and true on larger screens to show the docked search. -->

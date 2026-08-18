@@ -70,6 +70,9 @@ java_defaults {
         "com.google.android.material_material",
         "docsui-change-ids",
         "guava",
+        "eventbus3",
+        "baselibcomp",
+        "glide5",
         "modules-utils-build_system",
 
         // The following dependencies are optimized out when use_peek_preview_ro is disabled.

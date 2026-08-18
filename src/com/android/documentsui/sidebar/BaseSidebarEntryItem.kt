@@ -35,6 +35,7 @@ import com.android.documentsui.base.UserId
 import com.android.documentsui.util.FlagUtils.Companion.isUseMaterial3FlagEnabled
 import com.android.documentsui.util.Material3Config.Companion.getRes
 import com.google.android.material.button.MaterialButton
+import android.provider.Settings;
 
 abstract class BaseSidebarEntryItem(
     @LayoutRes layoutId: Int,
@@ -139,6 +140,11 @@ abstract class BaseSidebarEntryItem(
 
     private fun bindTitle(view: View) {
         val titleView = view.findViewById<View?>(android.R.id.title) as TextView?
+
+        val deviceName =  Settings.Global.getString(view.context.contentResolver, Settings.Global.DEVICE_NAME);
+        if (TextUtils.equals(title, deviceName)) {
+            title = view.context.getString(R.string.fde_fde_dir);
+        }
         titleView!!.text = title
     }
 

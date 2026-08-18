@@ -36,6 +36,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS"/>
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
     <!-- Permission required for reading the network status -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -250,6 +253,28 @@
             android:name=".picker.LastAccessedProvider"
             android:authorities="com.android.documentsui.lastAccessed"
             android:exported="false"/>
+
+<!--        <provider-->
+<!--            android:name=".provider.LinuxRootProvider"-->
+<!--            android:authorities="com.android.documentsui.fusionvolume"-->
+<!--            android:exported="true"-->
+<!--            android:grantUriPermissions="true"-->
+<!--            android:permission="android.permission.MANAGE_DOCUMENTS">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.content.action.DOCUMENTS_PROVIDER"/>-->
+<!--            </intent-filter>-->
+<!--        </provider>-->
+
+<!--        <provider-->
+<!--            android:name=".provider.LinuxUserProvider"-->
+<!--            android:authorities="com.android.documentsui.linux.user"-->
+<!--            android:exported="true"-->
+<!--            android:grantUriPermissions="true"-->
+<!--            android:permission="android.permission.MANAGE_DOCUMENTS">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.content.action.DOCUMENTS_PROVIDER"/>-->
+<!--            </intent-filter>-->
+<!--        </provider>-->
 
         <provider
             android:name=".picker.PickCountRecordProvider"
