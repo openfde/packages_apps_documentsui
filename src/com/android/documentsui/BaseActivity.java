@@ -312,7 +312,7 @@ public abstract class BaseActivity
                                         WindowInsetsCompat.Type.captionBar()
                                 );
                         // 自定义标题栏不需要额外 padding
-                        captionBar.setPadding(0, 0, 0, 0);
+                        captionBar.setPadding(0, 0, 12, 0);
                         return windowInsets;
                     }
                 }

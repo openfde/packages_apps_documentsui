@@ -155,7 +155,7 @@ public class NavigationViewManager implements AppBarLayout.OnOffsetChangedListen
 
 //        mToolbar.setVisibility(GONE);
         mToolbar.setTitleTextAppearance(mToolbar.getContext(),R.style.MyTextAppearance);
-        mToolbar.setPadding(12,0,0,12);
+        mToolbar.setPadding(0,0,0,12);
 
         mToolbar.setNavigationOnClickListener(
                 new View.OnClickListener() {
