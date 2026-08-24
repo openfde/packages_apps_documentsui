@@ -25,6 +25,7 @@
         android:layout_marginHorizontal="@dimen/docked_searchbar_margin"
         android:paddingStart="@dimen/docked_searchbar_padding"
         android:paddingEnd="@dimen/docked_searchbar_padding"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/docked_search_bar_background">
 
         <ImageView

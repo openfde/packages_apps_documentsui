@@ -58,6 +58,8 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.Objects;
 import java.util.function.IntConsumer;
+import android.widget.TextView;
+import android.util.TypedValue;
 
 /** A facade over the portions of the app and drawer toolbars. */
 public class NavigationViewManager implements AppBarLayout.OnOffsetChangedListener {
@@ -150,6 +152,10 @@ public class NavigationViewManager implements AppBarLayout.OnOffsetChangedListen
         mConfigStore = configStore;
         mProfileTabs =
                 getProfileTabs(tabLayoutContainer, userIdManager, userManagerState, activity);
+
+//        mToolbar.setVisibility(GONE);
+        mToolbar.setTitleTextAppearance(mToolbar.getContext(),R.style.MyTextAppearance);
+        mToolbar.setPadding(12,0,0,12);
 
         mToolbar.setNavigationOnClickListener(
                 new View.OnClickListener() {

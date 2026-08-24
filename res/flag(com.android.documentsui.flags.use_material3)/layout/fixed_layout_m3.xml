@@ -30,13 +30,15 @@
     android:focusable="true"
     android:descendantFocusability="beforeDescendants">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:background="?attr/colorSurfaceContainer"
-        android:paddingTop="@dimen/layout_padding_top"
+        android:paddingTop="48dp"
         android:paddingEnd="@dimen/layout_padding_end">
         <!-- Navigation: left hand side. -->
         <FrameLayout
@@ -56,53 +58,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:paddingTop="@dimen/main_container_padding_top"
                 android:background="@drawable/main_container_top_section_background">
 
-                <FrameLayout
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent">
 
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_marginTop="@dimen/action_bar_margin_m3"
-                        android:touchscreenBlocksFocus="false">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/read_only_label"
-                            android:background="@drawable/read_only_label_background"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_marginStart="@dimen/space_extra_small_4"
-                            android:paddingHorizontal="@dimen/space_extra_small_6"
-                            android:text="@string/read_only_label"
-                            android:textAppearance="@style/TextAppearance.DocumentsUI.LabelSmall"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:tooltipText="@string/read_only_explanation"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/searchbar_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="?android:attr/actionBarSize"
-                            android:gravity="center_vertical"
-                            android:text="@string/search_bar_generic_hint"
-                            android:textAppearance="@style/AppBarTitle" />
-
-                    </com.google.android.material.appbar.MaterialToolbar>
-
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/selection_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:touchscreenBlocksFocus="false"
-                        android:visibility="gone"/>
-
-                </FrameLayout>
-
-                <include layout="@layout/directory_header_m3" />
+                <include layout="@layout/directory_header_m3"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -112,7 +75,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/main_container_section_gap"
+                android:layout_marginTop="0dp"
                 android:background="@drawable/main_container_middle_section_background">
 
                 <include layout="@layout/column_headers_m3"/>
@@ -178,8 +141,71 @@
     <!-- Peek overlay -->
     <FrameLayout
         android:id="@+id/peek_overlay"
-        android:layout_width="match_parent"
+        android:layout_width="2dp"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+
+    <LinearLayout
+        android:id="@+id/caption_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#ccc"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="160dp"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="@dimen/action_bar_margin_m3"
+                    android:touchscreenBlocksFocus="false">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/read_only_label"
+                        android:background="@drawable/read_only_label_background"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="@dimen/space_extra_small_4"
+                        android:paddingHorizontal="@dimen/space_extra_small_6"
+                        android:text="@string/read_only_label"
+                        android:textAppearance="@style/TextAppearance.DocumentsUI.LabelSmall"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:tooltipText="@string/read_only_explanation"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/searchbar_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="?android:attr/actionBarSize"
+                        android:gravity="center_vertical"
+                        android:text="@string/search_bar_generic_hint"
+                        android:textAppearance="@style/AppBarTitle" />
+
+                </com.google.android.material.appbar.MaterialToolbar>
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/selection_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:touchscreenBlocksFocus="false"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

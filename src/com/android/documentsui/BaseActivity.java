@@ -119,6 +119,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.view.WindowInsetsController;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import javax.annotation.Nullable;
 import com.android.documentsui.provider.FileUtils;
 public abstract class BaseActivity
@@ -132,6 +143,9 @@ public abstract class BaseActivity
     protected UserIdManager mUserIdManager;
     protected UserManagerState mUserManagerState;
     protected State mState;
+
+    private View root ;
+    private  View  captionBar;
 
     @Injected
     protected Injector<?> mInjector;
@@ -275,6 +289,66 @@ public abstract class BaseActivity
                 new SummaryProviderManager(this, LifecycleOwnerKt.getLifecycleScope(this), uri));
     }
 
+    private void setupTransparentCaptionBar() {
+        WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND
+            );
+        }
+    }
+
+    private void setupCaptionBarInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(
+                root,
+                new OnApplyWindowInsetsListener() {
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(
+                            View view,
+                            WindowInsetsCompat windowInsets) {
+                        Insets captionInsets =
+                                windowInsets.getInsets(
+                                        WindowInsetsCompat.Type.captionBar()
+                                );
+                        // 自定义标题栏不需要额外 padding
+                        captionBar.setPadding(0, 0, 0, 0);
+                        return windowInsets;
+                    }
+                }
+        );
+        ViewCompat.requestApplyInsets(root);
+    }
+
+    private void setupGestureExclusion() {
+        final View decorView = getWindow().getDecorView();
+        Runnable updateGestureExclusion = new Runnable() {
+            @Override
+            public void run() {
+                if (decorView.getWidth() <= 0) {
+                    return;
+                }
+                int height = (int) (48 * getResources().getDisplayMetrics().density);
+                List<Rect> rects = new ArrayList<>();
+                rects.add(new Rect( 0, 0,decorView.getWidth(),  height ));
+                decorView.setSystemGestureExclusionRects(rects);
+            }
+        };
+
+        // 第一次更新
+        updateGestureExclusion.run();
+
+        // Layout 改变时更新
+        decorView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        updateGestureExclusion.run();
+                    }
+                }
+        );
+    }
+
     @CallSuper
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -284,6 +358,8 @@ public abstract class BaseActivity
         if (SdkLevel.isAtLeastS()) {
             getWindow().setHideOverlayWindows(true);
         }
+
+
 
         // ToDo Create tool to check resource version before applyStyle for the theme
         // If version code is not match, we should reset overlay package to default,
@@ -303,6 +379,9 @@ public abstract class BaseActivity
         addListenerForLaunchCompletion();
 
         setContentView(mLayoutId);
+
+
+
 
         setContainer();
 
@@ -606,6 +685,13 @@ public abstract class BaseActivity
         updateRecentsSetting();
 
         mCurrentLocale = getResources().getConfiguration().getLocales().get(0);
+
+        root = findViewById(R.id.coordinator_layout);
+        captionBar = findViewById(R.id.caption_bar);
+
+        setupTransparentCaptionBar();
+        setupCaptionBarInsets();
+        setupGestureExclusion();
     }
 
     private NavigationViewManager getNavigationViewManager(

@@ -21,9 +21,11 @@
     android:orientation="vertical">
 
     <!-- used for search chip. -->
-    <include layout="@layout/search_chip_row_m3"/>
+    <include layout="@layout/search_chip_row_m3"
+        />
     <!-- search options dropdown shown while search view is active. -->
-    <include layout="@layout/search_options_row"/>
+    <include layout="@layout/search_options_row"
+       />
 
     <LinearLayout
         android:id="@+id/tabs_container"
