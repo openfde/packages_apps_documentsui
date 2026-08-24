@@ -300,24 +300,33 @@ public abstract class BaseActivity
     }
 
     private void setupCaptionBarInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(
-                root,
-                new OnApplyWindowInsetsListener() {
-                    @Override
-                    public WindowInsetsCompat onApplyWindowInsets(
-                            View view,
-                            WindowInsetsCompat windowInsets) {
-                        Insets captionInsets =
-                                windowInsets.getInsets(
-                                        WindowInsetsCompat.Type.captionBar()
-                                );
-                        // 自定义标题栏不需要额外 padding
-                        captionBar.setPadding(0, 0, 12, 0);
-                        return windowInsets;
-                    }
-                }
-        );
-        ViewCompat.requestApplyInsets(root);
+       try {
+           if(root !=null){
+               ViewCompat.setOnApplyWindowInsetsListener(
+                       root,
+                       new OnApplyWindowInsetsListener() {
+                           @Override
+                           public WindowInsetsCompat onApplyWindowInsets(
+                                   View view,
+                                   WindowInsetsCompat windowInsets) {
+                               Insets captionInsets =
+                                       windowInsets.getInsets(
+                                               WindowInsetsCompat.Type.captionBar()
+                                       );
+                               // 自定义标题栏不需要额外 padding
+                               if(captionBar!=null){
+                                   captionBar.setPadding(0, 0, 12, 0);
+                               }
+                               return windowInsets;
+                           }
+                       }
+               );
+               ViewCompat.requestApplyInsets(root);
+           }
+       }catch (java.lang.Exception e) {
+           e.printStackTrace();
+        }
+
     }
 
     private void setupGestureExclusion() {
