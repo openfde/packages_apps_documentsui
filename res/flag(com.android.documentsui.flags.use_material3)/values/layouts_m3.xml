@@ -16,7 +16,6 @@
 
 <resources>
     <!-- pick_activity_m3 is "the file picker (Material Design 3)". -->
-    <item name="pick_activity_m3" type="layout">@layout/drawer_layout_m3</item>
-    <!-- files_activity_m3 is "the file management app (Material Design 3)". -->
-    <item name="files_activity_m3" type="layout">@layout/drawer_layout_m3</item>
+    <item name="pick_activity_m3" type="layout">@layout/fixed_layout_m3</item>
+    <item name="files_activity_m3" type="layout">@layout/fixed_layout_m3</item>
 </resources>
