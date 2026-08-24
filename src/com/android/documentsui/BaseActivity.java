@@ -330,7 +330,7 @@ public abstract class BaseActivity
                 }
                 int height = (int) (48 * getResources().getDisplayMetrics().density);
                 List<Rect> rects = new ArrayList<>();
-                rects.add(new Rect( 0, 0,decorView.getWidth(),  height ));
+                rects.add(new Rect( decorView.getWidth()/2, 0,decorView.getWidth(),  height ));
                 decorView.setSystemGestureExclusionRects(rects);
             }
         };
