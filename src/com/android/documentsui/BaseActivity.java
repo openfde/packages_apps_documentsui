@@ -309,10 +309,10 @@ public abstract class BaseActivity
                            public WindowInsetsCompat onApplyWindowInsets(
                                    View view,
                                    WindowInsetsCompat windowInsets) {
-                               Insets captionInsets =
-                                       windowInsets.getInsets(
-                                               WindowInsetsCompat.Type.captionBar()
-                                       );
+                            //    Insets captionInsets =
+                            //            windowInsets.getInsets(
+                            //                    WindowInsetsCompat.Type.captionBar()
+                            //            );
                                // 自定义标题栏不需要额外 padding
                                if(captionBar!= null){
                                    captionBar.setPadding(0, 0, 12, 0);
@@ -323,7 +323,7 @@ public abstract class BaseActivity
                );
                ViewCompat.requestApplyInsets(root);
            }
-       }catch (java.lang.Exception e) {
+       }catch (Exception e) {
            e.printStackTrace();
         }
 
