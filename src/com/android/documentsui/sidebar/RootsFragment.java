@@ -738,12 +738,16 @@ public class RootsFragment extends Fragment {
             // Only add providers
             otherProviders.sort(comp);
             for (RootItem item : otherProviders) {
-                if (state.configStore.isPrivateSpaceInDocsUIEnabled()) {
-                    createRootListsPrivateSpaceEnabled(item, userIds, rootListAllUsers);
-                } else {
-                    createRootListsPrivateSpaceDisabled(item, rootList, rootListOtherUser);
+                if (item.stringId.contains("bugreport") || item.stringId.contains("traces")) {
+                    // remove
+                }else{
+                    if (state.configStore.isPrivateSpaceInDocsUIEnabled()) {
+                        createRootListsPrivateSpaceEnabled(item, userIds, rootListAllUsers);
+                    } else {
+                        createRootListsPrivateSpaceDisabled(item, rootList, rootListOtherUser);
+                    }
+                    mApplicationItemList.add(item);
                 }
-                mApplicationItemList.add(item);
             }
         }
 
