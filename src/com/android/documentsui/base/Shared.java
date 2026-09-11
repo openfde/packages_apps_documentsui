@@ -80,6 +80,11 @@ public final class Shared {
      */
     public static final String EXTRA_STACK = "com.android.documentsui.STACK";
 
+    /**
+     * Extra flag used to open the trash page directly, e.g. from the launcher dock.
+     */
+    public static final String EXTRA_OPEN_TRASH = "com.android.documentsui.OPEN_TRASH";
+
     public static final String EXTRA_SELECTED_SHORTCUT = "com.android.documentsui.SELECTED_SHORCUT";
 
     /**
