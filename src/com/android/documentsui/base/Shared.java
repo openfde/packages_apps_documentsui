@@ -85,6 +85,12 @@ public final class Shared {
      */
     public static final String EXTRA_OPEN_TRASH = "com.android.documentsui.OPEN_TRASH";
 
+    /**
+     * Extra flag used together with {@link #EXTRA_OPEN_TRASH} to trigger the empty trash flow
+     * once the trash page has loaded, e.g. from the launcher dock.
+     */
+    public static final String EXTRA_EMPTY_TRASH = "com.android.documentsui.EMPTY_TRASH";
+
     public static final String EXTRA_SELECTED_SHORTCUT = "com.android.documentsui.SELECTED_SHORCUT";
 
     /**

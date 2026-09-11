@@ -751,6 +751,7 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
         if (trashRoot == null) {
             return false;
         }
+        setPendingEmptyTrash(intent.getBooleanExtra(Shared.EXTRA_EMPTY_TRASH, false));
         mActivity.onRootPicked(trashRoot);
         return true;
     }

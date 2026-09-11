@@ -169,6 +169,16 @@ public abstract class AbstractActionHandler<T extends FragmentActivity & CommonA
     private ContentLock mContentLock;
     protected Uri mToSelect;
 
+    /**
+     * When true, the empty trash flow is triggered once the current directory (the trash page)
+     * has finished loading. Set from the intent extra {@link Shared#EXTRA_EMPTY_TRASH}.
+     */
+    private boolean mPendingEmptyTrash;
+
+    protected final void setPendingEmptyTrash(boolean pending) {
+        mPendingEmptyTrash = pending;
+    }
+
     @Override
     public void registerDisplayStateChangedListener(Runnable l) {
         mDisplayStateChangedListener = l;
@@ -1654,6 +1664,16 @@ public abstract class AbstractActionHandler<T extends FragmentActivity & CommonA
             assert (result != null);
             // First: Update the  file list with the new results.
             mInjector.getModel().update(result);
+
+            // Trigger the empty trash flow requested via the launch intent, now that the
+            // trash page has loaded its documents.
+            if (mPendingEmptyTrash) {
+                mPendingEmptyTrash = false;
+                if (mState.stack.isTrashTopLevel()) {
+                    showEmptyTrashConfirmationDialog();
+                }
+            }
+
             if (isHomeScreenFilesFlagEnabled()) {
                 selectDocument();
             }
