@@ -132,6 +132,12 @@ public class RootsFragment extends Fragment {
     private static final String ANDROID = "android";
     private static final String LOADER_REFRESH_ROOT_AND_DIRECTORY_ID = "refreshRootAndDirectory";
 
+    // Authorities of the Linux providers. Their roots are shown in a dedicated section below the
+    // quick access roots (Home Directory, Desktop, Pictures, Videos, Music, Documents, Downloads).
+    private static final String AUTHORITY_LINUX_FILE_SYSTEM =
+            "com.android.documentsui.fusionvolume";
+    private static final String AUTHORITY_LINUX_HOME = "com.android.documentsui.linux.user";
+
     private RootsListHandler mListHandler;
     private LoaderCallbacks<Collection<RootInfo>> mRootsCallbacks;
     private LoaderCallbacks<Collection<ShortcutInfo>> mShortcutsCallbacks;
@@ -630,6 +636,7 @@ public class RootsFragment extends Fragment {
                                 : new RootItem(root, mActionHandler, maybeShowBadge);
                 trashItems.add(item);
             } else if (root.authority != null) {
+                applyLinuxRootIcon(root);
                 item =
                         mUseRailAsContainer
                                 ? new NavRailRootItem(
@@ -646,49 +653,50 @@ public class RootsFragment extends Fragment {
             }
         }
 
+        // Quick access roots derived from the storage root. They are displayed right below the
+        // storage root (Home Directory) without a divider, in the fixed order below.
+        final List<Item> quickAccessItems = new ArrayList<>();
         if (openQuickFlag == 1) {
             if(desktopInfo != null){
                 desktopInfo.documentId = desktopInfo.rootId = Providers.ROOT_ID_DESKTOP;
                 desktopInfo.title = getString(R.string.fde_desktop);
                 desktopInfo.derivedIcon = R.mipmap.icon_desktop;
-                otherProviders.add(new RootItem(desktopInfo, mActionHandler, maybeShowBadge));
+                quickAccessItems.add(new RootItem(desktopInfo, mActionHandler, maybeShowBadge));
             }
 
-            if(musicInfo !=null){
-                musicInfo.documentId = musicInfo.rootId = Providers.ROOT_ID_AUDIO_NEW;
-                musicInfo.title = getString(R.string.fde_music);
-                musicInfo.derivedIcon = R.mipmap.icon_audio;
-                otherProviders.add(new RootItem(musicInfo, mActionHandler, maybeShowBadge));
+            if(pictureInfo !=null){
+                pictureInfo.documentId = pictureInfo.rootId = Providers.ROOT_ID_IMAGES_NEW;
+                pictureInfo.title = getString(R.string.fde_pictures);
+                pictureInfo.derivedIcon = R.mipmap.icon_picture;
+                quickAccessItems.add(new RootItem(pictureInfo, mActionHandler, maybeShowBadge));
             }
 
             if(videoInfo !=null){
                 videoInfo.rootId = videoInfo.documentId = Providers.ROOT_ID_VIDEOS_NEW;
                 videoInfo.title = getString(R.string.fde_videos);
                 videoInfo.derivedIcon = R.mipmap.icon_video;
-                otherProviders.add(new RootItem(videoInfo, mActionHandler, maybeShowBadge));
+                quickAccessItems.add(new RootItem(videoInfo, mActionHandler, maybeShowBadge));
             }
 
-
-            if(pictureInfo !=null){
-                pictureInfo.documentId = pictureInfo.rootId = Providers.ROOT_ID_IMAGES_NEW;
-                pictureInfo.title = getString(R.string.fde_pictures);
-                pictureInfo.derivedIcon = R.mipmap.icon_picture;
-                otherProviders.add(new RootItem(pictureInfo, mActionHandler, maybeShowBadge));
+            if(musicInfo !=null){
+                musicInfo.documentId = musicInfo.rootId = Providers.ROOT_ID_AUDIO_NEW;
+                musicInfo.title = getString(R.string.fde_music);
+                musicInfo.derivedIcon = R.mipmap.icon_audio;
+                quickAccessItems.add(new RootItem(musicInfo, mActionHandler, maybeShowBadge));
             }
-
 
             if(documentsInfo !=null){
                 documentsInfo.documentId = documentsInfo.rootId = Providers.ROOT_ID_DOCUMENTS_NEW;
                 documentsInfo.title = getString(R.string.fde_documents);
                 documentsInfo.derivedIcon = R.mipmap.icon_document;
-                otherProviders.add(new RootItem(documentsInfo, mActionHandler, maybeShowBadge));
+                quickAccessItems.add(new RootItem(documentsInfo, mActionHandler, maybeShowBadge));
             }
 
             if(downloadInfo !=null){
                 downloadInfo.rootId = downloadInfo.documentId = Providers.ROOT_ID_DOWNLOADS_NEW;
                 downloadInfo.title = getString(R.string.fde_downloads);
                 downloadInfo.derivedIcon = R.mipmap.icon_download;
-                otherProviders.add(new RootItem(downloadInfo, mActionHandler, maybeShowBadge));
+                quickAccessItems.add(new RootItem(downloadInfo, mActionHandler, maybeShowBadge));
             }
 
         }
@@ -722,6 +730,8 @@ public class RootsFragment extends Fragment {
         }
         if (VERBOSE) Log.v(TAG, "Adding storage roots: " + storageProviders);
         result.addAll(storageProviders);
+        if (VERBOSE) Log.v(TAG, "Adding quick access roots: " + quickAccessItems);
+        result.addAll(quickAccessItems);
 
         final List<SortableItem> rootList = new ArrayList<>();
         final List<SortableItem> rootListOtherUser = new ArrayList<>();
@@ -735,18 +745,32 @@ public class RootsFragment extends Fragment {
             includeHandlerApps(state, handlerAppIntent, excludePackage, rootList, rootListOtherUser,
                     rootListAllUsers, otherProviders, userIds, maybeShowBadge);
         } else {
-            // Only add providers
+            // Only add providers. The Linux roots (File System and Linux Home Directory) get
+            // their own section, in a fixed order, right below the quick access roots.
             otherProviders.sort(comp);
+            final List<RootItem> linuxRootItems = new ArrayList<>();
+            final List<RootItem> providerItems = new ArrayList<>();
             for (RootItem item : otherProviders) {
-                if (item.stringId.contains("bugreport") || item.stringId.contains("traces")) {
-                    // remove
-                }else{
-                    if (state.configStore.isPrivateSpaceInDocsUIEnabled()) {
-                        createRootListsPrivateSpaceEnabled(item, userIds, rootListAllUsers);
-                    } else {
-                        createRootListsPrivateSpaceDisabled(item, rootList, rootListOtherUser);
-                    }
-                    mApplicationItemList.add(item);
+                if (isLinuxRoot(item)) {
+                    linuxRootItems.add(item);
+                } else if (!item.stringId.contains("bugreport")
+                        && !item.stringId.contains("traces")) {
+                    providerItems.add(item);
+                }
+            }
+            Collections.sort(linuxRootItems, new LinuxRootComparator());
+            providerItems.addAll(0, linuxRootItems);
+            for (RootItem item : providerItems) {
+                if (state.configStore.isPrivateSpaceInDocsUIEnabled()) {
+                    createRootListsPrivateSpaceEnabled(item, userIds, rootListAllUsers);
+                } else {
+                    createRootListsPrivateSpaceDisabled(item, rootList, rootListOtherUser);
+                }
+                mApplicationItemList.add(item);
+            }
+            for (Item item : quickAccessItems) {
+                if (item instanceof RootItem) {
+                    mApplicationItemList.add((RootItem) item);
                 }
             }
         }
@@ -1206,6 +1230,48 @@ public class RootsFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private static boolean isLinuxRoot(RootItem item) {
+        return item.root != null
+                && (AUTHORITY_LINUX_FILE_SYSTEM.equals(item.root.authority)
+                        || AUTHORITY_LINUX_HOME.equals(item.root.authority));
+    }
+
+    /**
+     * The Linux roots do not carry a derived icon, which makes them render with the untinted
+     * package icon. Assign the same derived icons used by the other sidebar entries so that they
+     * are tinted consistently.
+     */
+    private static void applyLinuxRootIcon(RootInfo root) {
+        if (AUTHORITY_LINUX_FILE_SYSTEM.equals(root.authority)) {
+            // File System.
+            root.derivedIcon = R.mipmap.icon_pc;
+        } else if (AUTHORITY_LINUX_HOME.equals(root.authority)) {
+            // Linux Home Directory.
+            root.derivedIcon = R.mipmap.icon_linux_home;
+        }
+    }
+
+    /** Orders the Linux roots so File System is shown before Linux Home Directory. */
+    private static class LinuxRootComparator implements Comparator<RootItem> {
+        @Override
+        public int compare(RootItem lhs, RootItem rhs) {
+            return getLinuxRootRank(lhs.root) - getLinuxRootRank(rhs.root);
+        }
+
+        private static int getLinuxRootRank(RootInfo root) {
+            if (root == null) {
+                return 2;
+            }
+            if (AUTHORITY_LINUX_FILE_SYSTEM.equals(root.authority)) {
+                return 0;
+            }
+            if (AUTHORITY_LINUX_HOME.equals(root.authority)) {
+                return 1;
+            }
+            return 2;
+        }
     }
 
     private static class RootComparator implements Comparator<RootItem> {
