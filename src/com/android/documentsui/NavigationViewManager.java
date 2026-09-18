@@ -165,6 +165,7 @@ public class NavigationViewManager implements AppBarLayout.OnOffsetChangedListen
                     }
                 });
         mSearchBarView = activity.findViewById(getRes(R.id.searchbar_title));
+          mSearchBarView.setVisibility(VISIBLE);
         mCollapsingBarLayout = activity.findViewById(getRes(R.id.collapsing_toolbar));
         mDefaultActionBarBackground = mToolbar.getBackground();
         mDefaultOutlineProvider = mToolbar.getOutlineProvider();
@@ -378,7 +379,7 @@ public class NavigationViewManager implements AppBarLayout.OnOffsetChangedListen
         if (shouldShowSearchBar()) {
             mBreadcrumbController.setNavBreadcrumbVisible(false);
             mToolbar.setTitle(null);
-            mSearchBarView.setVisibility(VISIBLE);
+            // mSearchBarView.setVisibility(VISIBLE);
             return;
         }
 

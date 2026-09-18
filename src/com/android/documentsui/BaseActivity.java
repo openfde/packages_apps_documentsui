@@ -315,7 +315,7 @@ public abstract class BaseActivity
                             //            );
                                // 自定义标题栏不需要额外 padding
                                if(captionBar!= null){
-                                   captionBar.setPadding(0, 0, 12, 0);
+                                   captionBar.setPadding(0, 0, 0, 0);
                                }
                                return windowInsets;
                            }
