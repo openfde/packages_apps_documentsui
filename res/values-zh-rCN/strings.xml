@@ -85,6 +85,7 @@
     <string name="button_clear" msgid="5412304437764369441">"清除"</string>
     <string name="button_show_provider" msgid="6905880493806292753">"在提供程序中显示"</string>
     <string name="button_back" msgid="1888621708934742182">"返回"</string>
+    <string name="button_forward">"前进"</string>
     <string name="button_show_in_folder" msgid="6674673478637689386">"在文件夹中显示"</string>
     <string name="button_open_trash" msgid="8152584341121216006">"打开回收站"</string>
     <string name="not_sorted" msgid="7813496644889115530">"未排序"</string>

@@ -44,7 +44,7 @@
         <!-- Navigation: left hand side. -->
         <FrameLayout
             android:id="@+id/container_roots"
-            android:layout_width="256dp"
+            android:layout_width="@dimen/left_width"
             android:layout_height="match_parent"
             />
 
@@ -154,72 +154,110 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-
-    
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginRight="160dp"
             android:layout_height="48dp"
-            android:gravity="center_vertical">
+            android:layout_marginRight="160dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <FrameLayout
-                android:layout_height="48dp"
-                android:layout_width="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <!-- Sidebar header background, aligned with container_roots. -->
+              
+                <LinearLayout
+                    android:layout_width="@dimen/left_width"
+                    android:layout_height="48dp"
+                    android:background="?attr/colorSurfaceContainer"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
 
                 <LinearLayout
-                    android:layout_width="256dp"
+                    android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
-                    android:visibility="visible"
-                    android:background="#EEEDF6"
-                    android:orientation="horizontal"/>
+                    android:paddingStart="60dp"
+                    android:orientation="horizontal">
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="64dp"
-                    android:minHeight="48dp"
-                    app:contentInsetStart="0dp"
-                    app:contentInsetStartWithNavigation="0dp"
-                    app:contentInsetEnd="@dimen/space_extra_small_4"
-                    android:touchscreenBlocksFocus="false">
+                  
 
-                 
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:minHeight="48dp"
+                        app:contentInsetStart="0dp"
+                        app:contentInsetStartWithNavigation="0dp"
+                        app:contentInsetEnd="@dimen/space_extra_small_4"
+                        android:touchscreenBlocksFocus="false">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/read_only_label"
+                            android:background="@drawable/read_only_label_background"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_marginStart="@dimen/space_extra_small_4"
+                            android:paddingHorizontal="@dimen/space_extra_small_6"
+                            android:text="@string/read_only_label"
+                            android:textAppearance="@style/TextAppearance.DocumentsUI.LabelSmall"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:tooltipText="@string/read_only_explanation"
+                            android:visibility="gone" />
+
+                        <!-- Search entry point, styled as a rounded input box and kept
+                             vertically centered in the title bar. -->
+                        <TextView
+                            android:id="@+id/searchbar_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="@dimen/space_extra_small_6"
+                            android:background="@drawable/docked_search_bar_background"
+                            android:drawableStart="@drawable/ic_menu_search_m3"
+                            android:drawablePadding="@dimen/space_extra_small_4"
+                            android:gravity="center_vertical"
+                            android:paddingStart="@dimen/space_extra_small_6"
+                            android:paddingEnd="@dimen/space_extra_small_6"
+                            android:text="@string/search_bar_generic_hint"
+                            android:textAppearance="@style/TextAppearance.DocumentsUI.SearchBar" />
+
+                    </com.google.android.material.appbar.MaterialToolbar>
+
+                </LinearLayout>
 
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/read_only_label"
-                        android:background="@drawable/read_only_label_background"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                  <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="@dimen/left_width"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <!-- File navigation history, on the far left of the title bar. The buttons
+                                            share the search box center line and match the other icon buttons. -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/action_back"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_marginStart="@dimen/space_extra_small_4"
-                        android:paddingHorizontal="@dimen/space_extra_small_6"
-                        android:text="@string/read_only_label"
-                        android:textAppearance="@style/TextAppearance.DocumentsUI.LabelSmall"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:tooltipText="@string/read_only_explanation"
-                        android:visibility="gone" />
+                        android:contentDescription="@string/button_back"
+                        android:enabled="false"
+                        app:icon="@drawable/ic_arrow_back_m3" />
 
-                    <!-- Search entry point, styled as a rounded input box and kept
-                         vertically centered in the title bar. -->
-                    <TextView
-                        android:id="@+id/searchbar_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="@dimen/space_extra_small_6"
-                        android:background="@drawable/docked_search_bar_background"
-                        android:drawableStart="@drawable/ic_menu_search_m3"
-                        android:drawablePadding="@dimen/space_extra_small_4"
-                        android:gravity="center_vertical"
-                        android:paddingStart="@dimen/space_extra_small_6"
-                        android:paddingEnd="@dimen/space_extra_small_6"
-                        android:text="@string/search_bar_generic_hint"
-                        android:textAppearance="@style/TextAppearance.DocumentsUI.SearchBar" />
-
-                </com.google.android.material.appbar.MaterialToolbar>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/action_forward"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="@dimen/space_extra_small_4"
+                        android:contentDescription="@string/button_forward"
+                        android:enabled="false"
+                        app:icon="@drawable/ic_arrow_forward_m3" />
+                </LinearLayout>
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/selection_bar"

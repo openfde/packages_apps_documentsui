@@ -112,6 +112,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.color.DynamicColors;
 
 import org.jspecify.annotations.NonNull;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -146,6 +147,14 @@ public abstract class BaseActivity
 
     private View root ;
     private  View  captionBar;
+
+    /** Title bar history buttons. Null when the current layout does not provide them. */
+    private @Nullable View mBackButton;
+    private @Nullable View mForwardButton;
+    /** Directories we navigated back from, used by the title bar "forward" button. */
+    private final List<DocumentInfo> mForwardStack = new ArrayList<>();
+    /** The directory the last entry of {@link #mForwardStack} was left from. */
+    private @Nullable Uri mForwardParentUri;
 
     @Injected
     protected Injector<?> mInjector;
@@ -697,6 +706,8 @@ public abstract class BaseActivity
 
         root = findViewById(R.id.coordinator_layout);
         captionBar = findViewById(R.id.caption_bar);
+
+        setupHistoryButtons();
 
         setupTransparentCaptionBar();
         setupCaptionBarInsets();
@@ -1313,6 +1324,8 @@ public abstract class BaseActivity
 
         mNavigator.update();
 
+        updateHistoryButtons();
+
         refreshDirectory(anim);
 
         final RootsFragment roots = getRootsFragment();
@@ -1709,11 +1722,98 @@ public abstract class BaseActivity
                 fragment.stopScroll();
             }
 
+            final DocumentInfo leaving = mState.stack.peek();
             mState.stack.pop();
+            // Remember the directory we left so the forward button can return to it.
+            if (leaving != null && leaving.isDirectory()) {
+                mForwardStack.add(leaving);
+                mForwardParentUri = getCurrentDirectoryUri();
+            }
             refreshCurrentRootAndDirectory(AnimationView.ANIM_LEAVE);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Navigates forward in the directory history recorded by {@link #popDir()}. Does nothing when
+     * there is no (valid) forward history.
+     */
+    protected boolean goForward() {
+        final Uri currentUri = getCurrentDirectoryUri();
+        if (mForwardStack.isEmpty()
+                || !(currentUri != null && currentUri.equals(mForwardParentUri))) {
+            updateHistoryButtons();
+            return false;
+        }
+
+        final DirectoryFragment fragment = getDirectoryFragment();
+        if (fragment != null) {
+            fragment.stopScroll();
+        }
+
+        final DocumentInfo next = mForwardStack.remove(mForwardStack.size() - 1);
+        mState.stack.push(next);
+        mForwardParentUri = next.derivedUri;
+
+        refreshCurrentRootAndDirectory(AnimationView.ANIM_ENTER);
+        return true;
+    }
+
+    private void setupHistoryButtons() {
+        final View back = findViewById(R.id.action_back);
+        if (back != null) {
+        back.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                popDir();
+                return true;
+            }
+            return false;
+        });
+
+        }
+        final View forward = findViewById(R.id.action_forward);
+        if (forward != null) {
+            forward.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    goForward();
+                    return true;
+                }
+                return false;
+            });
+        }
+        mBackButton = back;
+        mForwardButton = forward;
+        updateHistoryButtons();
+    }
+
+    /**
+     * Refreshes the enabled state of the title bar history buttons. The forward history is dropped
+     * as soon as we are no longer located at the directory it was recorded from.
+     */
+    private void updateHistoryButtons() {
+        if (mBackButton == null && mForwardButton == null) {
+            return;
+        }
+
+        final Uri currentUri = getCurrentDirectoryUri();
+        if (!mForwardStack.isEmpty()
+                && !(currentUri != null && currentUri.equals(mForwardParentUri))) {
+            mForwardStack.clear();
+            mForwardParentUri = null;
+        }
+
+        if (mBackButton != null) {
+            mBackButton.setEnabled(mState.stack.size() > 1);
+        }
+        if (mForwardButton != null) {
+            mForwardButton.setEnabled(!mForwardStack.isEmpty());
+        }
+    }
+
+    private @Nullable Uri getCurrentDirectoryUri() {
+        final DocumentInfo current = mState.stack.peek();
+        return current != null ? current.derivedUri : null;
     }
 
     protected boolean focusSidebar() {
