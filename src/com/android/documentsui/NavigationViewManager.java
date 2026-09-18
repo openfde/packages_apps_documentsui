@@ -155,7 +155,12 @@ public class NavigationViewManager implements AppBarLayout.OnOffsetChangedListen
 
 //        mToolbar.setVisibility(GONE);
         mToolbar.setTitleTextAppearance(mToolbar.getContext(),R.style.MyTextAppearance);
-        mToolbar.setPadding(0,0,0,12);
+        // Keep the title bar content (search box, grid/list toggle and overflow button)
+        // vertically centered: no vertical padding, only a small end inset so the action
+        // buttons are not flush against the window controls area.
+        final int titleBarPaddingEnd =
+                (int) (8 * mToolbar.getResources().getDisplayMetrics().density);
+        mToolbar.setPadding(0, 0, titleBarPaddingEnd, 0);
 
         mToolbar.setNavigationOnClickListener(
                 new View.OnClickListener() {

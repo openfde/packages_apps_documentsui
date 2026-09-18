@@ -17,20 +17,23 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical">
     <LinearLayout
         android:id="@+id/docked_search_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/docked_searchbar_height"
+        android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="@dimen/docked_searchbar_margin"
         android:paddingStart="@dimen/docked_searchbar_padding"
         android:paddingEnd="@dimen/docked_searchbar_padding"
-        android:layout_marginBottom="12dp"
+        android:gravity="center_vertical"
         android:background="@drawable/docked_search_bar_background">
 
         <ImageView
             android:layout_width="@dimen/docked_searchbar_height"
             android:layout_height="@dimen/docked_searchbar_height"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_menu_search_m3"
             android:tint="?attr/colorOnSurfaceVariant"
             android:padding="@dimen/docked_searchbar_icon_padding"
@@ -40,11 +43,14 @@
             android:id="@+id/docked_search_text"
             android:layout_width="@dimen/docked_searchbar_text_width"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:background="@null"
             android:hint="@string/search_bar_generic_hint"
             android:singleLine="true"
+            android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.DocumentsUI.SearchBar"
-            android:textColorHint="@null"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant"
             android:inputType="textFilter|textNoSuggestions"
             android:importantForAutofill="no"
             android:imeOptions="actionSearch">
@@ -54,6 +60,7 @@
             android:id="@+id/docked_search_clear"
             android:layout_width="@dimen/docked_searchbar_height"
             android:layout_height="@dimen/docked_searchbar_height"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_cancel"
             android:tint="?attr/colorOnSurfaceVariant"
             android:padding="@dimen/docked_searchbar_icon_padding"
