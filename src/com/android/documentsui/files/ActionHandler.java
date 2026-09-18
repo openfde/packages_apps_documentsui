@@ -617,6 +617,13 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
             return;
         }
 
+        if (launchToTrash(intent)) {
+            if (DEBUG) {
+                Log.d(TAG, "Launched to trash.");
+            }
+            return;
+        }
+
         if (launchToStackLocation(intent)) {
             if (DEBUG) {
                 Log.d(TAG, "Launched to location from stack.");
@@ -728,6 +735,24 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Opens the trash page directly when the intent carries
+     * {@link Shared#EXTRA_OPEN_TRASH}, e.g. the launcher dock trash icon.
+     */
+    private boolean launchToTrash(Intent intent) {
+        if (!intent.getBooleanExtra(Shared.EXTRA_OPEN_TRASH, false)
+                || !isTrashFlowEnabled()) {
+            return false;
+        }
+        final RootInfo trashRoot = mProviders.getTrashRoot(UserId.CURRENT_USER);
+        if (trashRoot == null) {
+            return false;
+        }
+        setPendingEmptyTrash(intent.getBooleanExtra(Shared.EXTRA_EMPTY_TRASH, false));
+        mActivity.onRootPicked(trashRoot);
         return true;
     }
 
