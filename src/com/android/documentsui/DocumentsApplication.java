@@ -50,6 +50,7 @@ import com.android.documentsui.roots.ProvidersCache;
 import com.android.documentsui.theme.ThemeOverlayManager;
 import com.android.documentsui.util.FlagUtils;
 import com.android.modules.utils.build.SdkLevel;
+import android.app.Activity;
 
 import com.google.common.collect.Lists;
 
@@ -88,6 +89,30 @@ public class DocumentsApplication extends Application {
     private UserIdManager mUserIdManager;
     private UserManagerState mUserManagerState;
     private Lookup<String, String> mFileTypeLookup;
+
+    private  IpcService ipcService ;
+    private static DocumentsApplication instance;
+    private Activity mCurrentActivity;
+
+     public IpcService getIpcService() {
+        return ipcService;
+    }
+
+    public void setIpcService(IpcService ipcService) {
+        this.ipcService = ipcService;
+    }
+
+    public static DocumentsApplication getInstance() {
+        return instance;
+    }
+
+    public void setCurrentActivity(Activity activity) {
+        mCurrentActivity = activity;
+    }
+
+    public Activity getCurrentActivity() {
+        return mCurrentActivity;
+    }
 
     public static ProvidersCache getProvidersCache(Context context) {
         return ((DocumentsApplication) context.getApplicationContext()).mProviders;

@@ -86,6 +86,21 @@
             </intent-filter>
         </activity>
 
+
+        <receiver
+            android:name=".receiver.DesktopFileUpdatePackageReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.fde.desktop.file.update" />
+            </intent-filter>
+        </receiver>
+        
+        <service
+            android:name=".IpcService"
+            android:enabled="true"
+            android:exported="true" />
+
         <!-- There are 2 PickActivity with different themes, one used for feature off, one used
              for feature on. The content of these 2 <activity> should be kept in sync. Remove the
              feature off one once the feature is fully rolleo out.
