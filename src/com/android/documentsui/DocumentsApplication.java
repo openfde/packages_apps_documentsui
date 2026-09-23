@@ -222,6 +222,7 @@ public class DocumentsApplication extends Application {
     public void onCreate() {
         setMaterial3Flag();
         super.onCreate();
+        instance = this ;
         synchronized (DocumentsApplication.class) {
             if (sConfigStore == null) {
                 sConfigStore = new ConfigStore.ConfigStoreImpl();

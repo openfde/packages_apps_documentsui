@@ -50,7 +50,6 @@ public class IpcService extends Service {
         super.onCreate();
         context = this;
         DocumentsApplication.getInstance().setIpcService(this);
-      
     }
 
 
