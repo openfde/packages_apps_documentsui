@@ -52,6 +52,7 @@ import com.android.documentsui.base.Lookup;
 import com.android.documentsui.base.Shared;
 import com.android.documentsui.base.State;
 import com.android.documentsui.base.UserId;
+import com.android.documentsui.sorting.ColumnWidths;
 import com.android.documentsui.ui.Views;
 import com.android.modules.utils.build.SdkLevel;
 
@@ -288,25 +289,20 @@ final class ListDocumentHolder extends DocumentHolder {
      * com.android.documentsui.sorting.TableHeaderController#adjustColumnWidthForSummary()}
      */
     private void adjustColumnWidthForSummary() {
-        if (isUseFileSummaryEnabled()) {
-            setWeight(mTitleContainer, 0.35f);
-            if (mSummary != null) {
-                setWeight(mSummary, 0.25f);
-            }
-            setWeight(mDate, 0.15f);
-            setWeight(mSize, 0.15f);
-            setWeight(mType, 0.15f);
-        } else {
-            setWeight(mTitleContainer, 0.4f);
-            if (mSummary != null) {
-                setWeight(mSummary, 0f);
-            }
-            setWeight(mDate, 0.2f);
-            setWeight(mSize, 0.2f);
-            setWeight(mType, 0.2f);
+        ColumnWidths.ensureDefaults();
+        setWeight(mTitleContainer, ColumnWidths.getWeight(ColumnWidths.COLUMN_TITLE));
+        if (mSummary != null) {
+            setWeight(mSummary, isUseFileSummaryEnabled() ? 0.25f : 0f);
         }
+        setWeight(mDate, ColumnWidths.getWeight(ColumnWidths.COLUMN_DATE));
+        setWeight(mSize, ColumnWidths.getWeight(ColumnWidths.COLUMN_SIZE));
+        setWeight(mType, ColumnWidths.getWeight(ColumnWidths.COLUMN_FILE_TYPE));
     }
 
+        /** Re-applies the current column widths without rebinding the whole row. */
+    void applyColumnWidths() {
+        adjustColumnWidthForSummary();
+    }
     private void bindSummary(@Nullable String summary) {
         if (mSummary == null) {
             return;

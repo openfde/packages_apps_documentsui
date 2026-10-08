@@ -153,6 +153,7 @@ import com.android.documentsui.services.FileOperationService;
 import com.android.documentsui.services.FileOperationService.OpType;
 import com.android.documentsui.services.FileOperations;
 import com.android.documentsui.services.JobProgress;
+import com.android.documentsui.sorting.ColumnWidths;
 import com.android.documentsui.sorting.SortDimension;
 import com.android.documentsui.sorting.SortModel;
 import com.android.documentsui.ui.Snackbars;
@@ -281,6 +282,27 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
                     mActions.loadDocumentsForCurrentStack();
                 }
             };
+
+     /**
+     * Refreshes the widths of the already-bound file rows whenever the user drags a column divider
+     * in the table header.
+     */
+    private final ColumnWidths.Listener mColumnWidthListener =
+            new ColumnWidths.Listener() {
+                @Override
+                public void onColumnWidthsChanged() {
+                    if (mRecView == null) {
+                        return;
+                    }
+                    for (int i = 0; i < mRecView.getChildCount(); i++) {
+                        RecyclerView.ViewHolder holder =
+                                mRecView.getChildViewHolder(mRecView.getChildAt(i));
+                        if (holder instanceof ListDocumentHolder) {
+                            ((ListDocumentHolder) holder).applyColumnWidths();
+                        }
+                    }
+                }
+            };        
 
     // getActivity() from Fragment is final and can't be override/mock in the test, so we extract
     // all getActivity() to this method so we can't override it in the unit test.
@@ -651,6 +673,7 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
 
         mModel.removeUpdateListener(mModelUpdateListener);
         mModel.removeUpdateListener(mAdapter.getModelUpdateListener());
+        ColumnWidths.removeListener(mColumnWidthListener);
         if (isUseFileSummaryEnabled()) {
             mModel.removeSummaryUpdateListener(mAdapter);
         }
@@ -714,6 +737,10 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
         }
 
         mRecView.setAdapter(mAdapter);
+
+        // Keep the column widths of the file rows in sync when the user drags a column divider in
+        // the table header.
+        ColumnWidths.addListener(mColumnWidthListener);
 
         // When mFocusManager.onLayoutCompleted() is called inside the GridLayoutManager's
         // onLayoutCompleted(), the newly added document (e.g.  after new folder creation)
