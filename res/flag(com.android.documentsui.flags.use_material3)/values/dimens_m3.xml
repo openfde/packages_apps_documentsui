@@ -137,12 +137,12 @@
     <dimen name="drawer_padding_bottom">@dimen/space_small_1</dimen>
     <dimen name="drawer_divider_padding_horizontal">16dp</dimen>
     <dimen name="drawer_divider_padding_vertical">@dimen/space_extra_small_4</dimen>
-    <dimen name="drawer_item_height">56dp</dimen>
+    <dimen name="drawer_item_height">48dp</dimen>
     <dimen name="drawer_item_vertical_margin">10dp</dimen>
     <dimen name="drawer_item_text_margin_start">12dp</dimen>
     <dimen name="drawer_item_action_icon_margin_start">4dp</dimen>
 
-    <dimen name="nav_rail_item_height">64dp</dimen>
+    <dimen name="nav_rail_item_height">56dp</dimen>
     <dimen name="nav_rail_item_icon_bg_radius">16dp</dimen>
     <dimen name="nav_rail_item_icon_bg_width">56dp</dimen>
     <dimen name="nav_rail_item_icon_bg_height">32dp</dimen>
