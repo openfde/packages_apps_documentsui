@@ -48,6 +48,16 @@
             android:layout_height="match_parent"
             />
 
+        <View
+            android:id="@+id/resize_handle"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="false"
+            android:background="@drawable/main_container_top_section_background"
+            android:pointerIcon="horizontal_double_arrow"
+            android:visibility="visible" />    
+
         <!-- Main container for the right hand side. -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,6 +178,7 @@
                 <!-- Sidebar header background, aligned with container_roots. -->
               
                 <LinearLayout
+                    android:id="@+id/roots_sidebar_header_bg"
                     android:layout_width="@dimen/left_width"
                     android:layout_height="48dp"
                     android:background="?attr/colorSurfaceContainer"
@@ -230,6 +241,7 @@
 
 
                   <LinearLayout
+                    android:id="@+id/roots_sidebar_nav_buttons"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginStart="@dimen/left_width"

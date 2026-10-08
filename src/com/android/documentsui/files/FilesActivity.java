@@ -38,6 +38,7 @@ import android.view.KeyEvent;
 import android.view.KeyboardShortcutGroup;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.CallSuper;
@@ -305,8 +306,18 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
             View saveContainer = findViewById(getRes(R.id.container_save));
             saveContainer.setBackgroundColor(Color.TRANSPARENT);
         }
-
+        setupResizeHandle();
         presentFileErrors(icicle, intent);
+    }
+
+    private void setupResizeHandle() {
+        View resizeHandle = findViewById(R.id.resize_handle);
+        View rootsContainer = findViewById(R.id.container_roots);
+        View rootsContainer2 = findViewById(R.id.roots_sidebar_header_bg);
+        View navButtons = findViewById(R.id.roots_sidebar_nav_buttons);
+        if (resizeHandle != null && rootsContainer != null) {
+            new com.android.documentsui.util.ResizeHandleHelper(resizeHandle, rootsContainer,rootsContainer2,navButtons);
+        }
     }
 
     private AppsRowManager getAppsRowManager() {
