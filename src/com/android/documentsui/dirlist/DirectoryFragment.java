@@ -175,6 +175,11 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+import com.fde.baselib.Animation.AnimDrawablePlayer;
+import com.fde.baselib.Animation.AnimFactory;
+import com.fde.baselib.view.CustomScrollBarView;
+import com.fde.baselib.view.RecyclerScrollBinder;
+
 /**
  * Display the documents inside a single directory.
  */
@@ -206,6 +211,10 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
     @VisibleForTesting public static final int TICK_VISIBLE_DURATION_MS = 1200;
 
     private BaseActivity mActivity;
+
+    AnimDrawablePlayer animDrawablePlayer;
+    ImageView imgLoadding;
+    CustomScrollBarView customScrollBarView;
 
     private State mState;
     private Model mModel;
@@ -589,10 +598,15 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
                     }
                 });
 
+        imgLoadding = (ImageView)mRootView.findViewById(R.id.imgLoadding);
+        mRecView = (RecyclerView) mRootView.findViewById(R.id.dir_list);
+        customScrollBarView = (CustomScrollBarView) mRootView.findViewById(R.id.customScrollBarView);
+
         mRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(getRes(R.id.refresh_layout));
         mRefreshLayout.setOnRefreshListener(this);
         mRecView.setItemAnimator(new DirectoryItemAnimator());
 
+        RecyclerScrollBinder.bind(mRecView, customScrollBarView);
         mInjector = mActivity.getInjector();
         // Initially, this selection tracker (delegator) uses a stub implementation, so it must be
         // updated (reset) when necessary things are ready.
@@ -600,6 +614,7 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
         mModel = mInjector.getModel();
         mModel.reset();
 
+        animDrawablePlayer = AnimFactory.INSTANCE.loading(getActivity(), imgLoadding);
         mInjector.actions.registerDisplayStateChangedListener(mOnDisplayStateChanged);
 
         mClipper = DocumentsApplication.getDocumentClipper(getContext());
@@ -702,10 +717,29 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
         super.onDestroyView();
     }
 
+    public void startLoadding(){
+        if(imgLoadding !=null){
+            imgLoadding.setVisibility(View.VISIBLE);
+        }
+        if(animDrawablePlayer !=null){
+            animDrawablePlayer.start();
+        }
+    }
+
+    public void stopLoadding(){
+        if(animDrawablePlayer !=null){
+            animDrawablePlayer.stop();
+        }
+        if(imgLoadding !=null){
+            imgLoadding.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        startLoadding();
         mState = mActivity.getDisplayState();
 
         if (isUseMaterial3FlagEnabled()) {
@@ -2231,6 +2265,7 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
                     mActivity.updateHeaderTitle();
                 }
             }
+            stopLoadding();
             if (isUseMaterial3FlagEnabled()) {
                 mRecView.post(mFocusManager::onLayoutCompleted);
             }
