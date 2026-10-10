@@ -15,7 +15,7 @@
 -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="@dimen/drawer_item_height"/>
+    <corners android:radius="@dimen/drawer_item_radius"/>
     <!-- The color here is used as activated color in root_item_background.xml. -->
     <solid android:color="?attr/colorSecondaryContainer"/>
 </shape>

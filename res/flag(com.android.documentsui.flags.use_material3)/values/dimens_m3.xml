@@ -138,6 +138,7 @@
     <dimen name="drawer_divider_padding_horizontal">16dp</dimen>
     <dimen name="drawer_divider_padding_vertical">@dimen/space_extra_small_4</dimen>
     <dimen name="drawer_item_height">56dp</dimen>
+    <dimen name="drawer_item_radius">8dp</dimen>
     <dimen name="drawer_item_vertical_margin">10dp</dimen>
     <dimen name="drawer_item_text_margin_start">12dp</dimen>
     <dimen name="drawer_item_action_icon_margin_start">4dp</dimen>

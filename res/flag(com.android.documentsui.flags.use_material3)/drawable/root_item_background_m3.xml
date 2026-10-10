@@ -29,7 +29,7 @@
         <selector>
             <item app:state_error="true">
                 <shape>
-                    <corners android:radius="@dimen/drawer_item_height"/>
+                    <corners android:radius="@dimen/drawer_item_radius"/>
                     <solid android:color="?attr/colorErrorContainer" />
                 </shape>
             </item>
@@ -39,13 +39,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="?attr/colorSecondaryContainer"/>
                         </shape>
                     </item>
                     <item>
                         <shape android:tint="?attr/colorOnSecondaryContainer">
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="@color/overlay_hover_color_percentage"/>
                         </shape>
                     </item>
@@ -55,13 +55,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="?attr/colorSecondaryContainer"/>
                         </shape>
                     </item>
                     <item>
                         <shape android:tint="?attr/colorOnSecondaryContainer">
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="@color/overlay_hover_color_percentage"/>
                         </shape>
                     </item>
@@ -74,13 +74,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="?attr/colorSecondaryContainer"/>
                         </shape>
                     </item>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <stroke android:width="@dimen/focus_ring_width" android:color="?attr/colorSecondary"/>
                         </shape>
                     </item>
@@ -90,13 +90,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="?attr/colorSecondaryContainer"/>
                         </shape>
                     </item>
                     <item>
                         <shape android:tint="?attr/colorOnSecondaryContainer">
-                            <corners android:radius="@dimen/drawer_item_height"/>
+                            <corners android:radius="@dimen/drawer_item_radius"/>
                             <solid android:color="@color/overlay_hover_color_percentage"/>
                         </shape>
                     </item>
@@ -107,25 +107,25 @@
             <!-- Unselected. -->
             <item app:state_highlighted="true">
                 <shape android:tint="?attr/colorOnSurface">
-                    <corners android:radius="@dimen/drawer_item_height"/>
+                    <corners android:radius="@dimen/drawer_item_radius"/>
                     <solid android:color="@color/overlay_hover_color_percentage"/>
                 </shape>
             </item>
             <item android:state_pressed="true">
                 <shape android:tint="?attr/colorOnSurface">
-                    <corners android:radius="@dimen/drawer_item_height"/>
+                    <corners android:radius="@dimen/drawer_item_radius"/>
                     <solid android:color="@color/overlay_hover_color_percentage"/>
                 </shape>
             </item>
             <item android:state_focused="true" android:state_window_focused="true">
                 <shape>
-                    <corners android:radius="@dimen/drawer_item_height"/>
+                    <corners android:radius="@dimen/drawer_item_radius"/>
                     <stroke android:width="@dimen/focus_ring_width" android:color="?attr/colorSecondary"/>
                 </shape>
             </item>
             <item android:state_hovered="true">
                 <shape android:tint="?attr/colorOnSurface">
-                    <corners android:radius="@dimen/drawer_item_height"/>
+                    <corners android:radius="@dimen/drawer_item_radius"/>
                     <solid android:color="@color/overlay_hover_color_percentage"/>
                 </shape>
             </item>
