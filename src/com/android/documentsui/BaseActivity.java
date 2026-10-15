@@ -346,6 +346,13 @@ public abstract class BaseActivity
                 if (decorView.getWidth() <= 0) {
                     return;
                 }
+                // 桌面模式（自由窗口）下窗口顶部 48dp 与系统标题栏重叠：上报手势排除区会让
+                // WM Shell 把标题栏右半段从可触摸区中扣除，该条带内按下无法发起窗口拖动
+                // （见 issue #492）。因此仅在窗口没有系统标题栏时上报排除区。
+                if (hasVisibleCaptionBar(decorView)) {
+                    decorView.setSystemGestureExclusionRects(new ArrayList<Rect>());
+                    return;
+                }
                 int height = (int) (48 * getResources().getDisplayMetrics().density);
                 List<Rect> rects = new ArrayList<>();
                 rects.add(new Rect( decorView.getWidth()/2, 0,decorView.getWidth(),  height ));
@@ -365,6 +372,17 @@ public abstract class BaseActivity
                     }
                 }
         );
+    }
+
+    /**
+     * 窗口当前是否显示了系统标题栏（桌面模式自由窗口）。
+     * 有系统标题栏时，窗口顶部区域属于系统标题栏的拖动带，不应被应用上报为手势排除区。
+     */
+    private static boolean hasVisibleCaptionBar(View decorView) {
+        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(decorView);
+        return insets != null
+                && insets.isVisible(WindowInsetsCompat.Type.captionBar())
+                && insets.getInsets(WindowInsetsCompat.Type.captionBar()).top > 0;
     }
 
     @CallSuper
