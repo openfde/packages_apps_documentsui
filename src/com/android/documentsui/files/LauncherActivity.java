@@ -60,7 +60,8 @@ public class LauncherActivity extends Activity {
      */
     public static final String FIX496_TAG = "OpenFdeFix496";
     private static final String FIX496_MARKER =
-            "issue496-fix-applied documentLaunchMode=intoExisting";
+            "issue496-fix-applied documentLaunchMode=intoExisting"
+                    + " restoreTask=MULTIPLE_TASK-stripped";
 
     // Array of boolean extras that should be copied when creating new launch intents.
     // Missing intents will be ignored.
@@ -147,6 +148,13 @@ public class LauncherActivity extends Activity {
             Log.d(TAG, "Restoring existing task > " + intent.getData());
         }
         try {
+            // The base intent persisted with an existing task can still carry
+            // FLAG_ACTIVITY_MULTIPLE_TASK, e.g. when the task was created while
+            // documentLaunchMode was "always". Replaying it verbatim makes
+            // ActivityStarter#resolveReusableTask skip the existing task and start
+            // another FilesActivity task instead. Drop the flag so that the
+            // intoExisting deduplication also works for already persisted tasks.
+            intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             // TODO: This doesn't appear to restore a task once it has stopped running.
             Log.i(FIX496_TAG, "restoreTask(): startActivity data=" + intent.getData()
                     + " flags=0x" + Integer.toHexString(intent.getFlags()));
