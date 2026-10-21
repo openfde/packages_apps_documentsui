@@ -123,6 +123,11 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
 
     @Override
     public void onCreate(Bundle icicle) {
+        Log.i(LauncherActivity.FIX496_TAG, "FilesActivity.onCreate taskId=" + getTaskId()
+                + " icicle=" + (icicle != null)
+                + " data=" + getIntent().getData()
+                + " flags=0x" + Integer.toHexString(getIntent().getFlags()));
+
         setTheme(getRes(R.style.DocumentsTheme));
 
         MessageBuilder messages = new MessageBuilder(this);
@@ -435,6 +440,9 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
 
     @Override
     protected void onDestroy() {
+        Log.i(LauncherActivity.FIX496_TAG, "FilesActivity.onDestroy taskId=" + getTaskId()
+                + " isFinishing=" + isFinishing()
+                + " isChangingConfigurations=" + isChangingConfigurations());
         super.onDestroy();
     }
 

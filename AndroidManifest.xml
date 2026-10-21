@@ -209,7 +209,7 @@
             android:name=".files.FilesActivity"
             android:taskAffinity=""
             android:launchMode="standard"
-            android:documentLaunchMode="always"
+            android:documentLaunchMode="intoExisting"
             android:exported="true"
             android:theme="@style/LauncherTheme"
             android:configChanges="locale|layoutDirection">
