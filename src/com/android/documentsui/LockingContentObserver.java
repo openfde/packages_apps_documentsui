@@ -60,6 +60,7 @@ public final class LockingContentObserver extends ContentObserver {
 
     @Override
     public void onChange(boolean selfChange) {
+        Log.d(TAG, "11 hasDeletedFiles onChange selfChange  "+selfChange);
         if (mPaused.get()) {
             if (DEBUG) {
                 Log.d(TAG, "Change dropped due to pause.");

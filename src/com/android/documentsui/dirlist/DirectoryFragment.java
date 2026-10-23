@@ -411,17 +411,18 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (!isUseMaterial3FlagEnabled()
-                            || mActivity == null
-                            || !mActivity.isSearching()) {
-                        return;
-                    }
+                    // if (!isUseMaterial3FlagEnabled()
+                    //         || mActivity == null
+                    //         || !mActivity.isSearching()) {
+                    //     return;
+                    // }
 
-                    assert ACTION_PROGRESS.equals(intent.getAction());
+                    // assert ACTION_PROGRESS.equals(intent.getAction());
                     final Collection<JobProgress> progresses =
                             getParcelableArrayListExtra(intent, EXTRA_PROGRESS, JobProgress.class);
                     assert progresses != null;
                     for (JobProgress p : progresses) {
+                        Log.d(TAG,"mJobProgressObserver state "+p.state  + ",operationType:  "+p.operationType);
                         if (p.state == STATE_COMPLETED
                                 && (p.operationType == OPERATION_DELETE
                                         || p.operationType == OPERATION_TRASH)) {

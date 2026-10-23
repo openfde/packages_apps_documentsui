@@ -80,6 +80,7 @@ import com.android.documentsui.base.State;
 import com.android.documentsui.base.UserId;
 import com.android.documentsui.clipping.DocumentClipper;
 import com.android.documentsui.dirlist.AnimationView.AnimationType;
+import com.android.documentsui.provider.FileUtils;
 import com.android.documentsui.dirlist.AppsRowManager;
 import com.android.documentsui.dirlist.DirectoryFragment;
 import com.android.documentsui.services.FileOperationService;
@@ -89,9 +90,15 @@ import com.android.documentsui.ui.MessageBuilder;
 import com.android.documentsui.util.VersionUtils;
 
 import kotlinx.coroutines.Dispatchers;
+import android.database.ContentObserver;
+import android.provider.Settings;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.database.Cursor;
+import android.provider.MediaStore;
 
 /**
  * Standalone file management activity.
@@ -121,9 +128,25 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
         return super.popDir();
     }
 
+   
+
     @Override
     public void onCreate(Bundle icicle) {
         setTheme(getRes(R.style.DocumentsTheme));
+        
+        Uri uri = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        getContentResolver().registerContentObserver(uri,true,new ContentObserver(null){
+            @Override
+            public void onChange(boolean selfChange) {
+                File fileTrash = new File(FileUtils.PATH_TRASH);
+                 if(!fileTrash.exists()){
+                    fileTrash.mkdir();
+                }
+                int trashLen = fileTrash.listFiles().length;
+                Log.d(TAG,"trashLen "+trashLen);
+                Settings.System.putInt(getContentResolver(), "trash_storage", trashLen);
+            }
+        });
 
         MessageBuilder messages = new MessageBuilder(this);
         Features features = Features.create(this);

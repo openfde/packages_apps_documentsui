@@ -358,8 +358,8 @@ public final class MenuManager extends com.android.documentsui.MenuManager {
     }
 
     @Override
-    protected void updateMoveToTrash(MenuItem moveToTrash, SelectionDetails selectionDetails) {
-        final boolean enabled = selectionDetails.canTrash() && isTrashFlowEnabled();
+    protected void updateMoveToTrash(MenuItem moveToTrash, SelectionDetails selectionDetails,boolean isShow) {
+        final boolean enabled = selectionDetails.canTrash() && isTrashFlowEnabled() && isShow;
         if (!disableIfContentUnavailable(moveToTrash, selectionDetails, enabled)) {
             Menus.setEnabledAndVisible(moveToTrash, enabled);
         }
@@ -367,8 +367,8 @@ public final class MenuManager extends com.android.documentsui.MenuManager {
 
     @Override
     protected void updateRestoreFromTrash(MenuItem restoreFromTrash,
-            SelectionDetails selectionDetails) {
-        final boolean enabled = selectionDetails.canRestore() && isTrashFlowEnabled();
+            SelectionDetails selectionDetails,boolean isShow) {
+        final boolean enabled = selectionDetails.canRestore() && isTrashFlowEnabled() && isShow;
         if (!disableIfContentUnavailable(restoreFromTrash, selectionDetails, enabled)) {
             Menus.setEnabledAndVisible(restoreFromTrash, enabled);
         }

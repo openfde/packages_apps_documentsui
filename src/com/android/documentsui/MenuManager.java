@@ -140,9 +140,11 @@ public abstract class MenuManager {
         }
 
         if (isTrashFlowEnabled()) {
-            updateMoveToTrash(menu.findItem(getRes(R.id.action_menu_move_to_trash)), selection);
+            boolean isTrashRoot = mState.stack.isTrashRoot();
+            Log.d(TAG,"updateActionMenu mState.stack.isTrashRoot() "+isTrashRoot);
+            updateMoveToTrash(menu.findItem(getRes(R.id.action_menu_move_to_trash)), selection,!isTrashRoot);
             updateRestoreFromTrash(
-                    menu.findItem(getRes(R.id.action_menu_restore_from_trash)), selection);
+                    menu.findItem(getRes(R.id.action_menu_restore_from_trash)), selection,isTrashRoot);
         }
 
         if (isUseApprovedDocumentHandlerEnabled()) {
@@ -388,8 +390,9 @@ public abstract class MenuManager {
         if (isTrashFlowEnabled()) {
             MenuItem moveToTrash = menu.findItem(getRes(R.id.dir_menu_move_to_trash));
             MenuItem restoreFromTrash = menu.findItem(getRes(R.id.dir_menu_restore_from_trash));
-            updateMoveToTrash(moveToTrash, selectionDetails);
-            updateRestoreFromTrash(restoreFromTrash, selectionDetails);
+            boolean isTrashRoot = mState.stack.isTrashRoot();
+            updateMoveToTrash(moveToTrash, selectionDetails,!isTrashRoot);
+            updateRestoreFromTrash(restoreFromTrash, selectionDetails,isTrashRoot);
         }
 
         updateCopyAndCut(copy, cut, selectionDetails);
@@ -670,12 +673,12 @@ public abstract class MenuManager {
         Menus.setEnabledAndVisible(it, false);
     }
 
-    protected void updateMoveToTrash(MenuItem moveToTrash, SelectionDetails selectionDetails) {
-        Menus.setEnabledAndVisible(moveToTrash, false);
+    protected void updateMoveToTrash(MenuItem moveToTrash, SelectionDetails selectionDetails,boolean isShow) {
+        Menus.setEnabledAndVisible(moveToTrash, isShow);
     }
 
     protected void updateRestoreFromTrash(MenuItem restoreFromTrash,
-            SelectionDetails selectionDetails) {
+            SelectionDetails selectionDetails,boolean isShow) {
         Menus.setEnabledAndVisible(restoreFromTrash, false);
     }
 
