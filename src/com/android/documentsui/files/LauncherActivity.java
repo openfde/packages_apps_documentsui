@@ -52,6 +52,17 @@ public class LauncherActivity extends Activity {
     private static final String LAUNCH_CONTROL_AUTHORITY = "com.android.documentsui.launchControl";
     private static final String TAG = "LauncherActivity";
 
+    /**
+     * OpenFDE issue 496 diagnostics. This tag is deliberately unconditional (not gated on
+     * the documentsui DEBUG flag) so that a user build can be checked with
+     * {@code adb logcat -s OpenFdeFix496}. The marker line proves that this patch is present
+     * in the running build; the remaining lines trace task reuse.
+     */
+    public static final String FIX496_TAG = "OpenFdeFix496";
+    private static final String FIX496_MARKER =
+            "issue496-fix-applied documentLaunchMode=intoExisting"
+                    + " restoreTask=MULTIPLE_TASK-stripped";
+
     // Array of boolean extras that should be copied when creating new launch intents.
     // Missing intents will be ignored.
     private static final String[] PERSISTENT_BOOLEAN_EXTRAS = {
@@ -62,15 +73,26 @@ public class LauncherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.i(FIX496_TAG, FIX496_MARKER
+                + " LauncherActivity.onCreate taskId=" + getTaskId()
+                + " savedInstanceState=" + (savedInstanceState != null)
+                + " isChangingConfigurations=" + isChangingConfigurations()
+                + " data=" + getIntent().getData()
+                + " flags=0x" + Integer.toHexString(getIntent().getFlags()));
+
         launch();
 
         finish();
+
+        Log.i(FIX496_TAG, "LauncherActivity.finish() called taskId=" + getTaskId());
     }
 
     private void launch() {
         ActivityManager activities = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
         Intent intent = findTask(activities);
+        Log.i(FIX496_TAG, "launch(): existing launch task=" + (intent != null)
+                + " data=" + (intent == null ? null : intent.getData()));
         if (intent != null) {
             if (restoreTask(intent)) {
                 return;
@@ -87,10 +109,18 @@ public class LauncherActivity extends Activity {
 
     private @Nullable Intent findTask(ActivityManager activities) {
         List<AppTask> tasks = activities.getAppTasks();
+        Log.i(FIX496_TAG, "findTask(): appTasks=" + tasks.size());
         for (AppTask task : tasks) {
-            Intent intent = task.getTaskInfo().baseIntent;
+            ActivityManager.RecentTaskInfo info = task.getTaskInfo();
+            Intent intent = info.baseIntent;
             Uri uri = intent.getData();
-            if (isLaunchUri(uri)) {
+            boolean launchUri = isLaunchUri(uri);
+            Log.i(FIX496_TAG, "findTask(): candidate taskId=" + info.taskId
+                    + " launchUri=" + launchUri
+                    + " data=" + uri
+                    + " flags=0x" + Integer.toHexString(intent.getFlags()));
+            if (launchUri) {
+                Log.i(FIX496_TAG, "findTask(): selected taskId=" + info.taskId);
                 return intent;
             }
         }
@@ -108,6 +138,8 @@ public class LauncherActivity extends Activity {
         if (DEBUG) {
             Log.d(TAG, "Starting new task > " + intent.getData());
         }
+        Log.i(FIX496_TAG, "startTask(): new task data=" + intent.getData()
+                + " flags=0x" + Integer.toHexString(intent.getFlags()));
         startActivity(intent);
     }
 
@@ -116,7 +148,16 @@ public class LauncherActivity extends Activity {
             Log.d(TAG, "Restoring existing task > " + intent.getData());
         }
         try {
+            // The base intent persisted with an existing task can still carry
+            // FLAG_ACTIVITY_MULTIPLE_TASK, e.g. when the task was created while
+            // documentLaunchMode was "always". Replaying it verbatim makes
+            // ActivityStarter#resolveReusableTask skip the existing task and start
+            // another FilesActivity task instead. Drop the flag so that the
+            // intoExisting deduplication also works for already persisted tasks.
+            intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             // TODO: This doesn't appear to restore a task once it has stopped running.
+            Log.i(FIX496_TAG, "restoreTask(): startActivity data=" + intent.getData()
+                    + " flags=0x" + Integer.toHexString(intent.getFlags()));
             startActivity(intent);
 
             return true;
