@@ -711,7 +711,7 @@ public abstract class BaseActivity
 
         setupTransparentCaptionBar();
         setupCaptionBarInsets();
-        setupGestureExclusion();
+        // setupGestureExclusion();
     }
 
     private NavigationViewManager getNavigationViewManager(
