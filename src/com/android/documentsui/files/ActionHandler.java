@@ -69,6 +69,7 @@ import com.android.documentsui.clipping.DocumentClipper;
 import com.android.documentsui.clipping.UrisSupplier;
 import com.android.documentsui.dirlist.AnimationView;
 import com.android.documentsui.peek.PeekViewManager;
+import com.android.documentsui.provider.FileUtils;
 import com.android.documentsui.queries.SearchViewManager;
 import com.android.documentsui.roots.ProvidersAccess;
 import com.android.documentsui.services.FileOperation;
@@ -80,7 +81,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executor;
-
+import android.provider.Settings;
 import javax.annotation.Nullable;
 
 /**
@@ -697,6 +698,8 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
         }
 
         deleteSelectedDocuments(docs, /* srcParent */ null);
+        FileUtils.clearTrashFolder(FileUtils.PATH_TRASH);
+        Settings.System.putInt(mActivity.getContentResolver(), "trash_storage", 0);
     }
 
     // If EXTRA_STACK is not null in intent, we'll skip other means of loading

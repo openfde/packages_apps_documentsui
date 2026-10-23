@@ -197,6 +197,7 @@ abstract class Message {
                     && isUseMaterial3FlagEnabled()
                     && mEnv.isOnTrashPage()) {
                 final boolean isEmptyPage = mEnv.getModel().getModelIds().length == 0;
+                Log.d(TAG, "11 hasDeletedFiles isEmptyPage  "+isEmptyPage);
                 update(
                         null,
                         mEnv.getContext().getString(getRes(R.string.empty_trash_banner_message)),

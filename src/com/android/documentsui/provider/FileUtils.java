@@ -82,6 +82,8 @@ public class FileUtils {
 
     public static final String PATH_ID_DESKTOP = "/mnt/sdcard/" + DESKTOP + "/";
 
+    public static final String PATH_TRASH = "/mnt/sdcard/.trash-storage/";
+
     public static final String OPEN_DIR = "OPEN_DIR";
 
     public static final String OPEN_FILE = "OPEN_FILE";
@@ -1238,5 +1240,51 @@ public static final String QUERY_ARG_LAST_MODIFIED_AFTER =
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * 清空指定目录下的所有文件和子文件夹（保留根目录本身）
+     * @param dirPath 目录路径，例如 "/mnt/sdcard/.trash-storage/"
+     */
+    public static void clearTrashFolder(String dirPath) {
+        if (dirPath == null || dirPath.isEmpty()) {
+            return;
+        }
+        clearTrashFolder(new File(dirPath));
+    }
+
+    /**
+     * 重载方法：传入 File 对象
+     */
+    public static void clearTrashFolder(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory()) {
+            return;
+        }
+
+        // 获取目录下的所有子项
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                deleteRecursive(file);
+            }
+        }
+    }
+
+    /**
+     * 递归删除文件或子目录
+     */
+    private static void deleteRecursive(File file) {
+        if (file.isDirectory()) {
+            // 如果是子文件夹，先清空其内部内容
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteRecursive(child);
+                }
+            }
+        }
+        // 删除文件或已经清空的空文件夹
+        file.delete();
     }
 }
