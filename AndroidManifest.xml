@@ -102,6 +102,23 @@
             android:enabled="true"
             android:exported="true" />
 
+        <!--
+        通过 App Functions 向系统智能体（Agent）暴露文件管理器能力：删除（移入回收站）、
+        移动文件夹下的文件到目标目录、重命名文件夹、清空回收站。
+        功能定义见 assets/appfunctions.xml（deleteFile / moveFiles / renameFolder / emptyTrash）。
+        -->
+        <service
+            android:name=".appfunctions.DocumentsUiAppFunctionService"
+            android:permission="android.permission.BIND_APP_FUNCTION_SERVICE"
+            android:exported="true">
+            <property
+                android:name="android.app.appfunctions"
+                android:value="appfunctions.xml" />
+            <intent-filter>
+                <action android:name="android.app.appfunctions.AppFunctionService" />
+            </intent-filter>
+        </service>
+
         <!-- There are 2 PickActivity with different themes, one used for feature off, one used
              for feature on. The content of these 2 <activity> should be kept in sync. Remove the
              feature off one once the feature is fully rolleo out.

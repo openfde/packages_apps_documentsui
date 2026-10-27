@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  DocumentsUI App Functions 静态描述（框架 legacy XML asset 格式，由系统 AppSearch 索引读取）。
+  供系统智能体（Agent）/ App Function 调用方检索本应用可执行的功能：
+    - deleteFile    删除（移入回收站）某个文件或文件夹
+    - moveFiles     把某个文件夹下的所有文件/子文件夹移动到某个目标目录
+    - renameFolder  重命名某个文件夹
+    - emptyTrash    清空回收站
+
+  所有路径参数支持绝对路径（如 /storage/emulated/0/Desktop/a.txt），
+  也支持相对桌面的名称（如 a.txt，等价于 /storage/emulated/0/Desktop/a.txt）。
+-->
+<appfunctions>
+    <appfunction>
+        <id>deleteFile</id>
+        <function_id>deleteFile</function_id>
+        <schema_name>deleteFile</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>moveFiles</id>
+        <function_id>moveFiles</function_id>
+        <schema_name>moveFiles</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>renameFolder</id>
+        <function_id>renameFolder</function_id>
+        <schema_name>renameFolder</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>emptyTrash</id>
+        <function_id>emptyTrash</function_id>
+        <schema_name>emptyTrash</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+</appfunctions>

@@ -196,6 +196,12 @@ android_app {
     static_libs: ["DocumentsUI-lib"],
     resource_dirs: [],
 
+    // App Functions 静态描述（assets/appfunctions.xml），供系统 AppSearch 索引读取。
+    // `assets` is a directory, so it must go through asset_dirs (not the file-list `assets`
+    // property); using `assets: ["assets"]` makes Soong try to read the dir as a file and
+    // panics during ninja generation.
+    asset_dirs: ["assets"],
+
     flags_packages: ["docsui-flags-aconfig"],
 
     licenses: [
