@@ -675,7 +675,10 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
             return;
         }
 
-        EmptyTrashDialogFragment.show(mActivity.getSupportFragmentManager());
+        // Launch the standalone dialog-style EmptyTrashActivity. Unlike the old
+        // EmptyTrashDialogFragment it doesn't depend on this activity to drain its injector,
+        // it renders its own UI and performs the empty trash operation by itself.
+        mActivity.startActivity(EmptyTrashActivity.createIntent(mActivity));
     }
 
     @Override

@@ -71,6 +71,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import java.util.Locale;
+import android.provider.Settings;
+import android.provider.MediaStore;
 
 public class FileUtils {
 
@@ -312,6 +314,47 @@ public class FileUtils {
             Intent intent = new Intent();
             intent.setAction("android.intent.action.FDE_PROVIDER");
             context.sendBroadcast(intent);
+        }
+    }
+
+
+    public static void deleteTrashFiles(Context context , String path) {
+        try {
+            File file = new File(path);
+            if (!file.exists()) {
+                return;
+            }
+            // 回收站目录
+            File trashDir = new File("/mnt/sdcard/.trash-storage/");
+            if (!trashDir.exists() && !trashDir.mkdirs()) {
+                return;
+            }
+            // 生成目标文件名，避免重名覆盖
+            // File target = new File(trashDir,file.getName() + "_" + System.currentTimeMillis()
+            // );
+            // 直接移动文件或整个文件夹
+            if (!file.renameTo(trashDir)) {
+                Log.d(TAG,"移动到回收站失败: " + file.getAbsolutePath());
+            }
+            Settings.System.putInt(context.getContentResolver(), "trash_storage", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void trashPath(Context context ,String path) {
+        try {
+            String trashedPath = MediaStore.trashFile(
+                    context.getContentResolver(),
+                    path
+            );
+
+            android.util.Log.d("RecycleBin",
+                    "已移入回收站: " + trashedPath);
+
+        } catch (Exception e) {
+            android.util.Log.e("RecycleBin",
+                    "移入回收站失败: " + path, e);
         }
     }
 

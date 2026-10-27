@@ -81,4 +81,12 @@
     <style name="TabTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="colorPrimary">@color/edge_effect</item>
     </style>
+
+    <!-- Theme for EmptyTrashActivity. The activity window is a floating dialog (like the
+         confirmation dialog shown previously by EmptyTrashDialogFragment) but the activity
+         itself exists independently of other activities. The (possibly Material3) default
+         theme is applied on top at runtime to keep colors/components consistent. -->
+    <style name="EmptyTrashDialogTheme" parent="@style/Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:dialogCornerRadius">@dimen/grid_item_radius</item>
+    </style>
 </resources>

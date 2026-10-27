@@ -156,7 +156,7 @@ public class IpcService extends Service {
                     startActivity(shareIntent);
                 }
             } else if (FileUtils.DELETE_FILE.equals(method)) {
-                FileUtils.deleteFiles(params);
+                FileUtils.trashPath(context,params);
                 gotoClientApp("DELETE_FILE","");
             }else if(FileUtils.NEW_FILE.equals(method)){
                 String fileName = FileUtils.newFile();
