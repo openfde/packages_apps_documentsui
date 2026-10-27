@@ -237,6 +237,9 @@
 
     <dimen name="dialog_content_padding_horizontal">@dimen/space_small_4</dimen>
     <dimen name="dialog_content_padding_top_no_title">@dimen/space_small_4</dimen>
+    <!-- Material3 alert dialog corner radius (28dp). Used by EmptyTrashActivity's content
+         background drawable when the use_material3 flag is enabled. -->
+    <dimen name="empty_trash_dialog_corner_radius">28dp</dimen>
 
     <dimen name="apps_row_item_width_m3">96dp</dimen>
     <dimen name="apps_row_app_icon_size_m3">24dp</dimen>

@@ -156,7 +156,9 @@ public class IpcService extends Service {
                     startActivity(shareIntent);
                 }
             } else if (FileUtils.DELETE_FILE.equals(method)) {
-                FileUtils.deleteFiles(params);
+                // params 为文件实际路径：移至系统回收站（实现与
+                // ActionHandler.trashSelectedDocuments() 相同的回收流程）
+                FileUtils.trashPath(context,params);
                 gotoClientApp("DELETE_FILE","");
             }else if(FileUtils.NEW_FILE.equals(method)){
                 String fileName = FileUtils.newFile();

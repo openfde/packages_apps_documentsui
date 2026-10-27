@@ -38,8 +38,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.android.documentsui.DocumentsApplication;
 import com.android.documentsui.R;
 import com.android.documentsui.base.DocumentInfo;
+import com.android.documentsui.clipping.UrisSupplier;
+import com.android.documentsui.services.FileOperation;
+import com.android.documentsui.services.FileOperationService;
+import com.android.documentsui.services.FileOperations;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -62,6 +67,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -71,6 +77,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import java.util.Locale;
+import android.provider.Settings;
 
 public class FileUtils {
 
@@ -313,6 +320,105 @@ public class FileUtils {
             intent.setAction("android.intent.action.FDE_PROVIDER");
             context.sendBroadcast(intent);
         }
+    }
+
+
+    public static void deleteTrashFiles(Context context , String path) {
+        try {
+            File file = new File(path);
+            if (!file.exists()) {
+                return;
+            }
+            // 回收站目录
+            File trashDir = new File("/mnt/sdcard/.trash-storage/");
+            if (!trashDir.exists() && !trashDir.mkdirs()) {
+                return;
+            }
+            // 生成目标文件名，避免重名覆盖
+            // File target = new File(trashDir,file.getName() + "_" + System.currentTimeMillis()
+            // );
+            // 直接移动文件或整个文件夹
+            if (!file.renameTo(trashDir)) {
+                Log.d(TAG,"移动到回收站失败: " + file.getAbsolutePath());
+            }
+            Settings.System.putInt(context.getContentResolver(), "trash_storage", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 将文件(或文件夹)移入回收站。
+     * <p>实现参考 {@link com.android.documentsui.files.ActionHandler#trashSelectedDocuments()}：
+     * 先把文件实际路径转成 external storage provider 的 document Uri，
+     * 再构造 {@code OPERATION_TRASH} 的 {@link FileOperation}，交给
+     * {@link FileOperationService}(TrashJob) 异步执行，
+     * 最终通过 {@link DocumentsContract#trashDocument} 移入系统回收站。
+     *
+     * @param context 上下文
+     * @param path 文件实际路径，如 /mnt/sdcard/Desktop/a.txt；
+     *             也兼容相对 Desktop 的名称，如 a.txt
+     */
+    public static void trashPath(Context context ,String path) {
+        try {
+            String docId = getStorageDocIdFromPath(path);
+            if (docId == null) {
+                Log.e(TAG, "trashPath: cannot resolve storage document id for path: " + path);
+                return;
+            }
+            Uri docUri = DocumentsContract.buildDocumentUri(
+                    "com.android.externalstorage.documents", docId);
+            Log.i(TAG, "trashPath: moving to trash, docUri = " + docUri);
+
+            // 1. 构造待回收的 doc URI 集合，参考 trashSelectedDocuments()
+            UrisSupplier srcs = UrisSupplier.create(
+                    Collections.singletonList(docUri),
+                    DocumentsApplication.getClipStore(context));
+
+            // 2. 构造回收站操作(OPERATION_TRASH)，参考 trashSelectedDocuments()
+            FileOperation operation = new FileOperation.Builder()
+                    .withOpType(FileOperationService.OPERATION_TRASH)
+                    .withSrcs(srcs)
+                    .build();
+
+            // 3. 交给 FileOperationService(TrashJob) 异步移入回收站
+            FileOperations.start(context, operation, null, FileOperations.createJobId());
+        } catch (Exception e) {
+            Log.e(TAG, "trashPath failed: " + path, e);
+        }
+    }
+
+    /**
+     * 把文件实际路径转换成 external storage provider 的 document id，例如：
+     * <ul>
+     *   <li>/mnt/sdcard/Desktop/a.txt           -&gt; primary:Desktop/a.txt</li>
+     *   <li>/storage/emulated/0/Pictures/b.png  -&gt; primary:Pictures/b.png</li>
+     *   <li>a.txt (相对 Desktop)                 -&gt; primary:Desktop/a.txt</li>
+     * </ul>
+     *
+     * @throws IOException 路径无法归一化时抛出
+     */
+    private static String getStorageDocIdFromPath(String path) throws IOException {
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
+        File file = new File(path);
+        if (!file.isAbsolute()) {
+            // 兼容相对 Desktop 的传参（即文件名）
+            file = new File(PATH_ID_DESKTOP, path);
+        }
+        // getCanonicalPath() 会解析软链（/mnt/sdcard -> /storage/emulated/0）
+        String canonical = file.getCanonicalPath();
+        String storageRoot = new File(Environment.getExternalStorageDirectory(), ".")
+                .getCanonicalPath();
+
+        if (canonical.equals(storageRoot)) {
+            return "primary:";
+        }
+        if (canonical.startsWith(storageRoot + File.separator)) {
+            return "primary:" + canonical.substring(storageRoot.length() + 1);
+        }
+        return null;
     }
 
     public static void deleteFiles(String path) {

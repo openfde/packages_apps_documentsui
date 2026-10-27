@@ -81,4 +81,22 @@
     <style name="TabTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="colorPrimary">@color/edge_effect</item>
     </style>
+
+    <!-- Theme for EmptyTrashActivity. The activity window itself is fully transparent and
+         translucent (windowIsTranslucent must be applied in the manifest theme for the
+         transparency to work), so the activity can behave as a standalone floating dialog even
+         when it's launched with no other activity behind it: only the content drawn by
+         empty_trash_activity.xml (which supplies its own surface background and rounded corners)
+         is visible, and whatever is behind (the launcher or the previous activity) shows through
+         dimmed. Do not overlay an opaque full-screen theme on top at runtime or this
+         transparency would be lost. -->
+    <style name="EmptyTrashDialogTheme" parent="@style/Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
 </resources>

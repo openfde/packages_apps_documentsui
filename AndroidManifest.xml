@@ -187,6 +187,18 @@
             android:theme="@style/DocumentsTheme">
         </activity>
 
+        <!-- A standalone dialog-style activity for the "Empty trash" confirmation. It replaces the
+             old EmptyTrashDialogFragment, exists independently of other activities (e.g. it does
+             not depend on FilesActivity) and performed the empty trash operation by itself. -->
+        <activity
+            android:name=".files.EmptyTrashActivity"
+            android:label="@string/empty_trash_dialog_title"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/EmptyTrashDialogTheme"
+            android:configChanges="locale|layoutDirection">
+        </activity>
+
         <!--  Preserve original launcher activity from Nougat. -->
         <activity-alias
             android:name=".LauncherActivity"
