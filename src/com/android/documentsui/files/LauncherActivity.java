@@ -62,7 +62,12 @@ public class LauncherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        launch();
+        // Only launch on the initial creation. On a configuration-change
+        // recreation (e.g. freeform windowing resize) the task was already
+        // launched; re-running launch() would open a duplicate FilesActivity.
+        if (savedInstanceState == null) {
+            launch();
+        }
 
         finish();
     }
