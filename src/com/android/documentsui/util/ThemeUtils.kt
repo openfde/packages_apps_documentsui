@@ -262,6 +262,7 @@ private fun initializeIdMapping() {
             R.layout.drag_shadow_layout to R.layout.drag_shadow_layout_m3,
             R.layout.drawer_layout to R.layout.drawer_layout_m3,
             R.layout.drop_badge to R.layout.drop_badge_m3,
+            R.layout.empty_trash_activity to R.layout.empty_trash_activity_m3,
             R.layout.files_activity to R.layout.files_activity_m3,
             R.layout.fixed_layout to R.layout.fixed_layout_m3,
             R.layout.fragment_directory to R.layout.fragment_directory_m3,
