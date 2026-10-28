@@ -99,4 +99,15 @@
         <item name="windowNoTitle">true</item>
 
     </style>
+
+    <!-- Theme for DeleteFilesConfirmationActivity. 与 EmptyTrashDialogTheme 相同：透明 + 半透明
+         窗口，由 delete_files_confirmation_activity.xml 自己提供表面与圆角背景，可独立悬浮显示。 -->
+    <style name="DeleteFilesConfirmationDialogTheme" parent="@style/Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

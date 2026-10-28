@@ -76,6 +76,7 @@ import com.android.documentsui.approveddochandlers.ApprovedDocMenuController;
 import com.android.documentsui.base.DocumentInfo;
 import com.android.documentsui.base.Features;
 import com.android.documentsui.base.RootInfo;
+import com.android.documentsui.base.Shared;
 import com.android.documentsui.base.State;
 import com.android.documentsui.base.UserId;
 import com.android.documentsui.clipping.DocumentClipper;
@@ -445,6 +446,8 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
     public void onResume() {
         super.onResume();
 
+        updateTrashPageVisibility();
+
         final RootInfo root = getCurrentRoot();
 
         // If we're browsing a specific root, and that root went away, then we
@@ -459,6 +462,12 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            Settings.System.putInt(
+                    getContentResolver(), Shared.SETTINGS_TRASH_PAGE_OPEN, 0);
+        } catch (Throwable t) {
+            Log.w(TAG, "resetTrashPageVisibility failed", t);
+        }
     }
 
     @Override

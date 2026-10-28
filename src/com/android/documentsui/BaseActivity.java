@@ -44,6 +44,7 @@ import android.os.Bundle;
 import android.os.MessageQueue.IdleHandler;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -1287,6 +1288,22 @@ public abstract class BaseActivity
         return mNavigator;
     }
 
+    /**
+     * Mirrors whether the current stack root is the trash page to Settings.System
+     * ({@link Shared#SETTINGS_TRASH_PAGE_OPEN}) so the launcher dock trash icon can tell
+     * "trash already open -> just bring it to the front" from "trash closed -> open it".
+     */
+    protected final void updateTrashPageVisibility() {
+        try {
+            Settings.System.putInt(
+                    getContentResolver(),
+                    Shared.SETTINGS_TRASH_PAGE_OPEN,
+                    mState.stack.isTrashRoot() ? 1 : 0);
+        } catch (Throwable t) {
+            Log.w(TAG, "updateTrashPageVisibility failed", t);
+        }
+    }
+
     @Override
     public void restoreRootAndDirectory() {
         // We're trying to restore stuff in document stack from saved instance. If we didn't have a
@@ -1321,6 +1338,8 @@ public abstract class BaseActivity
     public final void refreshCurrentRootAndDirectoryWithoutSearch(int anim) {
         final int fallback = isUseMaterial3FlagEnabled() ? MODE_LIST : MODE_GRID;
         mState.derivedMode = LocalPreferences.getViewMode(this, mState.stack.getRoot(), fallback);
+
+        updateTrashPageVisibility();
 
         mNavigator.update();
 

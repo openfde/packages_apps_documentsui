@@ -104,8 +104,11 @@
 
         <!--
         通过 App Functions 向系统智能体（Agent）暴露文件管理器能力：删除（移入回收站）、
-        移动文件夹下的文件到目标目录、重命名文件夹、清空回收站。
-        功能定义见 assets/appfunctions.xml（deleteFile / moveFiles / renameFolder / emptyTrash）。
+        移动文件夹下的文件到目标目录、重命名文件夹、清空回收站、按过滤条件查找/删除文件
+        （查找大文件、不常用文件等）。删除类功能支持 requireConfirmation 逐项弹窗确认。
+        功能定义见 assets/appfunctions.xml
+        （deleteFile / moveFiles / renameFolder / emptyTrash / findFiles /
+         deleteFilesByName / deleteFilesByTime / findLargeFiles / findUnusedFiles / deleteFiles）。
         -->
         <service
             android:name=".appfunctions.DocumentsUiAppFunctionService"
@@ -213,6 +216,18 @@
             android:exported="true"
             android:excludeFromRecents="true"
             android:theme="@style/EmptyTrashDialogTheme"
+            android:configChanges="locale|layoutDirection">
+        </activity>
+
+        <!-- Standalone dialog-style activity shown before app-function bulk deletes, listing the
+             files to be deleted with per-item checkboxes (moved to trash only after the user
+             confirms). Launched internally by DocumentsUiAppFunctionService, so not exported. -->
+        <activity
+            android:name=".appfunctions.DeleteFilesConfirmationActivity"
+            android:label="@string/delete_files_dialog_label"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@style/DeleteFilesConfirmationDialogTheme"
             android:configChanges="locale|layoutDirection">
         </activity>
 

@@ -2,10 +2,26 @@
 <!--
   DocumentsUI App Functions 静态描述（框架 legacy XML asset 格式，由系统 AppSearch 索引读取）。
   供系统智能体（Agent）/ App Function 调用方检索本应用可执行的功能：
-    - deleteFile    删除（移入回收站）某个文件或文件夹
+    - deleteFile    删除（移入回收站）某个文件或文件夹；也支持按 folder + 过滤条件批量删除
+                     （namePrefix/nameSuffix 名称过滤，ageMonths/beforeDate 修改时间过滤）
     - moveFiles     把某个文件夹下的所有文件/子文件夹移动到某个目标目录
     - renameFolder  重命名某个文件夹
     - emptyTrash    清空回收站
+    - findFiles     只读查找某个文件夹下的文件（namePrefix/nameSuffix 名称匹配，
+                     lastMonths 最近 N 个月修改，beforeDate 某个时间点之前，afterDate 某个时间点之后）
+    - deleteFilesByName    删除（移入回收站）文件夹下以 prefix 开头 / suffix 结尾的所有文件
+                            （支持 recursive 递归，缺省 true）
+    - deleteFilesByTime    删除（移入回收站）最后修改时间在 before / after（epoch 毫秒）
+                            之前 / 之后的所有文件
+    - findLargeFiles       递归找出文件夹下的大文件（minSize 字节，缺省 100MB；按大小降序，
+                            最多返回 limit 个，缺省 50）
+    - findUnusedFiles      递归找出 N 天（days，缺省 30）内未被访问/修改的不常用文件
+                            （最久未使用在前，最多返回 limit 个，缺省 50）
+    - deleteFiles          删除 paths（路径数组，通常是上述查找功能返回的结果）指定的文件
+
+  所有删除类功能（deleteFile / deleteFilesByName / deleteFilesByTime / deleteFiles）都支持
+  可选参数 requireConfirmation：缺省 true——删除前弹出对话框逐项列出待删除文件，用户可取消勾选
+  并确认后才移入回收站；传 false 直接删除不弹窗。
 
   所有路径参数支持绝对路径（如 /storage/emulated/0/Desktop/a.txt），
   也支持相对桌面的名称（如 a.txt，等价于 /storage/emulated/0/Desktop/a.txt）。
@@ -39,6 +55,54 @@
         <id>emptyTrash</id>
         <function_id>emptyTrash</function_id>
         <schema_name>emptyTrash</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>findFiles</id>
+        <function_id>findFiles</function_id>
+        <schema_name>findFiles</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>deleteFilesByName</id>
+        <function_id>deleteFilesByName</function_id>
+        <schema_name>deleteFilesByName</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>deleteFilesByTime</id>
+        <function_id>deleteFilesByTime</function_id>
+        <schema_name>deleteFilesByTime</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>findLargeFiles</id>
+        <function_id>findLargeFiles</function_id>
+        <schema_name>findLargeFiles</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>findUnusedFiles</id>
+        <function_id>findUnusedFiles</function_id>
+        <schema_name>findUnusedFiles</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>files</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <id>deleteFiles</id>
+        <function_id>deleteFiles</function_id>
+        <schema_name>deleteFiles</schema_name>
         <schema_version>1</schema_version>
         <schema_category>files</schema_category>
         <enabled_by_default>true</enabled_by_default>
