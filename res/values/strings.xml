@@ -1097,6 +1097,21 @@
     <!-- Action button text in the dialog to confirm emptying the trash. [CHAR_LIMIT=48] -->
     <string name="empty_trash_dialog_action_button">Delete forever</string>
 
+    <!-- Title of the app-function delete confirmation dialog (deleting N found files). -->
+    <plurals name="delete_files_confirm_title">
+        <item quantity="one">Delete %d file?</item>
+        <item quantity="other">Delete %d files?</item>
+    </plurals>
+
+    <!-- Message in the app-function delete confirmation dialog. [CHAR_LIMIT=NONE] -->
+    <string name="delete_files_confirm_message">These items will be moved to the recycle bin. Uncheck any item you want to keep.</string>
+
+    <!-- Action button text in the app-function delete confirmation dialog. [CHAR_LIMIT=48] -->
+    <string name="delete_files_confirm_action">Delete</string>
+
+    <!-- Label of the delete-confirmation dialog activity. [CHAR_LIMIT=48] -->
+    <string name="delete_files_dialog_label">Confirm deletion</string>
+
     <!-- Title of the dialog when opening a file in the trash. [CHAR_LIMIT=48] -->
     <string name="file_open_in_trash_dialog_title">{count, plural,
         =1 {Item is in trash}

@@ -76,6 +76,7 @@ import com.android.documentsui.approveddochandlers.ApprovedDocMenuController;
 import com.android.documentsui.base.DocumentInfo;
 import com.android.documentsui.base.Features;
 import com.android.documentsui.base.RootInfo;
+import com.android.documentsui.base.Shared;
 import com.android.documentsui.base.State;
 import com.android.documentsui.base.UserId;
 import com.android.documentsui.clipping.DocumentClipper;
@@ -99,6 +100,9 @@ import java.util.List;
 
 import android.database.Cursor;
 import android.provider.MediaStore;
+import com.android.documentsui.dirlist.AnimationView;
+import android.provider.DocumentsContract;
+
 
 /**
  * Standalone file management activity.
@@ -107,6 +111,8 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
 
     private static final String TAG = "FilesActivity";
     static final String PREFERENCES_SCOPE = "files";
+    
+    String childPath = null ;
 
     private Injector<ActionHandler<FilesActivity>> mInjector;
     private ActivityInputHandler mActivityInputHandler;
@@ -150,6 +156,8 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
 
         MessageBuilder messages = new MessageBuilder(this);
         Features features = Features.create(this);
+        
+        childPath = getIntent().getStringExtra("childPath");
 
         mInjector = new Injector<>(
                 features,
@@ -445,6 +453,8 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
     public void onResume() {
         super.onResume();
 
+        updateTrashPageVisibility();
+
         final RootInfo root = getCurrentRoot();
 
         // If we're browsing a specific root, and that root went away, then we
@@ -459,6 +469,12 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            Settings.System.putInt(
+                    getContentResolver(), Shared.SETTINGS_TRASH_PAGE_OPEN, 0);
+        } catch (Throwable t) {
+            Log.w(TAG, "resetTrashPageVisibility failed", t);
+        }
     }
 
     @Override
@@ -523,7 +539,18 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
             DirectoryFragment.showRecentsOpen(fm, anim);
         } else {
             // Normal boring directory
-            DirectoryFragment.showDirectory(fm, root, cwd, anim);
+            if (childPath != null && !"".equals(childPath)) {
+                final DocumentInfo documentInfo = cwd;
+                root.documentId = documentInfo.documentId = "primary:Desktop/"+childPath;
+                root.title  = documentInfo.displayName = childPath;
+                root.authority = documentInfo.authority = "com.android.externalstorage.documents";
+                documentInfo.mimeType = "vnd.android.document/directory";
+                documentInfo.derivedUri = DocumentsContract.buildDocumentUri("com.android.externalstorage.documents",  documentInfo.documentId);
+                DirectoryFragment.showDirectory(fm, root, documentInfo, AnimationView.ANIM_NONE);
+                childPath = null;
+            }else{
+                DirectoryFragment.showDirectory(fm, root, cwd, anim);
+            }
         }
     }
 

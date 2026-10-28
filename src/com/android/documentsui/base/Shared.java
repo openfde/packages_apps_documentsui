@@ -91,6 +91,14 @@ public final class Shared {
      */
     public static final String EXTRA_EMPTY_TRASH = "com.android.documentsui.EMPTY_TRASH";
 
+    /**
+     * Settings.System key that mirrors whether the trash page is currently shown in this
+     * (files) window. Written by the files activity whenever the visible root changes and
+     * cleared once the activity (task) goes away. The launcher dock trash icon reads it to
+     * decide between "bring the existing trash window to the front" and "open a new one".
+     */
+    public static final String SETTINGS_TRASH_PAGE_OPEN = "documentsui_trash_page_open";
+
     public static final String EXTRA_SELECTED_SHORTCUT = "com.android.documentsui.SELECTED_SHORCUT";
 
     /**

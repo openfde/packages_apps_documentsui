@@ -389,6 +389,46 @@ public class FileUtils {
     }
 
     /**
+     * 同步删除（移入回收站）某个文件或文件夹。
+     *
+     * <p>与 {@link #trashPath(Context, String)} 的回收流程一致，区别在于这里是阻塞式调用：
+     * 直接把文件实际路径转成 external storage provider 的 document Uri，再调用
+     * {@link DocumentsContract#trashDocument}，由系统回收站统一管理（文件会被移动到
+     * {@code /mnt/sdcard/.trash-storage/} 下并可在回收站页面恢复）。适合 AppFunction 等需要
+     * 同步返回结果的调用方使用。
+     *
+     * @param context 上下文
+     * @param path 文件实际路径，如 /mnt/sdcard/Desktop/a.txt；也兼容相对 Desktop 的名称
+     * @return 是否成功移入回收站
+     */
+    public static boolean trashPathSync(Context context, String path) {
+        if (context == null || TextUtils.isEmpty(path)) {
+            return false;
+        }
+        try {
+            String docId = getStorageDocIdFromPath(path);
+            if (docId == null) {
+                Log.e(TAG, "trashPathSync: cannot resolve storage document id for path: " + path);
+                return false;
+            }
+            Uri docUri = DocumentsContract.buildDocumentUri(
+                    "com.android.externalstorage.documents", docId);
+            Uri trashedUri =
+                    DocumentsContract.trashDocument(context.getContentResolver(), docUri);
+            boolean ok = trashedUri != null;
+            Log.i(TAG, "trashPathSync: " + path + " -> trash " + (ok ? "succeeded" : "failed")
+                    + ", docUri = " + docUri);
+            if (ok) {
+                EventBus.getDefault().post(new MessageEvent("", "UPDATE"));
+            }
+            return ok;
+        } catch (Exception e) {
+            Log.e(TAG, "trashPathSync failed: " + path, e);
+            return false;
+        }
+    }
+
+    /**
      * 把文件实际路径转换成 external storage provider 的 document id，例如：
      * <ul>
      *   <li>/mnt/sdcard/Desktop/a.txt           -&gt; primary:Desktop/a.txt</li>
@@ -398,7 +438,7 @@ public class FileUtils {
      *
      * @throws IOException 路径无法归一化时抛出
      */
-    private static String getStorageDocIdFromPath(String path) throws IOException {
+    public static String getStorageDocIdFromPath(String path) throws IOException {
         if (TextUtils.isEmpty(path)) {
             return null;
         }
