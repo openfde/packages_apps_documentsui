@@ -102,6 +102,9 @@
     <dimen name="dialog_content_padding_top">18dp</dimen>
     <dimen name="dialog_content_padding_bottom">24dp</dimen>
 
+    <!-- 清空回收站对话框 (EmptyTrashActivity) 的最大宽度，避免透明对话框窗口铺满整个屏宽。 -->
+    <dimen name="empty_trash_dialog_max_width">480dp</dimen>
+
     <dimen name="apps_row_title_height">48dp</dimen>
     <dimen name="apps_row_title_padding_start">24dp</dimen>
     <dimen name="apps_row_item_width">92dp</dimen>

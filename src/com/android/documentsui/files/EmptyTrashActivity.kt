@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.Settings
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.android.documentsui.DocumentsApplication
@@ -30,6 +31,7 @@ import com.android.documentsui.base.UserId
 import com.android.documentsui.provider.FileUtils
 import com.android.documentsui.util.FlagUtils.Companion.isUseMaterial3FlagEnabled
 import com.android.documentsui.util.Material3Config.Companion.getRes
+import com.android.documentsui.util.UnitUtils.Companion.dpToPx
 import de.greenrobot.event.EventBus
 
 /**
@@ -49,6 +51,9 @@ class EmptyTrashActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "EmptyTrashActivity"
+
+        /** 标准对话框与屏幕边缘之间的水平间距 (每侧)。 */
+        private const val HORIZONTAL_INSET_DP = 24f
 
         /**
          * Creates an intent used to launch this activity.
@@ -80,11 +85,29 @@ class EmptyTrashActivity : AppCompatActivity() {
         }
         setContentView(getRes(R.layout.empty_trash_activity))
 
+        // 限制透明对话框窗口的宽度，避免内容 (match_parent) 撑满整个屏宽、看起来太宽。
+        customizeWindowWidth()
+
         findViewById<Button>(android.R.id.button2).setOnClickListener { finish() }
 
         findViewById<Button>(android.R.id.button1).setOnClickListener {
             emptyTrashAndFinish()
         }
+    }
+
+    /**
+     * 把窗口限制为普通 Alert 对话框的宽度：最大不超过 [R.dimen.empty_trash_dialog_max_width]，
+     * 同时保留标准 24dp 的水平屏幕边距，让手机和小屏幕上也不会铺满全宽。
+     */
+    private fun customizeWindowWidth() {
+        val params = WindowManager.LayoutParams()
+        params.copyFrom(window.attributes)
+        val horizontalInsetPx = dpToPx(this, HORIZONTAL_INSET_DP)
+        params.width =
+            (resources.displayMetrics.widthPixels - 2 * horizontalInsetPx)
+                .coerceAtMost(resources.getDimensionPixelSize(R.dimen.empty_trash_dialog_max_width))
+                .coerceAtLeast(0)
+        window.attributes = params
     }
 
     /**
