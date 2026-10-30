@@ -850,15 +850,14 @@ public abstract class AbstractActionHandler<T extends FragmentActivity & CommonA
         if (doc.isWriteSupported()) {
             flags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
         }
-        // On desktop users expect files to open in a new window.
-        if (isDesktopFileHandlingFlagEnabled()) {
-            // The combination of NEW_DOCUMENT and MULTIPLE_TASK allows multiple instances of the
-            // same activity to open in separate windows.
-            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-            // If the activity has documentLaunchMode="never", NEW_TASK forces the activity to still
-            // open in a new window.
-            flags |= Intent.FLAG_ACTIVITY_NEW_TASK;
-        }
+        // 打开文件时始终在一个新的独立窗口(新的 task)中打开，而不是复用
+        // 当前或已有的窗口。
+        // The combination of NEW_DOCUMENT and MULTIPLE_TASK allows multiple instances of the
+        // same activity to open in separate windows.
+        flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+        // If the activity has documentLaunchMode="never", NEW_TASK forces the activity to still
+        // open in a new window.
+        flags |= Intent.FLAG_ACTIVITY_NEW_TASK;
         intent.setFlags(flags);
 
         return intent;
