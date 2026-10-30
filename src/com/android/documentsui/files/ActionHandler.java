@@ -234,6 +234,7 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
             @ViewType int fallback) {
         Trace.beginSection("documentsui.files.ActionHandler#openItem");
         DocumentInfo doc = mModel.getDocument(details.getSelectionKey());
+  
         if (doc == null) {
             Log.w(TAG, "Can't view item. No Document available for modeId: "
                     + details.getSelectionKey());
@@ -653,10 +654,55 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
             return;
         }
 
+        if (launchToDesktopChild(intent)) {
+            if (DEBUG) {
+                Log.d(TAG, "Launched to a desktop child folder.");
+            }
+            return;
+        }
+
         if (DEBUG) {
             Log.d(TAG, "Launching directly into Home directory.");
         }
         launchToDefaultLocation();
+    }
+
+    /**
+     * Launches into a folder on the desktop when the caller (e.g. the launcher) supplies the
+     * folder name as a {@code childPath} extra. The path is relative to the Desktop root, e.g.
+     * {@code "NewDir"} is resolved to {@code primary:Desktop/NewDir}.
+     *
+     * <p>This is intentionally only handled when the stack is not initialized yet. On activity
+     * recreation (for example after the app process was killed while minimized) the document
+     * stack restored from savedInstanceState is authoritative; applying childPath again would
+     * resolve it relative to an already opened folder and land on a wrong/empty page.
+     */
+    private boolean launchToDesktopChild(Intent intent) {
+        if (mState.stack.isInitialized()) {
+            return false;
+        }
+
+        String childPath = intent.getStringExtra("childPath");
+        if (childPath == null) {
+            return false;
+        }
+        childPath = childPath.trim();
+        while (childPath.startsWith("/")) {
+            childPath = childPath.substring(1);
+        }
+        while (childPath.endsWith("/")) {
+            childPath = childPath.substring(0, childPath.length() - 1);
+        }
+        if (childPath.isEmpty()) {
+            return false;
+        }
+
+        Uri uri = DocumentsContract.buildDocumentUri(
+                Providers.AUTHORITY_STORAGE, Providers.ROOT_ID_DESKTOP + "/" + childPath);
+        if (DEBUG) {
+            Log.d(TAG, "Launching to desktop child " + uri);
+        }
+        return launchToDocument(uri);
     }
 
     @Override

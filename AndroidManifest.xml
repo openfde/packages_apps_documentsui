@@ -24,6 +24,9 @@
 
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.REMOVE_TASKS" />
+    <!-- Required by LauncherActivity#restoreTask() to bring an existing (e.g. minimized)
+         FilesActivity task back to the front instead of starting a duplicate task. -->
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />

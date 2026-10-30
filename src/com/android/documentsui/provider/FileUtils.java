@@ -78,6 +78,7 @@ import android.os.Handler;
 import android.os.Looper;
 import java.util.Locale;
 import android.provider.Settings;
+import android.os.PersistableBundle;
 
 public class FileUtils {
 
@@ -177,7 +178,7 @@ public class FileUtils {
         if (!file.exists()) {
             boolean result = file.mkdirs();
             if (!result) {
-                Log.e(TAG, "bella_doc Failed to create desktop directory");
+                Log.e(TAG, " Failed to create desktop directory");
             }
         }
     }
@@ -831,7 +832,13 @@ public class FileUtils {
         ClipData clip = ClipData.newUri(context.getContentResolver(), "File", uri);
         if (clip == null) {
             Log.i("bella", "copyFileToClipboard........ clip is null ");
+             return; 
         }
+
+        PersistableBundle extras = new PersistableBundle();
+        extras.putInt("clipper:opType", 1);
+        clip.getDescription().setExtras(extras);
+
         clipboard.setPrimaryClip(clip);
         Log.i("bella", "copyFileToClipboard  File copied to clipboard");
     }

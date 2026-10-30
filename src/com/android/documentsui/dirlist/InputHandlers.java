@@ -20,9 +20,7 @@ import static androidx.core.util.Preconditions.checkArgument;
 import static com.android.documentsui.ActionHandler.VIEW_TYPE_NONE;
 import static com.android.documentsui.ActionHandler.VIEW_TYPE_PREVIEW;
 import static com.android.documentsui.ActionHandler.VIEW_TYPE_REGULAR;
-import static com.android.documentsui.util.FlagUtils.isDesktopFileHandlingFlagEnabled;
 import static com.android.documentsui.util.FlagUtils.isUseMaterial3FlagEnabled;
-import static com.android.documentsui.util.FlagUtils.isUseNewOpenWithEnabled;
 
 import android.view.KeyEvent;
 
@@ -81,18 +79,9 @@ final class InputHandlers {
                             case KeyEvent.KEYCODE_ENTER:
                             case KeyEvent.KEYCODE_DPAD_CENTER:
                             case KeyEvent.KEYCODE_BUTTON_A:
-                                // This was reverted as desktop file handling was rolling out until
-                                // we have default file opening apps out-of-the box.
-                                // Since the default file opening app uses a build flag, we're using
-                                // another flag that's rolling out in the same cycle to flag protect
-                                // the revert^2.
-                                if (isDesktopFileHandlingFlagEnabled()
-                                        && isUseNewOpenWithEnabled()) {
-                                    return mActions.openItem(
-                                            item, VIEW_TYPE_REGULAR, VIEW_TYPE_NONE);
-                                }
+                                // 回车打开文件：直接用默认应用打开（启动新的窗口）。
                                 return mActions.openItem(
-                                        item, VIEW_TYPE_REGULAR, VIEW_TYPE_PREVIEW);
+                                        item, VIEW_TYPE_REGULAR, VIEW_TYPE_NONE);
                             case KeyEvent.KEYCODE_SPACE:
                                 return mActions.openItem(item, VIEW_TYPE_PREVIEW, VIEW_TYPE_NONE);
                         }

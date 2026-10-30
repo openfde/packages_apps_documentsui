@@ -36,12 +36,16 @@ import com.android.documentsui.R;
 import java.util.List;
 
 /**
- * Provides FilesActivity task grouping support. This allows multiple FilesActivities to be
- * launched (a behavior imparted by way of {@code documentLaunchMode="intoExisting"} and
- * our use of pseudo document {@link Uri}s. This also lets us move an existing task
- * to the foreground when a suitable task exists.
+ * Provides FilesActivity task grouping support. FilesActivity is launched with pseudo document
+ * {@link Uri}s, which allows multiple FilesActivity windows to be opened. This also lets us move
+ * an existing task to the foreground when a suitable task exists.
  *
- * Requires that {@code documentLaunchMode="intoExisting"} be set on target activity.
+ * FilesActivity uses {@code documentLaunchMode="always"} so that different folders and files
+ * can be opened in separate windows. Because of that, re-launching an existing task's base intent
+ * would create a duplicate task/window instead of restoring the (possibly minimized) window, so
+ * existing tasks are brought to the foreground with {@link AppTask#moveToFront()} instead.
+ *
+ * Requires the {@code android.permission.REORDER_TASKS} permission.
  *
  */
 public class LauncherActivity extends Activity {
@@ -75,9 +79,9 @@ public class LauncherActivity extends Activity {
     private void launch() {
         ActivityManager activities = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
-        Intent intent = findTask(activities);
-        if (intent != null) {
-            if (restoreTask(intent)) {
+        AppTask task = findTask(activities);
+        if (task != null) {
+            if (restoreTask(task)) {
                 return;
             } else {
                 // We failed to restore the task. It may happen when system was just updated and we
@@ -90,13 +94,13 @@ public class LauncherActivity extends Activity {
         startTask();
     }
 
-    private @Nullable Intent findTask(ActivityManager activities) {
+    private @Nullable AppTask findTask(ActivityManager activities) {
         List<AppTask> tasks = activities.getAppTasks();
         for (AppTask task : tasks) {
             Intent intent = task.getTaskInfo().baseIntent;
             Uri uri = intent.getData();
             if (isLaunchUri(uri)) {
-                return intent;
+                return task;
             }
         }
         return null;
@@ -116,13 +120,18 @@ public class LauncherActivity extends Activity {
         startActivity(intent);
     }
 
-    private boolean restoreTask(Intent intent) {
+    private boolean restoreTask(AppTask task) {
+        Intent intent = task.getTaskInfo().baseIntent;
         if (DEBUG) {
             Log.d(TAG, "Restoring existing task > " + intent.getData());
         }
         try {
-            // TODO: This doesn't appear to restore a task once it has stopped running.
-            startActivity(intent);
+            // FilesActivity uses documentLaunchMode="always" so that different folders/files
+            // can be opened in separate windows. Re-starting the base intent here would then
+            // create yet another task/window instead of bringing back the window that the user
+            // minimized (the new window may stay hidden, making the app look like it cannot be
+            // opened again). Move the existing task to the front instead.
+            task.moveToFront();
 
             return true;
         } catch (Exception e) {

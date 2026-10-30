@@ -280,6 +280,19 @@ final class RuntimeDocumentClipper implements DocumentClipper {
         copyFromClipData(dstStack, clipData, callback);
     }
 
+    private static void dumpBundle(PersistableBundle bundle, String indent) {
+    if (bundle == null) return;
+    for (String key : bundle.keySet()) {
+        Object value = bundle.get(key);
+        if (value instanceof PersistableBundle) {
+            Log.i(TAG,"doc_bella: "+ indent + key + " -> (nested bundle)");
+            dumpBundle((PersistableBundle) value, indent + "  ");
+        } else {
+            Log.i(TAG, "doc_bella:  "+  indent + key + " = " + value);
+        }
+    }
+}
+
     @Override
     public void copyFromClipData(
             DocumentStack dstStack,
@@ -292,6 +305,8 @@ final class RuntimeDocumentClipper implements DocumentClipper {
         }
 
         PersistableBundle bundle = clipData.getDescription().getExtras();
+        dumpBundle(bundle, "  "); // Add indentation for better readability
+
         if (bundle == null) {
             Log.i(TAG, "Unable to determine operation type due to null bundle. Ignoring.");
             callback.onOperationResult(

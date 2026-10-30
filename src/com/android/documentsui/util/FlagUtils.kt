@@ -93,9 +93,10 @@ private constructor(private val overrides: MutableMap<String, Boolean> = mutable
 
         @JvmStatic
         fun isDesktopFileHandlingFlagEnabled(): Boolean {
-            return getInstance()
-                .overrides
-                .getOrDefault(Flags.FLAG_DESKTOP_FILE_HANDLING_RO, Flags.desktopFileHandlingRo())
+            return true ;
+            // return getInstance()
+            //     .overrides
+            //     .getOrDefault(Flags.FLAG_DESKTOP_FILE_HANDLING_RO, Flags.desktopFileHandlingRo())
         }
 
         @JvmStatic
