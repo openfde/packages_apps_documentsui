@@ -387,7 +387,13 @@ public abstract class MenuManager {
         MenuItem delete = menu.findItem(getRes(R.id.dir_menu_delete));
         MenuItem inspect = menu.findItem(getRes(R.id.dir_menu_inspect));
 
-        if (isTrashFlowEnabled()) {
+
+        String rootId = "";
+        if(mState.stack.getRoot() != null){
+            rootId = mState.stack.getRoot().rootId;
+        }
+        Log.d(TAG,"bella_doc mRoot  "+ rootId );
+        if (isTrashFlowEnabled() && !"linux".equals(rootId)) {
             MenuItem moveToTrash = menu.findItem(getRes(R.id.dir_menu_move_to_trash));
             MenuItem restoreFromTrash = menu.findItem(getRes(R.id.dir_menu_restore_from_trash));
             boolean isTrashRoot = mState.stack.isTrashRoot();
