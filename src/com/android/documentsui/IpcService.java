@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -16,7 +15,14 @@ import android.view.LayoutInflater;
 import android.content.ComponentName;
 
 
+import androidx.recyclerview.selection.MutableSelection;
+
+import com.android.documentsui.base.DocumentInfo;
+import com.android.documentsui.base.DocumentStack;
 import com.android.documentsui.base.Providers;
+import com.android.documentsui.base.RootInfo;
+import com.android.documentsui.base.UserId;
+import com.android.documentsui.clipping.DocumentClipper;
 import com.android.documentsui.dirlist.AppsRowItemData.AppData;
 import com.android.documentsui.files.FilesActivity;
 import com.android.documentsui.provider.FileUtils;
@@ -42,13 +48,14 @@ public class IpcService extends Service {
 
     public static final String ACTION_UPDATE_FILE = "com.android.documentsui.UPDATE_FILE";
 
-    private Handler handler = new Handler();
+    private DocumentClipper mClipper;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = this;
+        mClipper = DocumentsApplication.getDocumentClipper(getApplicationContext());
         DocumentsApplication.getInstance().setIpcService(this);
     }
 
@@ -167,14 +174,7 @@ public class IpcService extends Service {
                 String fileName = FileUtils.newDir();
                 gotoClientApp("NEW_DIR",fileName);
             }else if(FileUtils.COPY_DIR.equals(method) || FileUtils.COPY_FILE.equals(method)){
-                // Intent intent = new Intent(ACTION_UPDATE_FILE);
-                // intent.putExtra("EXTRA_DATA", params);
-                // intent.putExtra("EXTRA_TYPE", 1);
-                // context.sendBroadcast(intent);
-                SPUtils.putDocInfo(context, FileUtils.FILE_OPERATE, FileUtils.OP_COPY);
-                Uri derivedUri = DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Desktop/"+params);
-                FileUtils.copyFileToClipboard(context,derivedUri);
-                SPUtils.putDocInfo(context, FileUtils.FILE_DESKTOP_NAME, "");
+                copyToClipboard(params);
             }else if(FileUtils.RENAME_FILE.equals(method) || FileUtils.RENAME_DIR.equals(method) ){
                 try {
 
@@ -192,51 +192,9 @@ public class IpcService extends Service {
                     e.printStackTrace();
                 }
             }else if(FileUtils.CUT_DIR.equals(method)  || FileUtils.CUT_FILE.equals(method)){
-                // Intent intent = new Intent(ACTION_UPDATE_FILE);
-                // intent.putExtra("EXTRA_DATA", params);
-                // intent.putExtra("EXTRA_TYPE", 2);
-                // context.sendBroadcast(intent);
-                SPUtils.putDocInfo(context, FileUtils.FILE_OPERATE, FileUtils.OP_CUT);
-                SPUtils.putDocInfo(context, FileUtils.FILE_DESKTOP_NAME, params);
-                Uri derivedUri = DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Desktop/"+params);
-                FileUtils.copyFileToClipboard(context,derivedUri);
+                cutToClipboard(params);
             }else if(FileUtils.PASTE_DIR.equals(method) || FileUtils.PASTE_FILE.equals(method)){
-                // Intent intent = new Intent(ACTION_UPDATE_FILE);
-                // intent.putExtra("EXTRA_DATA", params);
-                // intent.putExtra("EXTRA_TYPE", 3);
-                // context.sendBroadcast(intent);
-                Uri uri = FileUtils.pasteFileFromClipboard(context);
-                if(uri == null){
-                    Log.e(TAG, "uri is null ");
-                }else{
-                    Log.i(TAG, "uri "+uri.toString());
-                    String fileName = FileUtils.extractFileName(uri.getLastPathSegment()) ;
-                    String newFilePath = FileUtils.getUniqueFileName(FileUtils.PATH_ID_DESKTOP,fileName);
-                    Log.i(TAG, "newFilePath "+newFilePath + " , fileName "+fileName + " ,uriPath: "+uri.getPath() );
-                    File destinationFile =  new File(FileUtils.PATH_ID_DESKTOP,newFilePath);
-                    
-                    String opStr = SPUtils.getDocInfo(context, FileUtils.FILE_OPERATE);
-                    if(!fileName.contains(".")){
-                        FileUtils.copyFolder(FileUtils.PATH_ID_DESKTOP+fileName,FileUtils.PATH_ID_DESKTOP+newFilePath);
-                    }else{
-                        FileUtils.copyUriToFile(context,uri,destinationFile);
-                    }
-
-                    SPUtils.putDocInfo(context, FileUtils.FILE_DESKTOP_NAME, "");
-                    if(FileUtils.OP_CUT.equals(opStr)){
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i(TAG, "opStr  "+opStr);
-                                FileUtils.deleteFileWithUri(context,uri);
-                                FileUtils.cleanClipboard(context);
-                                
-                            }
-                        }, 1000);
-                    }
-                    gotoClientApp("PASTE");
-                }
-
+                pasteFromClipboard();
             }else if(FileUtils.FILE_LIST.equals(method)) {
             //    return FileUtils.getDesktopFiles();
             }else if(FileUtils.OP_INIT.equals(method)) {
@@ -257,6 +215,144 @@ public class IpcService extends Service {
         }
     };
 
+    /* ===================== 文件/文件夹的拷贝、剪切、粘贴 =====================
+     * 拷贝/剪切通过 RuntimeDocumentClipper(DocumentClipper) 写入标准剪贴板，
+     * 粘贴通过 RuntimeDocumentClipper.copyFromClipboard() 交给 FileOperationService
+     * 异步执行真正的文件操作，完成后会清除剪贴板（剪切/移动操作）。
+     */
+    private static final String AUTHORITY_STORAGE = "com.android.externalstorage.documents";
+    private static final String DOC_ID_DESKTOP = "primary:Desktop";
+
+    /**
+     * 拷贝文件/文件夹到剪贴板。
+     *
+     * @param params 相对 Desktop 的文件名或子路径，例如 a.txt 或 dir/b.log
+     */
+    private void copyToClipboard(String params) {
+        try {
+            SPUtils.putDocInfo(context, FileUtils.FILE_OPERATE, FileUtils.OP_COPY);
+            SPUtils.putDocInfo(context, FileUtils.FILE_DESKTOP_NAME, "");
+
+            Uri derivedUri = buildDesktopDocUri(params);
+            MutableSelection<String> selection = new MutableSelection<>();
+            selection.add(params);
+            mClipper.clipDocumentsForCopy(id -> derivedUri, selection);
+            Log.i(TAG, "copyToClipboard: " + derivedUri);
+        } catch (Exception e) {
+            Log.e(TAG, "copyToClipboard failed: " + params, e);
+        }
+    }
+
+    /**
+     * 剪切文件/文件夹到剪贴板（标记为移动操作）。
+     *
+     * @param params 相对 Desktop 的文件名或子路径
+     */
+    private void cutToClipboard(String params) {
+        try {
+            SPUtils.putDocInfo(context, FileUtils.FILE_OPERATE, FileUtils.OP_CUT);
+            SPUtils.putDocInfo(context, FileUtils.FILE_DESKTOP_NAME, params);
+
+            Uri derivedUri = buildDesktopDocUri(params);
+            DocumentInfo parent = getParentDocumentInfo(params);
+            MutableSelection<String> selection = new MutableSelection<>();
+            selection.add(params);
+            mClipper.clipDocumentsForCut(id -> derivedUri, selection, parent, false);
+            Log.i(TAG, "cutToClipboard: " + derivedUri);
+        } catch (Exception e) {
+            Log.e(TAG, "cutToClipboard failed: " + params, e);
+        }
+    }
+
+    /**
+     * 把剪贴板中的内容粘贴（拷贝/移动）到 Desktop，由 FileOperationService 异步执行。
+     */
+    private void pasteFromClipboard() {
+        try {
+            DocumentStack dstStack = getDesktopDocumentStack();
+            mClipper.copyFromClipboard(dstStack, (status, opType, docCount) -> {
+                Log.i(TAG, "pasteFromClipboard callback: status=" + status
+                        + ", opType=" + opType + ", docCount=" + docCount);
+                // 通知桌面端刷新（实际操作由 FileOperationService 异步完成）
+                gotoClientApp("PASTE");
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "pasteFromClipboard failed", e);
+            gotoClientApp("PASTE");
+        }
+    }
+
+    /**
+     * 构建 Desktop 下文件/文件夹的 document Uri。
+     *
+     * @param params 相对 Desktop 的名称或子路径
+     */
+    private Uri buildDesktopDocUri(String params) {
+        try {
+            String docId = FileUtils.getStorageDocIdFromPath(params);
+            if (docId != null) {
+                return DocumentsContract.buildDocumentUri(AUTHORITY_STORAGE, docId);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "buildDesktopDocUri fallback for " + params, e);
+        }
+        return DocumentsContract.buildDocumentUri(AUTHORITY_STORAGE, DOC_ID_DESKTOP + "/" + params);
+    }
+
+    /**
+     * 获取 Desktop 文件夹对应的 DocumentInfo（粘贴目的目录）。
+     */
+    private DocumentInfo getDesktopDocumentInfo() {
+        Uri desktopUri = DocumentsContract.buildDocumentUri(AUTHORITY_STORAGE, DOC_ID_DESKTOP);
+        DocumentInfo desktop = new DocumentInfo();
+        desktop.authority = AUTHORITY_STORAGE;
+        desktop.documentId = DOC_ID_DESKTOP;
+        desktop.mimeType = DocumentsContract.Document.MIME_TYPE_DIR;
+        desktop.flags = DocumentsContract.Document.FLAG_DIR_SUPPORTS_CREATE;
+        desktop.userId = UserId.DEFAULT_USER;
+        desktop.derivedUri = desktopUri;
+        try {
+            // 优先用 provider 的真实信息（包含目录/创建等能力位）
+            return DocumentInfo.fromUri(context.getContentResolver(), desktopUri, UserId.DEFAULT_USER);
+        } catch (Exception e) {
+            Log.w(TAG, "getDesktopDocumentInfo query failed, using minimal fallback.", e);
+            return desktop;
+        }
+    }
+
+    /**
+     * 获取被剪切的文件/文件夹的真实父目录 DocumentInfo，用于记录剪切来源，
+     * 以便“同一目录内剪切+粘贴”被正确判定为无操作。
+     *
+     * @param params 相对 Desktop 的名称或子路径，例如 a.txt 或 dir/b.log
+     */
+    private DocumentInfo getParentDocumentInfo(String params) {
+        String parentDocId = DOC_ID_DESKTOP; // primary:Desktop
+        int slash = params == null ? -1 : params.lastIndexOf('/');
+        if (slash >= 0) {
+            parentDocId = DOC_ID_DESKTOP + "/" + params.substring(0, slash);
+        }
+        Uri parentUri = DocumentsContract.buildDocumentUri(AUTHORITY_STORAGE, parentDocId);
+        DocumentInfo parent = new DocumentInfo();
+        parent.authority = AUTHORITY_STORAGE;
+        parent.documentId = parentDocId;
+        parent.mimeType = DocumentsContract.Document.MIME_TYPE_DIR;
+        parent.derivedUri = parentUri;
+        try {
+            return DocumentInfo.fromUri(context.getContentResolver(), parentUri, UserId.DEFAULT_USER);
+        } catch (Exception e) {
+            Log.w(TAG, "getParentDocumentInfo query failed for " + parentDocId
+                    + ", using minimal fallback.", e);
+            return parent;
+        }
+    }
+
+    /**
+     * 以 Desktop 作为粘贴目的目录构造 DocumentStack。
+     */
+    private DocumentStack getDesktopDocumentStack() {
+        return new DocumentStack((RootInfo) null, getDesktopDocumentInfo());
+    }
 
     public  void gotoClientApp(String params){
        try {

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -118,19 +119,26 @@ final class RootsMonitor<T extends Activity & CommonAddons> {
                 }
             }
 
-            // Choose the default root.
-            final RootInfo defaultRoot = mProviders.getDefaultRootBlocking(mState);
-            assert (defaultRoot != null);
-            if (!defaultRoot.isRecents()) {
-                mDefaultRootDocument = mDocs.getDocument(defaultRoot.authority,
-                    defaultRoot.documentId,
-                    defaultRoot.userId);
-            }
-            return defaultRoot;
+            // The current root is missing from the freshly refreshed roots cache.
+            // This is usually transient: an operation such as permanently deleting a
+            // file in the current directory triggers a full roots refresh
+            // (BROADCAST_ACTION), during which the current root can briefly disappear.
+            // Switching to the "default" root here is what used to bounce the user
+            // over to the Downloads folder, so keep them on the current directory
+            // instead of navigating away.
+            Log.w("RootsMonitor",
+                    "Current root missing after roots refresh; keeping current directory: "
+                            + mCurrentRoot);
+            return null;
         }
 
         @Override
         protected void finish(RootInfo defaultRoot) {
+            // run() always returns null now: when the current root is missing from the
+            // refreshed cache we deliberately keep the user on their current directory
+            // instead of switching to the "default" root (which used to land on
+            // Downloads after a permanent delete). Everything below this guard is
+            // therefore no longer reachable and is kept only as upstream reference.
             if (defaultRoot == null) {
                 return;
             }
