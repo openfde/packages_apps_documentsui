@@ -100,8 +100,6 @@ import java.util.List;
 
 import android.database.Cursor;
 import android.provider.MediaStore;
-import com.android.documentsui.dirlist.AnimationView;
-import android.provider.DocumentsContract;
 
 
 /**
@@ -111,8 +109,6 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
 
     private static final String TAG = "FilesActivity";
     static final String PREFERENCES_SCOPE = "files";
-    
-    String childPath = null ;
 
     private Injector<ActionHandler<FilesActivity>> mInjector;
     private ActivityInputHandler mActivityInputHandler;
@@ -156,8 +152,6 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
 
         MessageBuilder messages = new MessageBuilder(this);
         Features features = Features.create(this);
-        
-        childPath = getIntent().getStringExtra("childPath");
 
         mInjector = new Injector<>(
                 features,
@@ -462,7 +456,7 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
         // TODO: Rather than just disappearing, maybe we should inform
         // the user what has happened, let them close us. Less surprising.
         if (mProviders.getRootBlocking(root.userId, root.authority, root.rootId) == null) {
-            finish();
+           // finish();
         }
     }
 
@@ -539,18 +533,7 @@ public class FilesActivity extends BaseActivity implements AbstractActionHandler
             DirectoryFragment.showRecentsOpen(fm, anim);
         } else {
             // Normal boring directory
-            if (childPath != null && !"".equals(childPath)) {
-                final DocumentInfo documentInfo = cwd;
-                root.documentId = documentInfo.documentId = "primary:Desktop/"+childPath;
-                root.title  = documentInfo.displayName = childPath;
-                root.authority = documentInfo.authority = "com.android.externalstorage.documents";
-                documentInfo.mimeType = "vnd.android.document/directory";
-                documentInfo.derivedUri = DocumentsContract.buildDocumentUri("com.android.externalstorage.documents",  documentInfo.documentId);
-                DirectoryFragment.showDirectory(fm, root, documentInfo, AnimationView.ANIM_NONE);
-                childPath = null;
-            }else{
-                DirectoryFragment.showDirectory(fm, root, cwd, anim);
-            }
+            DirectoryFragment.showDirectory(fm, root, cwd, anim);
         }
     }
 

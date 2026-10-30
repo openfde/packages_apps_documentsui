@@ -573,7 +573,7 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.d(TAG,"bella_doc isDesktopFileHandlingFlagEnabled() "+isDesktopFileHandlingFlagEnabled());        
+       
 
         mHandler = new Handler(Looper.getMainLooper());
         mActivity = getBaseActivity();

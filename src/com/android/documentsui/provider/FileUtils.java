@@ -178,7 +178,7 @@ public class FileUtils {
         if (!file.exists()) {
             boolean result = file.mkdirs();
             if (!result) {
-                Log.e(TAG, "bella_doc Failed to create desktop directory");
+                Log.e(TAG, " Failed to create desktop directory");
             }
         }
     }
