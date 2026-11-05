@@ -484,10 +484,20 @@ public class FileUtils {
             String mimeType = getDocumentType(file.getAbsolutePath());
             Log.i(TAG, "includeFile mimeType: " + mimeType + ",file.getAbsolutePath() " + file.getAbsolutePath());
             row.add(Document.COLUMN_MIME_TYPE, mimeType);
-            int flags = file.canWrite()
-                    ? Document.FLAG_SUPPORTS_DELETE | Document.FLAG_SUPPORTS_WRITE | Document.FLAG_SUPPORTS_RENAME
-                    | (mimeType.equals(Document.MIME_TYPE_DIR) ? Document.FLAG_DIR_SUPPORTS_CREATE : 0)
-                    : 0;
+            // 不再用 File.canWrite() 决定能力集：宿主机 bind mount 上 Java 的
+            // canWrite() 常常不可靠(以 App UID 视角判断宿主权限)，会导致复制/剪切/
+            // 粘贴/重命名等菜单被置灰。Linux 卷在文件系统层面自行支持所有操作，
+            // 具体读写的真实失败会由 IO 异常向上抛出，而不是静默禁用菜单。
+            boolean isDir = mimeType.equals(Document.MIME_TYPE_DIR);
+            int flags = Document.FLAG_SUPPORTS_DELETE
+                    | Document.FLAG_SUPPORTS_WRITE
+                    | Document.FLAG_SUPPORTS_RENAME
+                    | Document.FLAG_SUPPORTS_MOVE
+                    // 目录不声明 FLAG_SUPPORTS_COPY：provider 侧 copyDocument
+                    // (FileUtils.copyFile) 只支持单文件复制；目录复制走 CopyJob 的
+                    // 递归字节复制，避免失败的优化复制产生残留空文件。
+                    | (isDir ? 0 : Document.FLAG_SUPPORTS_COPY)
+                    | (isDir ? Document.FLAG_DIR_SUPPORTS_CREATE : 0);
             if (mimeType.startsWith("image/"))
                 flags |= Document.FLAG_SUPPORTS_THUMBNAIL;
             row.add(Document.COLUMN_FLAGS, flags);
@@ -512,10 +522,14 @@ public class FileUtils {
         row.add(Document.COLUMN_MIME_TYPE, mimeType);
         Log.i(TAG, "includeVolumesFile mimeType: " + mimeType + ",file.getAbsolutePath() " + file.getAbsolutePath() + ",fileName " + fileName);
 
-        int flags = file.canWrite()
-                ? Document.FLAG_SUPPORTS_DELETE | Document.FLAG_SUPPORTS_WRITE | Document.FLAG_SUPPORTS_RENAME
-                | (mimeType != null && mimeType.equals(Document.MIME_TYPE_DIR) ? Document.FLAG_DIR_SUPPORTS_CREATE : 0)
-                : 0;
+        boolean isDir = mimeType != null && mimeType.equals(Document.MIME_TYPE_DIR);
+        int flags = Document.FLAG_SUPPORTS_DELETE
+                | Document.FLAG_SUPPORTS_WRITE
+                | Document.FLAG_SUPPORTS_RENAME
+                | Document.FLAG_SUPPORTS_MOVE
+                // 目录不声明 FLAG_SUPPORTS_COPY，理由同 includeFile()。
+                | (isDir ? 0 : Document.FLAG_SUPPORTS_COPY)
+                | (isDir ? Document.FLAG_DIR_SUPPORTS_CREATE : 0);
         if (mimeType != null && mimeType.startsWith("image/"))
             flags |= Document.FLAG_SUPPORTS_THUMBNAIL;
         row.add(Document.COLUMN_FLAGS, flags);
@@ -663,13 +677,17 @@ public class FileUtils {
             int dotIndex = fileName.lastIndexOf('.');
             if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
                 String extension = fileName.substring(dotIndex + 1);
-                return extension;
-            } else {
-                return null;
+                // 优先返回标准 MIME，避免用裸扩展名(如 "conf")充当类型，
+                // 否则 createDocument 用非法 MIME 创建目标文件会失败。
+                String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                if (mime != null) {
+                    return mime;
+                }
             }
+            return "application/octet-stream";
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "application/octet-stream";
         }
     }
 

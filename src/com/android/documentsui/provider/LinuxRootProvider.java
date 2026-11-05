@@ -71,15 +71,20 @@ public class LinuxRootProvider extends DocumentsProvider {
             final String sortOrder) throws FileNotFoundException {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : FileUtils.DEFAULT_DOCUMENT_PROJECTION);
         final File parent = new File(parentDocumentId);
+        // 只有 /volumes 这一层(列出 UUID 卷目录)才用 includeVolumesFile，
+        // 其余任意子目录(包括 /volumes/<uuid> 起的文件系统树)都用 includeFile。
+        final boolean isVolumeLevel = DIR_ID_ROOT.equals(parentDocumentId);
         for (File file : parent.listFiles()) {
             // 不显示隐藏的文件或文件夹
-            if (parentDocumentId.contains("volumes")) {
+            if (isVolumeLevel) {
                 FileUtils.includeVolumesFile(result, file);
             } else if (!file.getName().startsWith(".")) {
                 // 添加文件的名字, 类型, 大小等属性
                 FileUtils.includeFile(result, file);
             }
         }
+        result.setNotificationUri(getContext().getContentResolver(),
+                DocumentsContract.buildChildDocumentsUri(AUTHORITY, parentDocumentId));
         return result;
     }
 
@@ -87,6 +92,8 @@ public class LinuxRootProvider extends DocumentsProvider {
     public Cursor queryDocument(final String documentId, final String[] projection) throws FileNotFoundException {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : FileUtils.DEFAULT_DOCUMENT_PROJECTION);
         FileUtils.includeFile(result, new File(documentId));
+        result.setNotificationUri(getContext().getContentResolver(),
+                DocumentsContract.buildDocumentUri(AUTHORITY, documentId));
         return result;
     }
 
@@ -100,7 +107,7 @@ public class LinuxRootProvider extends DocumentsProvider {
             final File parent = new File(documentId);
             File[] files = parent.listFiles();
             int len = files.length;
-            boolean isVolumesPath = documentId.contains("volumes");
+            boolean isVolumesPath = DIR_ID_ROOT.equals(documentId);
             Log.d(TAG, "Model update: accept querySearchDocuments   documentId "+documentId  +",isVolumesPath  "+isVolumesPath + " ,files "+files.length);
             for (File file : files) {
                 // 不显示隐藏的文件或文件夹
@@ -138,21 +145,39 @@ public class LinuxRootProvider extends DocumentsProvider {
     @Override
     public ParcelFileDescriptor openDocument(String documentId, String mode, @Nullable CancellationSignal signal)
             throws FileNotFoundException {
-        return ParcelFileDescriptor.open(new File(documentId),
-                ParcelFileDescriptor.MODE_READ_WRITE);
+        // 尊重客户端请求的 mode：源文件按 "r"(只读) 打开时以只读模式打开，
+        // 避免对只读文件强开读写导致 EACCES 复制失败。
+        int pfdMode = mode != null && mode.contains("w")
+                ? ParcelFileDescriptor.MODE_READ_WRITE
+                : ParcelFileDescriptor.MODE_READ_ONLY;
+        return ParcelFileDescriptor.open(new File(documentId), pfdMode);
     }
 
     @Override
     public String renameDocument(String documentId, String displayName)
             throws FileNotFoundException {
-        return FileUtils.renameFile(documentId, displayName);        
+        String newDocId = FileUtils.renameFile(documentId, displayName);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildDocumentUri(AUTHORITY, documentId), null, false);
+        File parent = new File(newDocId).getParentFile();
+        if (parent != null) {
+            getContext().getContentResolver().notifyChange(
+                    DocumentsContract.buildChildDocumentsUri(AUTHORITY,
+                            parent.getAbsolutePath()), null, false);
+        }
+        return newDocId;
     }
-
 
     @Override
     public String copyDocument(String sourceDocumentId, String targetParentDocumentId)
             throws FileNotFoundException {
-        return FileUtils.copyFile(sourceDocumentId, targetParentDocumentId);        
+        String newDocId = FileUtils.copyFile(sourceDocumentId, targetParentDocumentId);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildDocumentUri(AUTHORITY, targetParentDocumentId), null, false);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildChildDocumentsUri(AUTHORITY, targetParentDocumentId),
+                null, false);
+        return newDocId;
     }
 
     @Override
@@ -161,6 +186,14 @@ public class LinuxRootProvider extends DocumentsProvider {
         if (file.delete()) {
         } else {
             throw new FileNotFoundException("Failed to delete document with id " + documentId);
+        }
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildDocumentUri(AUTHORITY, documentId), null, false);
+        File parent = file.getParentFile();
+        if (parent != null) {
+            getContext().getContentResolver().notifyChange(
+                    DocumentsContract.buildChildDocumentsUri(AUTHORITY,
+                            parent.getAbsolutePath()), null, false);
         }
         EventBus.getDefault().post(new MessageEvent("","UPDATE"));
     }
@@ -172,7 +205,10 @@ public class LinuxRootProvider extends DocumentsProvider {
         File file = FileUtils.createFile(documentId, mimeType, displayName);
 
         getContext().getContentResolver().notifyChange(
-                DocumentsContract.buildDocumentUri(AUTHORITY, documentId),
+                DocumentsContract.buildDocumentUri(AUTHORITY, file.getAbsolutePath()),
+                null, false);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildChildDocumentsUri(AUTHORITY, documentId),
                 null, false);
         EventBus.getDefault().post(new MessageEvent("","UPDATE"));
         return file.getPath();

@@ -41,7 +41,7 @@ import com.android.documentsui.MessageEvent;
 
 public class LinuxUserProvider extends DocumentsProvider {
 
-    public static final String AUTHORITY = "com.android.documentsui.fusionvolume";
+    public static final String AUTHORITY = "com.android.documentsui.linux.user";
     public static final String DOC_ID_ROOT = "linux";
     public static final String DIR_ID_ROOT = "/volumes";
     public static final String TAG = "LinuxUserProvider";
@@ -70,15 +70,23 @@ public class LinuxUserProvider extends DocumentsProvider {
             final String sortOrder) throws FileNotFoundException {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : FileUtils.DEFAULT_DOCUMENT_PROJECTION);
         final File parent = new File(parentDocumentId);
+        // 只有 "文件系统" 的 /volumes 这一层才用 includeVolumesFile(把 UUID 卷目录名
+        // 解析成宿主路径做显示名)。其余任意子目录(包括 Home dir, 其 docId 是
+        // /volumes/<uuid>/home/..., 也包含 "volumes" 单词)都应走 includeFile。
+        final boolean isVolumeLevel = DIR_ID_ROOT.equals(parentDocumentId);
         for (File file : parent.listFiles()) {
             // 不显示隐藏的文件或文件夹
-            if (parentDocumentId.contains("volumes")) {
+            if (isVolumeLevel) {
                 FileUtils.includeVolumesFile(result, file);
             } else if (!file.getName().startsWith(".")) {
                 // 添加文件的名字, 类型, 大小等属性
                 FileUtils.includeFile(result, file);
             }
         }
+        // 设置通知 URI：provider 侧 createDocument/deleteDocument/renameDocument 等
+        // 通过 notifyChange 该 URI 触发客户端目录列表自动刷新。
+        result.setNotificationUri(getContext().getContentResolver(),
+                DocumentsContract.buildChildDocumentsUri(AUTHORITY, parentDocumentId));
         return result;
     }
 
@@ -86,6 +94,8 @@ public class LinuxUserProvider extends DocumentsProvider {
     public Cursor queryDocument(final String documentId, final String[] projection) throws FileNotFoundException {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : FileUtils.DEFAULT_DOCUMENT_PROJECTION);
         FileUtils.includeFile(result, new File(documentId));
+        result.setNotificationUri(getContext().getContentResolver(),
+                DocumentsContract.buildDocumentUri(AUTHORITY, documentId));
         return result;
     }
 
@@ -99,7 +109,7 @@ public class LinuxUserProvider extends DocumentsProvider {
             final File parent = new File(documentId);
             File[] files = parent.listFiles();
             int len = files.length;
-            boolean isVolumesPath = documentId.contains("volumes");
+            boolean isVolumesPath = DIR_ID_ROOT.equals(documentId);
             Log.d(TAG, "Model update: accept querySearchDocuments   documentId "+documentId  +",isVolumesPath  "+isVolumesPath + " ,files "+files.length);
             for (File file : files) {
                 // 不显示隐藏的文件或文件夹
@@ -136,21 +146,40 @@ public class LinuxUserProvider extends DocumentsProvider {
     @Override
     public ParcelFileDescriptor openDocument(String documentId, String mode, @Nullable CancellationSignal signal)
             throws FileNotFoundException {
-        return ParcelFileDescriptor.open(new File(documentId),
-                ParcelFileDescriptor.MODE_READ_WRITE);
+        // 尊重客户端请求的 mode：复制时源文件是按 "r"(只读) 打开，
+        // 若统一以 MODE_READ_WRITE 打开，遇到只读文件会抛 EACCES 导致复制失败。
+        int pfdMode = mode != null && mode.contains("w")
+                ? ParcelFileDescriptor.MODE_READ_WRITE
+                : ParcelFileDescriptor.MODE_READ_ONLY;
+        return ParcelFileDescriptor.open(new File(documentId), pfdMode);
     }
 
     @Override
     public String renameDocument(String documentId, String displayName)
             throws FileNotFoundException {
-        return FileUtils.renameFile(documentId, displayName);        
+        String newDocId = FileUtils.renameFile(documentId, displayName);
+        // 通知旧/新 document 及其父目录的 childDocuments Uri，触发列表刷新。
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildDocumentUri(AUTHORITY, documentId), null, false);
+        File parent = new File(newDocId).getParentFile();
+        if (parent != null) {
+            getContext().getContentResolver().notifyChange(
+                    DocumentsContract.buildChildDocumentsUri(AUTHORITY,
+                            parent.getAbsolutePath()), null, false);
+        }
+        return newDocId;
     }
-
 
     @Override
     public String copyDocument(String sourceDocumentId, String targetParentDocumentId)
             throws FileNotFoundException {
-        return FileUtils.copyFile(sourceDocumentId, targetParentDocumentId);        
+        String newDocId = FileUtils.copyFile(sourceDocumentId, targetParentDocumentId);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildDocumentUri(AUTHORITY, targetParentDocumentId), null, false);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildChildDocumentsUri(AUTHORITY, targetParentDocumentId),
+                null, false);
+        return newDocId;
     }
 
     @Override
@@ -159,6 +188,14 @@ public class LinuxUserProvider extends DocumentsProvider {
         if (file.delete()) {
         } else {
             throw new FileNotFoundException("Failed to delete document with id " + documentId);
+        }
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildDocumentUri(AUTHORITY, documentId), null, false);
+        File parent = file.getParentFile();
+        if (parent != null) {
+            getContext().getContentResolver().notifyChange(
+                    DocumentsContract.buildChildDocumentsUri(AUTHORITY,
+                            parent.getAbsolutePath()), null, false);
         }
         EventBus.getDefault().post(new MessageEvent("","UPDATE"));
     }
@@ -169,8 +206,13 @@ public class LinuxUserProvider extends DocumentsProvider {
             throws FileNotFoundException {
         File file = FileUtils.createFile(documentId, mimeType, displayName);
 
+        // AUTHORITY 已与 manifest 保持一致，这里通知新 document 及其父目录，
+        // DirectoryLoader 订阅的 childDocuments Uri 收到变更后自动刷新列表。
         getContext().getContentResolver().notifyChange(
-                DocumentsContract.buildDocumentUri(AUTHORITY, documentId),
+                DocumentsContract.buildDocumentUri(AUTHORITY, file.getAbsolutePath()),
+                null, false);
+        getContext().getContentResolver().notifyChange(
+                DocumentsContract.buildChildDocumentsUri(AUTHORITY, documentId),
                 null, false);
         EventBus.getDefault().post(new MessageEvent("","UPDATE"));
         return file.getPath();
