@@ -17,6 +17,7 @@
 <resources>
     <style name="LauncherThemeM3" parent="DocumentsTheme">
         <item name="android:windowBackground">@drawable/launcher_screen_m3</item>
+         <item name="android:listPreferredItemHeightSmall">24dp</item>
     </style>
     <!-- DocumentsTheme is allow customize by run time overlay -->
     <style name="DocumentsThemeM3" parent="@android:style/Theme.DeviceDefault.DocumentsUI">

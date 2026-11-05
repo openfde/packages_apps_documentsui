@@ -326,13 +326,19 @@ class CopyJob extends ResolvedResourcesJob {
             ProvidersCache cache = DocumentsApplication.getProvidersCache(appContext);
 
             RootInfo root = stack.getRoot();
+            if (root == null) {
+                // No root info for the destination (e.g. an uninitialized stack). Treat this as
+                // "space is unknown" and let the copy start anyway.
+                Log.w(TAG, "No root info for destination " + stack);
+                return true;
+            }
             // Query root info here instead of using stack.root because the number there may be
             // stale.
             root = cache.getRootOneshot(root.userId, root.authority, root.rootId, true);
-            if (root.availableBytes >= 0) {
-                available = (batchSize <= root.availableBytes);
+            if (root == null || root.availableBytes < 0) {
+                Log.w(TAG, "Root " + root + " doesn't provide available bytes.");
             } else {
-                Log.w(TAG, root.toString() + " doesn't provide available bytes.");
+                available = (batchSize <= root.availableBytes);
             }
         }
 
