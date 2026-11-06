@@ -122,6 +122,7 @@ import com.android.documentsui.Injector.Injected;
 import com.android.documentsui.MetricConsts;
 import com.android.documentsui.Metrics;
 import com.android.documentsui.Model;
+import com.android.documentsui.ModelId;
 import com.android.documentsui.ProfileTabsController;
 import com.android.documentsui.ProviderExecutor;
 import com.android.documentsui.R;
@@ -208,6 +209,12 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
 
     @VisibleForTesting public static final int TICK_VISIBLE_DURATION_MS = 1200;
 
+    // How long to suppress content-observer driven model updates right after trashing/deleting
+    // items. The removed items are handled optimistically via removeDocumentsFromList(), so the
+    // automatic directory reload fired by the provider after the operation would only re-bind every
+    // visible item and reload their thumbnails for no good reason.
+    private static final long DELETE_RELOAD_SUPPRESS_MS = 2000;
+
     private BaseActivity mActivity;
 
     AnimDrawablePlayer animDrawablePlayer;
@@ -279,6 +286,10 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
 
     private @Nullable PathExtractor mPathExtractor;
     private @Nullable String mSelectedItemKey = null;
+
+    // When non-null for the duration of DELETE_RELOAD_SUPPRESS_MS, it is used to unsuppress reload
+    // driven model updates (via the adapter) after a trash/delete operation.
+    private @Nullable Runnable mUnsuppressReloadRunnable;
 
     private AtomicInteger mVersion = new AtomicInteger(0);
 
@@ -424,6 +435,15 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
                         if (p.state == STATE_COMPLETED
                                 && (p.operationType == OPERATION_DELETE
                                         || p.operationType == OPERATION_TRASH)) {
+                            // The trashed/deleted items have already been removed from the list
+                            // optimistically in removeDocumentsFromList(), so there is no need (and
+                            // no desire) to reload the whole directory: reloading would evict the
+                            // thumbnail cache and re-bind every visible item, reloading their
+                            // thumbnails. Only fall back to a refresh when the operation failed so
+                            // that items which couldn't be trashed/deleted get restored.
+                            if (!p.hasFailures) {
+                                continue;
+                            }
                             onRefresh();
                             return;
                         }
@@ -679,6 +699,12 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
             }
         }
         getContext().unregisterReceiver(mSdCardBroadcastReceiver);
+
+        if (mUnsuppressReloadRunnable != null) {
+            mHandler.removeCallbacks(mUnsuppressReloadRunnable);
+            mUnsuppressReloadRunnable = null;
+        }
+        mAdapter.setReloadSuppressed(false);
 
         // Cancel any outstanding thumbnail requests
         final int count = mRecView.getChildCount();
@@ -2145,6 +2171,63 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
                 });
     }
 
+    /**
+     * Optimistically removes the given documents from the currently displayed directory list,
+     * instead of reloading the whole directory. Items behind the removed ones are shifted up with
+     * an animation, while remaining items are not rebound (so their thumbnails are not re-loaded).
+     *
+     * <p>Called right after a trash/delete operation has started. The automatic reload fired by the
+     * provider once the operation completes is suppressed for a short window via
+     * {@link DocumentsAdapter#setReloadSuppressed(boolean)}.
+     */
+    public void removeDocumentsFromList(List<DocumentInfo> docs) {
+        if (docs == null || docs.isEmpty() || mModel == null || mAdapter == null) {
+            return;
+        }
+
+        List<String> modelIds = new ArrayList<>(docs.size());
+        for (DocumentInfo doc : docs) {
+            String modelId = ModelId.build(doc.userId, doc.authority, doc.documentId);
+            if (modelId != null) {
+                modelIds.add(modelId);
+            }
+        }
+        if (modelIds.isEmpty()) {
+            return;
+        }
+
+        // Deselect any item that is about to disappear from the list.
+        List<String> disappearedIds = new ArrayList<>();
+        for (String key : mSelectionMgr.getSelection()) {
+            if (modelIds.contains(key)) {
+                disappearedIds.add(key);
+            }
+        }
+        if (!disappearedIds.isEmpty()) {
+            mSelectionMgr.setItemsSelected(disappearedIds, false);
+        }
+
+        mModel.removeDocuments(modelIds);
+        mAdapter.removeItems(modelIds);
+
+        // Suppress reload-driven model updates for a short while so the remaining items keep their
+        // view holders: nothing gets rebound and thumbnails are not re-loaded.
+        // If the list becomes empty there is nothing left to preserve, and we still want the
+        // empty-state message, so fall back to a normal (cheap) refresh instead.
+        if (mModel.getItemCount() == 0) {
+            mAdapter.setReloadSuppressed(false);
+            mHandler.post(this::onRefresh);
+        } else {
+            mAdapter.setReloadSuppressed(true);
+            if (mUnsuppressReloadRunnable != null) {
+                mHandler.removeCallbacks(mUnsuppressReloadRunnable);
+            }
+            mUnsuppressReloadRunnable =
+                    () -> mAdapter.setReloadSuppressed(false);
+            mHandler.postDelayed(mUnsuppressReloadRunnable, DELETE_RELOAD_SUPPRESS_MS);
+        }
+    }
+
     private void getRootDocumentAndMaybeRefreshDocument() {
         // If we can reload the root doc successfully, we will push it to the stack and load the
         // stack.
@@ -2176,6 +2259,17 @@ public class DirectoryFragment extends Fragment implements SwipeRefreshLayout.On
         public void accept(Model.Update update) {
             if (DEBUG) {
                 Log.d(TAG, "Received model update. Loading=" + mModel.isLoading());
+            }
+
+            // Right after a trash/delete operation the affected items have been removed from the
+            // list optimistically. The provider-triggered reload that follows would only re-bind
+            // every visible item and reload their thumbnails, so suppress it for a short window.
+            if (mAdapter.isReloadSuppressed()) {
+                Log.d(
+                        TAG,
+                        "Skipping model update right after trash/delete to avoid reloading "
+                                + "thumbnails.");
+                return;
             }
 
             mProgressBar.setVisibility(mModel.isLoading() ? View.VISIBLE : View.GONE);

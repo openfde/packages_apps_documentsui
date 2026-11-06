@@ -43,6 +43,8 @@ import com.android.documentsui.base.State;
 import com.android.modules.utils.build.SdkLevel;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -72,6 +74,7 @@ final class ModelBackedDocumentsAdapter extends DocumentsAdapter {
 
     private Set<String> mJustFinishedSyncingModelIds = new HashSet<>();
     private Set<String> mPreviousSyncInProgressModelIds = new HashSet<>();
+    private boolean mReloadSuppressed;
     private EventListener<Model.Update> mModelUpdateListener;
     private NetworkMonitor.NetworkListener mNetworkListener = isOnline -> {
         // Do nothing. Logic is handled in DirectoryAddonsAdapter.java.
@@ -250,6 +253,9 @@ final class ModelBackedDocumentsAdapter extends DocumentsAdapter {
     }
 
     private void onModelUpdate(Model model) {
+        if (mReloadSuppressed) {
+            return;
+        }
         String[] modelIds = model.getModelIds();
         mModelIdsAsHashMap = null;
         mModelIds = new ArrayList<>(modelIds.length);
@@ -351,6 +357,48 @@ final class ModelBackedDocumentsAdapter extends DocumentsAdapter {
     @Override
     public List<String> getStableIds() {
         return mModelIds;
+    }
+
+    @Override
+    public void removeItems(Collection<String> modelIds) {
+        if (modelIds == null || modelIds.isEmpty()) {
+            return;
+        }
+
+        Set<String> ids = new HashSet<>(modelIds);
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < mModelIds.size(); i++) {
+            if (ids.contains(mModelIds.get(i))) {
+                positions.add(i);
+            }
+        }
+        if (positions.isEmpty()) {
+            return;
+        }
+
+        // Remove starting from the highest position so the positions still refer to the original
+        // adapter indices (RecyclerView batches these notifications within the same frame). This
+        // only detaches the removed view holders; the remaining items keep their view holders and
+        // therefore their thumbnails are never re-loaded.
+        positions.sort(Collections.reverseOrder());
+        mModelIdsAsHashMap = null;
+        for (int pos : positions) {
+            mModelIds.remove(pos);
+            notifyItemRemoved(pos);
+        }
+    }
+
+    @Override
+    public void setReloadSuppressed(boolean suppressed) {
+        mReloadSuppressed = suppressed;
+        if (suppressed) {
+            mModelIdsAsHashMap = null;
+        }
+    }
+
+    @Override
+    public boolean isReloadSuppressed() {
+        return mReloadSuppressed;
     }
 
     @Override

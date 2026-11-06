@@ -30,7 +30,11 @@ import com.android.documentsui.base.NetworkMonitor;
 import com.android.documentsui.testing.TestEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A skeletal {@link DocumentsAdapter} test double.
@@ -130,6 +134,25 @@ public class TestDocumentsAdapter extends DocumentsAdapter {
     @Override
     public int getAdapterPosition(String docId) {
         return mModelIds.indexOf(docId);
+    }
+
+    @Override
+    public void removeItems(Collection<String> modelIds) {
+        if (modelIds == null || modelIds.isEmpty()) {
+            return;
+        }
+        Set<String> ids = new HashSet<>(modelIds);
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < mModelIds.size(); i++) {
+            if (ids.contains(mModelIds.get(i))) {
+                positions.add(i);
+            }
+        }
+        positions.sort(Collections.reverseOrder());
+        for (int pos : positions) {
+            mModelIds.remove(pos);
+            notifyItemRemoved(pos);
+        }
     }
 
     @Override
