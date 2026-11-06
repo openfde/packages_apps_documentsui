@@ -135,6 +135,7 @@
             android:theme="@style/LauncherTheme"
             android:visibleToInstantApps="true"
             android:featureFlag="!com.android.documentsui.flags.desktop_ux_phase_2_ro">
+            
             <!-- LINT.IfChange(pick_activity_feature_off) -->
             <intent-filter android:priority="100">
                 <action android:name="android.intent.action.OPEN_DOCUMENT" />
@@ -201,6 +202,13 @@
             android:icon="@drawable/launcher_icon"
             android:taskAffinity=""
             android:theme="@android:style/Theme.NoDisplay">
+
+            <layout
+                android:minWidth="1200dp"
+                android:minHeight="800dp"
+                android:defaultWidth="1200dp"
+                android:defaultHeight="800dp" />
+
         </activity>
 
         <activity
@@ -243,6 +251,7 @@
             android:resizeableActivity="true"
             android:taskAffinity=""
             android:icon="@drawable/launcher_icon">
+
             <property
                 android:name="android.window.PROPERTY_SUPPORTS_MULTI_INSTANCE_SYSTEM_UI"
                 android:value="true"/>
@@ -261,6 +270,13 @@
             android:exported="true"
             android:theme="@style/LauncherTheme"
             android:configChanges="locale|layoutDirection">
+
+            <layout
+                android:minWidth="1200dp"
+                android:minHeight="800dp"
+                android:defaultWidth="1200dp"
+                android:defaultHeight="800dp" />
+
             <property
                 android:name="android.window.PROPERTY_SUPPORTS_MULTI_INSTANCE_SYSTEM_UI"
                 android:value="true"/>
