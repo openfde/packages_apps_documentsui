@@ -531,6 +531,10 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
 
         FileOperations.start(mActivity, operation, mDialogs::showFileOperationStatus,
                 FileOperations.createJobId());
+
+        // Remove the trashed items from the displayed list immediately so the directory is not
+        // reloaded (and thumbnails are not re-loaded) after the operation.
+        removeDocumentsFromCurrentDirectory(docs);
     }
 
     @Override

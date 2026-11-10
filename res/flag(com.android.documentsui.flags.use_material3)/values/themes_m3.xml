@@ -17,6 +17,7 @@
 <resources>
     <style name="LauncherThemeM3" parent="DocumentsTheme">
         <item name="android:windowBackground">@drawable/launcher_screen_m3</item>
+         <item name="android:listPreferredItemHeightSmall">24dp</item>
     </style>
     <!-- DocumentsTheme is allow customize by run time overlay -->
     <style name="DocumentsThemeM3" parent="@android:style/Theme.DeviceDefault.DocumentsUI">
@@ -24,7 +25,7 @@
         <!-- these system bar colors are required for SDK 30 -->
         <item name="android:statusBarColor">@color/app_background_color_m3</item>
         <item name="android:navigationBarColor">@color/app_background_color_m3</item>
-
+        <item name="android:listPreferredItemHeightSmall">24dp</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustUnspecified</item>

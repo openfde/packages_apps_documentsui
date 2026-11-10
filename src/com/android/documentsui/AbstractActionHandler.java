@@ -85,6 +85,7 @@ import com.android.documentsui.clipping.ClipStore;
 import com.android.documentsui.clipping.UrisSupplier;
 import com.android.documentsui.dirlist.AnimationView;
 import com.android.documentsui.dirlist.AnimationView.AnimationType;
+import com.android.documentsui.dirlist.DirectoryFragment;
 import com.android.documentsui.dirlist.FocusHandler;
 import com.android.documentsui.dirlist.SummariesViewModel;
 import com.android.documentsui.dirlist.SummaryProviderManager;
@@ -1121,6 +1122,26 @@ public abstract class AbstractActionHandler<T extends FragmentActivity & CommonA
                 operation,
                 mDialogs::showFileOperationStatus,
                 FileOperations.createJobId());
+
+        // Remove the deleted items from the displayed list immediately so the directory is not
+        // reloaded (and thumbnails are not re-loaded) after the operation.
+        removeDocumentsFromCurrentDirectory(docs);
+    }
+
+    /**
+     * Optimistically removes the given documents from the currently displayed directory, so that
+     * trashing/deleting doesn't force a full list reload (which would also reload thumbnails).
+     */
+    protected void removeDocumentsFromCurrentDirectory(List<DocumentInfo> docs) {
+        if (docs == null || docs.isEmpty()) {
+            return;
+        }
+        if (mActivity instanceof BaseActivity) {
+            DirectoryFragment dir = ((BaseActivity) mActivity).getDirectoryFragment();
+            if (dir != null) {
+                dir.removeDocumentsFromList(docs);
+            }
+        }
     }
 
     @Override

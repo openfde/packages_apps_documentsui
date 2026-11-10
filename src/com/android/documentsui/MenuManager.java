@@ -393,7 +393,8 @@ public abstract class MenuManager {
             rootId = mState.stack.getRoot().rootId;
         }
         Log.d(TAG,"bella_doc mRoot  "+ rootId );
-        if (isTrashFlowEnabled() && !"linux".equals(rootId)) {
+        // if (isTrashFlowEnabled() && !"linux".equals(rootId)) {
+        if (isTrashFlowEnabled()) {
             MenuItem moveToTrash = menu.findItem(getRes(R.id.dir_menu_move_to_trash));
             MenuItem restoreFromTrash = menu.findItem(getRes(R.id.dir_menu_restore_from_trash));
             boolean isTrashRoot = mState.stack.isTrashRoot();

@@ -42,6 +42,7 @@ import com.android.documentsui.base.UserId;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -139,6 +140,37 @@ public class Model {
         mFileNames.clear();
         mSummariesUpdate.reset();
         notifyUpdateListeners();
+    }
+
+    /**
+     * Removes the given model IDs from this model, e.g. because the underlying documents have been
+     * trashed or permanently deleted.
+     *
+     * <p>This is an in-memory removal used to optimistically drop items from the list without
+     * reloading the whole directory. It deliberately does NOT notify update listeners: the caller is
+     * responsible for removing the items from the adapter with proper {@code notifyItemRemoved}
+     * notifications so that the remaining items shift up without being rebound (which would reload
+     * thumbnails).
+     */
+    @VisibleForTesting
+    public void removeDocuments(Collection<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return;
+        }
+        Set<String> idsToRemove = new HashSet<>(ids);
+        List<String> remaining = new ArrayList<>(mIds.length);
+        for (String id : mIds) {
+            if (!idsToRemove.contains(id)) {
+                remaining.add(id);
+            }
+        }
+        mIds = remaining.toArray(new String[0]);
+        mCursorCount = mIds.length;
+        // Keep the remaining ids mapped to their original cursor positions: the underlying cursor
+        // is not reloaded, so binding an item at a compacted position would point at the wrong row.
+        for (String id : idsToRemove) {
+            mPositions.remove(id);
+        }
     }
 
     @VisibleForTesting

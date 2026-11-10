@@ -24,7 +24,7 @@
 
         <item name="android:actionBarSize">@dimen/action_bar_size</item>
         <item name="android:actionModeBackground">?android:attr/colorBackground</item>
-
+        <item name="android:listPreferredItemHeightSmall">24dp</item>
         <!-- Color section -->
         <item name="android:colorAccent">@color/primary</item>
         <item name="android:colorBackground">@android:color/white</item>

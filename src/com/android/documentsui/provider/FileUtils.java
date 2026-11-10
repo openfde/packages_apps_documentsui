@@ -92,6 +92,16 @@ public class FileUtils {
 
     public static final String PATH_TRASH = "/mnt/sdcard/.trash-storage/";
 
+    /**
+     * Linux 卷/Home 的回收站目录。与系统回收站(.trash-storage)共用一个目录树，
+     * 放在 linux/ 子目录下：目录由 Linux 两个 provider 自行管理，
+     * "清空回收站"(clearTrashFolder(PATH_TRASH)) 会连同 linux/ 一起清空。
+     */
+    public static final String PATH_TRASH_LINUX = "/mnt/sdcard/.trash-storage/linux/";
+
+    /** 记录每个回收项来源(原始路径)的元数据文件 */
+    public static final String TRASH_META_FILE = "meta.json";
+
     public static final String OPEN_DIR = "OPEN_DIR";
 
     public static final String OPEN_FILE = "OPEN_FILE";
@@ -429,6 +439,374 @@ public class FileUtils {
         }
     }
 
+    // ======================= Linux 回收站支持 =======================
+
+    /**
+     * 一个被回收的 Linux 文件/目录的元信息。
+     */
+    public static class TrashItem {
+        public final String trashName;
+        public final String originalPath;
+        public final String mimeType;
+        public final boolean isDir;
+        public final String authority;
+
+        TrashItem(String trashName, String originalPath, String mimeType,
+                boolean isDir, String authority) {
+            this.trashName = trashName;
+            this.originalPath = originalPath;
+            this.mimeType = mimeType;
+            this.isDir = isDir;
+            this.authority = authority;
+        }
+    }
+
+    private static File getLinuxTrashDir() {
+        return new File(PATH_TRASH_LINUX);
+    }
+
+    /**
+     * 读取 linux 回收站元数据；目录/文件不存在或解析失败时返回空对象。
+     */
+    private static JSONObject readTrashMeta() {
+        JSONObject root = new JSONObject();
+        try {
+            root.put("items", new JSONArray());
+            File metaFile = new File(getLinuxTrashDir(), TRASH_META_FILE);
+            if (!metaFile.exists()) {
+                return root;
+            }
+            return new JSONObject(new String(Files.readAllBytes(metaFile.toPath())));
+        } catch (Exception e) {
+            Log.w(TAG, "readTrashMeta failed", e);
+            return root;
+        }
+    }
+
+    /**
+     * 原子写回回收站元数据。
+     */
+    private static void writeTrashMeta(JSONObject meta) {
+        try {
+            File dir = getLinuxTrashDir();
+            if (!dir.exists() && !dir.mkdirs()) {
+                Log.w(TAG, "writeTrashMeta: cannot create dir " + dir);
+                return;
+            }
+            File tmp = new File(dir, TRASH_META_FILE + ".tmp");
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(tmp), "UTF-8"));
+            try {
+                writer.write(meta.toString());
+            } finally {
+                writer.close();
+            }
+            File target = new File(dir, TRASH_META_FILE);
+            if (target.exists() && !target.delete()) {
+                Log.w(TAG, "writeTrashMeta: cannot remove old meta");
+            }
+            if (!tmp.renameTo(target)) {
+                Log.w(TAG, "writeTrashMeta: rename failed");
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "writeTrashMeta failed", e);
+        }
+    }
+
+    /**
+     * 把文件/文件夹移入 Linux 回收站，并记录原始路径(用于恢复)。
+     *
+     * @param documentId 准备回收的文件路径，如 /volumes/<uuid>/home/x.txt
+     * @param authority  执行回收的是哪个 provider，回收站列表按来源区分，
+     *                   两个 Linux provider 各自展示自己回收的条目。
+     * @return 成功返回 documentId；失败返回 null。
+     */
+    public static String trashDocumentToTrash(String documentId, String authority) {
+        File src = new File(documentId);
+        if (!src.exists()) {
+            Log.e(TAG, "trash: source not exists: " + documentId);
+            return null;
+        }
+        try {
+            boolean isDir = src.isDirectory();
+            String mime = isDir ? Document.MIME_TYPE_DIR : getDocumentType(documentId);
+
+            JSONObject meta = readTrashMeta();
+            JSONArray items = meta.optJSONArray("items");
+            if (items == null) {
+                items = new JSONArray();
+                meta.put("items", items);
+            }
+            // 同一原始路径不允许重复回收
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject it = items.optJSONObject(i);
+                if (it != null && documentId.equals(it.optString("path"))) {
+                    Log.w(TAG, "trash: already trashed: " + documentId);
+                    return documentId;
+                }
+            }
+
+            File dir = getLinuxTrashDir();
+            if (!dir.exists() && !dir.mkdirs()) {
+                Log.e(TAG, "trash: cannot create dir " + dir);
+                return null;
+            }
+
+            String trashName = src.getName();
+            File dst = new File(dir, trashName);
+            if (dst.exists()) {
+                trashName = trashName + "_" + System.currentTimeMillis();
+                dst = new File(dir, trashName);
+            }
+            if (!moveFile(src, dst)) {
+                Log.e(TAG, "trash: move failed: " + documentId);
+                return null;
+            }
+
+            JSONObject entry = new JSONObject();
+            entry.put("name", trashName);
+            entry.put("path", documentId);
+            entry.put("mime", mime);
+            entry.put("isDir", isDir);
+            entry.put("authority", authority);
+            items.put(entry);
+            writeTrashMeta(meta);
+
+            EventBus.getDefault().post(new MessageEvent("", "UPDATE"));
+            Log.i(TAG, "trash: " + documentId + " -> " + dst.getAbsolutePath());
+            return documentId;
+        } catch (Exception e) {
+            Log.e(TAG, "trash failed: " + documentId, e);
+            return null;
+        }
+    }
+
+    /**
+     * 按原始路径查找回收项。
+     */
+    public static TrashItem findTrashItem(String originalPath) {
+        JSONObject meta = readTrashMeta();
+        JSONArray items = meta.optJSONArray("items");
+        if (items == null) {
+            return null;
+        }
+        for (int i = 0; i < items.length(); i++) {
+            JSONObject it = items.optJSONObject(i);
+            if (it != null && originalPath.equals(it.optString("path"))) {
+                return new TrashItem(it.optString("name"), it.optString("path"),
+                        it.optString("mime"), it.optBoolean("isDir", false),
+                        it.optString("authority"));
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 列出某个 Linux provider 名下的全部回收项(只返回磁盘上仍然存在的)。
+     */
+    public static List<TrashItem> getTrashItems(String authority) {
+        List<TrashItem> result = new ArrayList<>();
+        JSONObject meta = readTrashMeta();
+        JSONArray items = meta.optJSONArray("items");
+        if (items == null) {
+            return result;
+        }
+        for (int i = 0; i < items.length(); i++) {
+            JSONObject it = items.optJSONObject(i);
+            if (it == null) {
+                continue;
+            }
+            if (authority != null && !authority.equals(it.optString("authority"))) {
+                continue;
+            }
+            File trashFile = new File(getLinuxTrashDir(), it.optString("name"));
+            if (!trashFile.exists()) {
+                continue;
+            }
+            result.add(new TrashItem(it.optString("name"), it.optString("path"),
+                    it.optString("mime"), it.optBoolean("isDir", false),
+                    it.optString("authority")));
+        }
+        return result;
+    }
+
+    /**
+     * 是否已回收某个原路径。
+     */
+    public static boolean isTrashedDocument(String documentId) {
+        return findTrashItem(documentId) != null;
+    }
+
+    /**
+     * 从回收站恢复：把回收项移回原始位置(targetParentDocumentId 为空时)或指定目录。
+     *
+     * @return 恢复后的最终路径(可能加后缀避免重名)；失败返回 null。
+     */
+    public static String restoreTrashDocument(String documentId,
+            String targetParentDocumentId, String authority, Context context) {
+        TrashItem item = findTrashItem(documentId);
+        if (item == null) {
+            Log.e(TAG, "restore: no trash meta for " + documentId);
+            return null;
+        }
+        File src = new File(getLinuxTrashDir(), item.trashName);
+        if (!src.exists()) {
+            Log.e(TAG, "restore: trash file missing " + src);
+            return null;
+        }
+
+        File destDir = TextUtils.isEmpty(targetParentDocumentId)
+                ? new File(item.originalPath).getParentFile()
+                : new File(targetParentDocumentId);
+        if (destDir == null || !destDir.isDirectory()) {
+            Log.e(TAG, "restore: bad destination for " + item.originalPath);
+            return null;
+        }
+
+        String origName = new File(item.originalPath).getName();
+        File dest = new File(destDir, origName);
+        if (dest.exists()) {
+            dest = new File(destDir, getUniqueFileName(destDir.getAbsolutePath(), origName));
+        }
+
+        if (!moveFile(src, dest)) {
+            Log.e(TAG, "restore: move back failed: " + src + " -> " + dest);
+            return null;
+        }
+        removeTrashMetaEntry(documentId, context);
+
+        EventBus.getDefault().post(new MessageEvent("", "UPDATE"));
+        Log.i(TAG, "restore: " + src.getAbsolutePath() + " -> " + dest.getAbsolutePath());
+        return dest.getAbsolutePath();
+    }
+
+    /**
+     * 从回收站永久删除某个条目(文件/文件夹)。
+     */
+    public static boolean permanentlyDeleteTrashed(String documentId,Context context) {
+        TrashItem item = findTrashItem(documentId);
+        if (item == null) {
+            return false;
+        }
+        File trashFile = new File(getLinuxTrashDir(), item.trashName);
+        if (trashFile.exists()) {
+            deleteRecursive(trashFile);
+        }
+        boolean metaOk = removeTrashMetaEntry(documentId,context);
+        EventBus.getDefault().post(new MessageEvent("", "UPDATE"));
+        return metaOk || !trashFile.exists();
+    }
+
+    /**
+     * 移除回收站元数据里某个原始路径的条目。
+     */
+    private static boolean removeTrashMetaEntry(String originalPath, Context context) {
+        try {
+            JSONObject meta = readTrashMeta();
+            JSONArray items = meta.optJSONArray("items");
+            if (items == null) {
+                return false;
+            }
+            JSONArray next = new JSONArray();
+            boolean removed = false;
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject it = items.optJSONObject(i);
+                if (it != null && originalPath.equals(it.optString("path"))) {
+                    removed = true;
+                    continue;
+                }
+                next.put(it);
+            }
+            meta.put("items", next);
+            writeTrashMeta(meta);
+            // 恢复/删除完最后一个条目后，meta 已空：把整个 linux 回收站目录
+            // (含 meta.json)清掉，避免 .trash-storage 下残留空的 linux/ 目录。
+            if (next.length() == 0) {
+                deleteEmptyLinuxTrashDir(context);
+            }
+            return removed;
+        } catch (Exception e) {
+            Log.w(TAG, "removeTrashMetaEntry failed", e);
+            return false;
+        }
+    }
+
+    /**
+     * linux 回收站已无任何条目时删除整个目录(含 meta.json)。
+     */
+    private static void deleteEmptyLinuxTrashDir(Context context) {
+        File dir = getLinuxTrashDir();
+        if (dir.exists()) {
+            deleteRecursive(dir);
+        }
+        Settings.System.putInt(context.getContentResolver(), "trash_storage", 0);
+    }
+
+    /**
+     * 把已回收的原路径补一行到 MatrixCursor 中(queryDocument 遇到已回收条目时使用)。
+     */
+    public static void includeTrashedFile(final MatrixCursor result, final String originalPath) {
+        TrashItem item = findTrashItem(originalPath);
+        if (item == null) {
+            return;
+        }
+        File trashFile = new File(getLinuxTrashDir(), item.trashName);
+        final MatrixCursor.RowBuilder row = result.newRow();
+        row.add(Document.COLUMN_DOCUMENT_ID, item.originalPath);
+        row.add(Document.COLUMN_DISPLAY_NAME, new File(item.originalPath).getName());
+        row.add(Document.COLUMN_MIME_TYPE, item.mimeType);
+        row.add(Document.COLUMN_FLAGS, Document.FLAG_SUPPORTS_RESTORE
+                | Document.FLAG_SUPPORTS_DELETE);
+        row.add(Document.COLUMN_SIZE, trashFile.length());
+        row.add(Document.COLUMN_LAST_MODIFIED, trashFile.lastModified());
+    }
+
+    /**
+     * 移动文件/目录：优先原子 rename；跨文件系统(EXDEV)退化为递归复制+删除。
+     */
+    private static boolean moveFile(File src, File dst) {
+        if (src.renameTo(dst)) {
+            return true;
+        }
+        try {
+            copyRecursive(src, dst);
+            deleteRecursive(src);
+            return true;
+        } catch (Exception e) {
+            Log.w(TAG, "moveFile copy fallback failed: " + src + " -> " + dst, e);
+            // 清理半成品，避免污染回收站列表
+            deleteRecursive(dst);
+            return false;
+        }
+    }
+
+    private static void copyRecursive(File src, File dst) throws IOException {
+        if (src.isDirectory()) {
+            if (!dst.exists() && !dst.mkdirs()) {
+                throw new IOException("Cannot create dir " + dst);
+            }
+            File[] children = src.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    copyRecursive(child, new File(dst, child.getName()));
+                }
+            }
+        } else {
+            FileInputStream in = new FileInputStream(src);
+            FileOutputStream out = new FileOutputStream(dst);
+            try {
+                byte[] buf = new byte[64 * 1024];
+                int n;
+                while ((n = in.read(buf)) != -1) {
+                    out.write(buf, 0, n);
+                }
+            } finally {
+                in.close();
+                out.close();
+            }
+        }
+    }
+
     /**
      * 把文件实际路径转换成 external storage provider 的 document id，例如：
      * <ul>
@@ -484,10 +862,23 @@ public class FileUtils {
             String mimeType = getDocumentType(file.getAbsolutePath());
             Log.i(TAG, "includeFile mimeType: " + mimeType + ",file.getAbsolutePath() " + file.getAbsolutePath());
             row.add(Document.COLUMN_MIME_TYPE, mimeType);
-            int flags = file.canWrite()
-                    ? Document.FLAG_SUPPORTS_DELETE | Document.FLAG_SUPPORTS_WRITE | Document.FLAG_SUPPORTS_RENAME
-                    | (mimeType.equals(Document.MIME_TYPE_DIR) ? Document.FLAG_DIR_SUPPORTS_CREATE : 0)
-                    : 0;
+            // 不再用 File.canWrite() 决定能力集：宿主机 bind mount 上 Java 的
+            // canWrite() 常常不可靠(以 App UID 视角判断宿主权限)，会导致复制/剪切/
+            // 粘贴/重命名等菜单被置灰。Linux 卷在文件系统层面自行支持所有操作，
+            // 具体读写的真实失败会由 IO 异常向上抛出，而不是静默禁用菜单。
+            boolean isDir = mimeType.equals(Document.MIME_TYPE_DIR);
+            int flags = Document.FLAG_SUPPORTS_DELETE
+                    | Document.FLAG_SUPPORTS_WRITE
+                    | Document.FLAG_SUPPORTS_RENAME
+                    | Document.FLAG_SUPPORTS_MOVE
+                    // 支持移入回收站：delete/移入回收站 路由到 trashDocument
+                    // (LinuxUserProvider/LinuxRootProvider 已实现)。目录同样支持回收。
+                    | Document.FLAG_SUPPORTS_TRASH
+                    // 目录不声明 FLAG_SUPPORTS_COPY：provider 侧 copyDocument
+                    // (FileUtils.copyFile) 只支持单文件复制；目录复制走 CopyJob 的
+                    // 递归字节复制，避免失败的优化复制产生残留空文件。
+                    | (isDir ? 0 : Document.FLAG_SUPPORTS_COPY)
+                    | (isDir ? Document.FLAG_DIR_SUPPORTS_CREATE : 0);
             if (mimeType.startsWith("image/"))
                 flags |= Document.FLAG_SUPPORTS_THUMBNAIL;
             row.add(Document.COLUMN_FLAGS, flags);
@@ -512,10 +903,15 @@ public class FileUtils {
         row.add(Document.COLUMN_MIME_TYPE, mimeType);
         Log.i(TAG, "includeVolumesFile mimeType: " + mimeType + ",file.getAbsolutePath() " + file.getAbsolutePath() + ",fileName " + fileName);
 
-        int flags = file.canWrite()
-                ? Document.FLAG_SUPPORTS_DELETE | Document.FLAG_SUPPORTS_WRITE | Document.FLAG_SUPPORTS_RENAME
-                | (mimeType != null && mimeType.equals(Document.MIME_TYPE_DIR) ? Document.FLAG_DIR_SUPPORTS_CREATE : 0)
-                : 0;
+        boolean isDir = mimeType != null && mimeType.equals(Document.MIME_TYPE_DIR);
+        int flags = Document.FLAG_SUPPORTS_DELETE
+                | Document.FLAG_SUPPORTS_WRITE
+                | Document.FLAG_SUPPORTS_RENAME
+                | Document.FLAG_SUPPORTS_MOVE
+                | Document.FLAG_SUPPORTS_TRASH
+                // 目录不声明 FLAG_SUPPORTS_COPY，理由同 includeFile()。
+                | (isDir ? 0 : Document.FLAG_SUPPORTS_COPY)
+                | (isDir ? Document.FLAG_DIR_SUPPORTS_CREATE : 0);
         if (mimeType != null && mimeType.startsWith("image/"))
             flags |= Document.FLAG_SUPPORTS_THUMBNAIL;
         row.add(Document.COLUMN_FLAGS, flags);
@@ -663,13 +1059,17 @@ public class FileUtils {
             int dotIndex = fileName.lastIndexOf('.');
             if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
                 String extension = fileName.substring(dotIndex + 1);
-                return extension;
-            } else {
-                return null;
+                // 优先返回标准 MIME，避免用裸扩展名(如 "conf")充当类型，
+                // 否则 createDocument 用非法 MIME 创建目标文件会失败。
+                String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                if (mime != null) {
+                    return mime;
+                }
             }
+            return "application/octet-stream";
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "application/octet-stream";
         }
     }
 

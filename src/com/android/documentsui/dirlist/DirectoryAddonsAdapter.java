@@ -37,6 +37,7 @@ import com.android.documentsui.base.UserId;
 import com.android.documentsui.dirlist.Message.HeaderMessage;
 import com.android.documentsui.dirlist.Message.InflateMessage;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,7 @@ final class DirectoryAddonsAdapter extends DocumentsAdapter {
     private NetworkMonitor.NetworkListener mNetworkListener;
 
     private int mBreakPosition = -1;
+    private boolean mReloadSuppressed;
     // TODO: There should be two header messages (or more here). Defaulting to showing only one for
     // now.
     private final Message mHeaderMessage;
@@ -115,6 +117,24 @@ final class DirectoryAddonsAdapter extends DocumentsAdapter {
     @Override
     public void onSummariesUpdated(List<Integer> updatedIndices) {
         mDelegate.onSummariesUpdated(updatedIndices);
+    }
+
+    @Override
+    public void removeItems(Collection<String> modelIds) {
+        // The delegate's notifyItemRemoved() calls are relayed by EventRelay with the
+        // addons-adjusted positions, so remaining items shift up without being rebound.
+        mDelegate.removeItems(modelIds);
+    }
+
+    @Override
+    public void setReloadSuppressed(boolean suppressed) {
+        mReloadSuppressed = suppressed;
+        mDelegate.setReloadSuppressed(suppressed);
+    }
+
+    @Override
+    public boolean isReloadSuppressed() {
+        return mReloadSuppressed;
     }
 
     @Override
@@ -225,6 +245,9 @@ final class DirectoryAddonsAdapter extends DocumentsAdapter {
     }
 
     private void onModelUpdate(Update event) {
+        if (mReloadSuppressed) {
+            return;
+        }
         // make sure the delegate handles the update before we do.
         // This isn't ideal since the delegate might be listening
         // the updates itself. But this is the safe thing to do

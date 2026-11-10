@@ -34,6 +34,7 @@ import com.android.documentsui.base.Features;
 import com.android.documentsui.base.NetworkMonitor;
 import com.android.documentsui.base.State;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -59,6 +60,26 @@ public abstract class DocumentsAdapter extends RecyclerView.Adapter<DocumentHold
     public abstract String getStableId(int adapterPosition);
     public abstract List<String> getStableIds();
     public abstract int getPosition(String id);
+
+    /**
+     * Removes the given model IDs from the adapter, notifying the RecyclerView so that remaining
+     * items shift up without being rebound (which would reload thumbnails).
+     */
+    public abstract void removeItems(Collection<String> modelIds);
+
+    /**
+     * Whether reload-driven model updates should be ignored, e.g. right after trashing/deleting
+     * items that were already removed from the list optimistically. This prevents the automatic
+     * directory reload fired by the content provider from re-building and re-binding every visible
+     * item (which would reload thumbnails).
+     */
+    public void setReloadSuppressed(boolean suppressed) {
+        // Default no-op; only the model-backed adapter needs to act on it.
+    }
+
+    public boolean isReloadSuppressed() {
+        return false;
+    }
 
     abstract EventListener<Model.Update> getModelUpdateListener();
 

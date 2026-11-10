@@ -69,7 +69,12 @@ public final class FileOperations {
                     operation.getSrc().getItemCount());
         }
 
-        context.startService(intent);
+        // 从 Launcher 触发时 DocumentsUI 位于后台，普通 startService() 会被 Android 8+
+        // 直接拦截并抛 IllegalStateException。此处需用 startForegroundService() 才能真正在
+        // 后台启动该 dataSync 前景服务。DocumentClipper 在 AndroidManifest 中已声明
+        // START_FOREGROUND_SERVICES_FROM_BACKGROUND 权限；FileOperationService 在 Job
+        // 执行初期（onStart）会立即调用 startForeground，不存在超时崩溃风险。
+        context.startForegroundService(intent);
 
         return newJobId;
     }
