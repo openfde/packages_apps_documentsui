@@ -104,8 +104,8 @@ public class ActionModeController extends SelectionObserver<String>
             final String title =
                     mMessages.getQuantityString(
                             getRes(R.plurals.elements_selected), mSelected.size());
-            mActionMode.setTitle(title);
-            mActivity.getWindow().setTitle(title);
+            mActionMode.setTitle("");
+            mActivity.getWindow().setTitle("");
         }
     }
 
