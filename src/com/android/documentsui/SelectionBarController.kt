@@ -87,9 +87,9 @@ class SelectionBarController(
             selectionBar.context
                 .getResources()
                 .getQuantityString(getRes(R.plurals.elements_selected), quantity, quantity)
-        selectionBar.title = title
-        selectionBar.setNavigationIcon(getRes(R.drawable.ic_cancel))
-        selectionBar.setNavigationContentDescription(R.string.clear_selection)
+        // selectionBar.title = title
+        // selectionBar.setNavigationIcon(getRes(R.drawable.ic_cancel))
+        // selectionBar.setNavigationContentDescription(R.string.clear_selection)
         selectionBar.setOnMenuItemClickListener { menuItemClicker?.accept(it) == true }
         selectionBar.setNavigationOnClickListener {
             closeSelectionBar()

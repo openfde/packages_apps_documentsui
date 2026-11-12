@@ -76,6 +76,7 @@ import com.android.documentsui.services.FileOperation;
 import com.android.documentsui.services.FileOperationService;
 import com.android.documentsui.services.FileOperations;
 import com.android.documentsui.util.FlagUtils;
+import com.android.documentsui.util.SPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +95,9 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
 
     private static final String TAG = "ManagerActionHandler";
     private static final int SHARE_FILES_COUNT_LIMIT = 100;
+
+    /** ExternalStorageProvider 主卷 Desktop 的 documentId 前缀（与 IpcService 保持一致）。 */
+    private static final String DOC_ID_DESKTOP_PREFIX = "primary:Desktop/";
 
     private final Features mFeatures;
     private final ActivityConfig mConfig;
@@ -332,6 +336,7 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
 
         mClipper.clipDocumentsForCut(
                 mModel::getItemUri, selection, mState.stack.peek(), mState.stack.isRecents());
+        recordPendingDesktopClip(selection, FileUtils.OP_CUT);
 
         mDialogs.showDocumentsClipped(selection.size());
     }
@@ -368,8 +373,42 @@ public class ActionHandler<T extends FragmentActivity & AbstractActionHandler.Co
         }
 
         mClipper.clipDocumentsForCopy(mModel::getItemUri, selection);
+        recordPendingDesktopClip(selection, FileUtils.OP_COPY);
 
         mDialogs.showDocumentsClipped(selection.size());
+    }
+
+    /**
+     * 记录最近一次“从 DocumentsUI 界面执行的拷贝/剪切”，写入与
+     * {@link com.android.documentsui.IpcService#copyToClipboard(String)} 相同的 SP 缓存
+     * （{@link FileUtils#FILE_DESKTOP_NAME} / {@link FileUtils#FILE_OPERATE}），保证
+     * IpcService.pasteFromClipboard() 在系统剪贴板不可读（Android 10+ 后台限制）时，
+     * 兜底解析出来的源文件与本次拷贝的文件一致，而不是粘贴到上次残留的旧文件。
+     *
+     * 仅当被操作项位于 Desktop（documentId 以 {@link #DOC_ID_DESKTOP_PREFIX} 开头）时有意义，
+     * 因为 IpcService 的本地兜底解析是相对 Desktop 的。文件不在 Desktop 时清空缓存，
+     * 避免把旧缓存当成本次拷贝结果。
+     *
+     * @param selection 被拷贝/剪切的选中项
+     * @param op        {@link FileUtils#OP_COPY} 或 {@link FileUtils#OP_CUT}
+     */
+    private void recordPendingDesktopClip(Selection<String> selection, String op) {
+        String relName = null;
+        for (DocumentInfo doc : mModel.getDocuments(selection)) {
+            String docId = doc.documentId;
+            if (docId != null && docId.startsWith(DOC_ID_DESKTOP_PREFIX)) {
+                relName = docId.substring(DOC_ID_DESKTOP_PREFIX.length());
+                break;
+            }
+        }
+        if (relName == null || relName.isEmpty()) {
+            // 不在 Desktop 下：清理旧缓存，避免粘贴到错误的旧文件。
+            SPUtils.putDocInfo(mActivity, FileUtils.FILE_DESKTOP_NAME, "");
+            SPUtils.putDocInfo(mActivity, FileUtils.FILE_OPERATE, "");
+        } else {
+            SPUtils.putDocInfo(mActivity, FileUtils.FILE_DESKTOP_NAME, relName);
+            SPUtils.putDocInfo(mActivity, FileUtils.FILE_OPERATE, op);
+        }
     }
 
     /** Base method for creating a share intent. */

@@ -427,6 +427,13 @@ public abstract class BaseActivity
 
         Toolbar toolbar = (Toolbar) findViewById(getRes(R.id.toolbar));
         setSupportActionBar(toolbar);
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+        View child = toolbar.getChildAt(i);
+
+        if (child instanceof TextView) {
+            child.setVisibility(View.GONE);
+        }
+    }
 
         HorizontalBreadcrumb navBreadcrumb = findViewById(getRes(R.id.horizontal_breadcrumb));
         assert (navBreadcrumb != null);
@@ -1378,6 +1385,7 @@ public abstract class BaseActivity
         mSortController.onViewModeChanged(mState.derivedMode);
         mSearchManager.updateChips(getCurrentRoot().derivedMimeTypes);
         mAppsRowManager.updateView(this);
+        
     }
 
     private final List<String> getExcludedAuthorities() {
