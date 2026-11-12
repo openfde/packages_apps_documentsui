@@ -58,7 +58,7 @@
     <dimen name="progress_bar_height_m3">4dp</dimen>
     <fraction name="grid_scale_min_m3">85%</fraction>
     <fraction name="grid_scale_max_m3">200%</fraction>
-    <dimen name="grid_width_m3">144dp</dimen>
+    <dimen name="grid_width_m3">96dp</dimen>
     <dimen name="grid_height">128dp</dimen>
     <dimen name="grid_section_separator_height_m3">0dp</dimen>
     <dimen name="grid_item_margin_m3">@dimen/space_extra_small_4</dimen>
@@ -99,8 +99,8 @@
     <dimen name="breadcrumb_item_max_width">275dp</dimen>
     <dimen name="dir_elevation_m3">8dp</dimen>
     <dimen name="drag_shadow_size_m3">120dp</dimen>
-    <dimen name="grid_item_thumbnail_width">128dp</dimen>
-    <dimen name="grid_item_thumbnail_height">128dp</dimen>
+    <dimen name="grid_item_thumbnail_width">80dp</dimen>
+    <dimen name="grid_item_thumbnail_height">80dp</dimen>
     <dimen name="grid_item_thumbnail_radius">20dp</dimen>
     <dimen name="grid_item_icon_width">112dp</dimen>
     <dimen name="grid_item_icon_height">112dp</dimen>
