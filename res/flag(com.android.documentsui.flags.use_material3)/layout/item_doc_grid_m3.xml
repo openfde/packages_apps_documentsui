@@ -34,15 +34,15 @@
         android:layout_width="@dimen/grid_item_thumbnail_width"
         android:layout_height="@dimen/grid_item_thumbnail_height"
         android:layout_centerHorizontal="true"
-        android:duplicateParentState="true"
-        android:background="@drawable/grid_thumbnail_background">
+        android:duplicateParentState="true">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/icon_wrapper"
+            app:strokeWidth="0dp"
+            app:cardElevation="0dp"
             android:layout_width="@dimen/grid_item_icon_width"
             android:layout_height="@dimen/grid_item_icon_height"
-            android:layout_gravity="center"
-            style="@style/GridThumbnailCardViewStyle">
+            android:layout_gravity="center">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/icon_thumb"
@@ -69,7 +69,7 @@
             android:layout_marginStart="@dimen/selection_circle_margin"
             android:layout_marginTop="@dimen/selection_circle_margin"
             android:layout_gravity="top|start"
-            android:background="@drawable/selection_circle"
+
             android:contentDescription="@null"
             android:elevation="0dp"
             android:scaleType="center" />
@@ -88,6 +88,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon_profile_badge"
+             android:visibility="gone"
             android:layout_width="@dimen/briefcase_icon_grid_size"
             android:layout_height="@dimen/briefcase_icon_grid_size"
             android:layout_marginBottom="@dimen/briefcase_icon_grid_margin"
