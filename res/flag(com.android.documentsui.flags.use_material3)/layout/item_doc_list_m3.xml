@@ -70,6 +70,7 @@
                 android:layout_height="@dimen/check_icon_size_m3"
                 android:layout_gravity="center"
                 android:alpha="0"
+                android:visibility="gone"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_check_circle_m3" />

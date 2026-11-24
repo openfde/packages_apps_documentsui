@@ -110,6 +110,13 @@
     <dimen name="grid_item_nameplate_marginTop">@dimen/space_extra_small_2</dimen>
     <dimen name="grid_item_nameplate_radius">8dp</dimen>
     <dimen name="grid_item_nameplate_inner_radius">4dp</dimen>
+    <!--
+      Grid selection highlight geometry that mirrors the Launcher desktop (Launcher3) item
+      selection: UtilitiesKt.HIGHLIGHT_PADDING_DP = 8 and HIGHLIGHT_CORNER_RADIUS = 8, so the
+      highlighted box floats 8dp around the item content with 8 radius rounded corners.
+    -->
+    <dimen name="grid_item_selection_padding">8dp</dimen>
+    <dimen name="grid_item_selection_radius">8dp</dimen>
     <!-- TODO(b/379776735): remove this after use_material3 flag is launched. -->
     <dimen name="grid_item_elevation_m3">2dp</dimen>
     <!-- TODO(b/379776735): remove this after use_material3 flag is launched. -->

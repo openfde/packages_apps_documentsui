@@ -69,15 +69,6 @@
                     android:contentDescription="@null"
                     android:scaleType="centerInside"/>
 
-                <ImageView
-                    android:id="@+id/icon_check"
-                    android:layout_width="@dimen/check_icon_size"
-                    android:layout_height="@dimen/check_icon_size"
-                    android:alpha="0"
-                    android:contentDescription="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_check_circle"/>
-
             </FrameLayout>
 
             <ImageView

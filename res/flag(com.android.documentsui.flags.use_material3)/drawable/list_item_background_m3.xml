@@ -36,7 +36,7 @@
                         android:right="@dimen/focus_ring_gap"
                         android:top="@dimen/focus_ring_gap">
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="?attr/colorPrimaryContainer" />
                         </shape>
                     </item>
@@ -46,13 +46,13 @@
                         android:right="@dimen/focus_ring_gap"
                         android:top="@dimen/focus_ring_gap">
                         <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="@color/overlay_hover_color_percentage" />
                         </shape>
                     </item>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <stroke
                                 android:width="@dimen/focus_ring_width"
                                 android:color="?attr/colorSecondary" />
@@ -64,13 +64,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="?attr/colorPrimaryContainer" />
                         </shape>
                     </item>
                     <item>
                         <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="@color/overlay_hover_color_percentage" />
                         </shape>
                     </item>
@@ -80,13 +80,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="?attr/colorPrimaryContainer" />
                         </shape>
                     </item>
                     <item>
                         <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="@color/overlay_hover_color_percentage" />
                         </shape>
                     </item>
@@ -103,13 +103,13 @@
                         android:right="@dimen/focus_ring_gap"
                         android:top="@dimen/focus_ring_gap">
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="?attr/colorPrimaryContainer" />
                         </shape>
                     </item>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <stroke
                                 android:width="@dimen/focus_ring_width"
                                 android:color="?attr/colorSecondary" />
@@ -121,13 +121,13 @@
                 <layer-list>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="?attr/colorPrimaryContainer" />
                         </shape>
                     </item>
                     <item>
                         <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="@color/overlay_hover_color_percentage" />
                         </shape>
                     </item>
@@ -135,7 +135,7 @@
             </item>
             <item android:state_selected="true">
                 <shape>
-                    <corners android:radius="@dimen/list_item_height_m3" />
+                    <corners android:radius="@dimen/search_bar_radius" />
                     <solid android:color="?attr/colorPrimaryContainer" />
                 </shape>
             </item>
@@ -152,13 +152,13 @@
                         android:right="@dimen/focus_ring_gap"
                         android:top="@dimen/focus_ring_gap">
                         <shape android:tint="?attr/colorOnSurface">
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <solid android:color="@color/overlay_hover_color_percentage" />
                         </shape>
                     </item>
                     <item>
                         <shape>
-                            <corners android:radius="@dimen/list_item_height_m3" />
+                            <corners android:radius="@dimen/search_bar_radius" />
                             <stroke
                                 android:width="@dimen/focus_ring_width"
                                 android:color="?attr/colorSecondary" />
@@ -168,19 +168,19 @@
             </item>
             <item android:state_drag_hovered="true">
                 <shape android:tint="?attr/colorOnSurface">
-                    <corners android:radius="@dimen/list_item_height_m3" />
+                    <corners android:radius="@dimen/search_bar_radius" />
                     <solid android:color="@color/overlay_hover_color_percentage" />
                 </shape>
             </item>
             <item android:state_pressed="true">
                 <shape android:tint="?attr/colorOnSurface">
-                    <corners android:radius="@dimen/list_item_height_m3" />
+                    <corners android:radius="@dimen/search_bar_radius" />
                     <solid android:color="@color/overlay_hover_color_percentage" />
                 </shape>
             </item>
             <item android:state_focused="true" android:state_window_focused="true">
                 <shape>
-                    <corners android:radius="@dimen/list_item_height_m3" />
+                    <corners android:radius="@dimen/search_bar_radius" />
                     <stroke
                         android:width="@dimen/focus_ring_width"
                         android:color="?attr/colorSecondary" />
@@ -188,7 +188,7 @@
             </item>
             <item android:state_hovered="true">
                 <shape android:tint="?attr/colorOnSurface">
-                    <corners android:radius="@dimen/list_item_height_m3" />
+                    <corners android:radius="@dimen/search_bar_radius" />
                     <solid android:color="@color/overlay_hover_color_percentage" />
                 </shape>
             </item>

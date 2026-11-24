@@ -18,7 +18,6 @@ package com.android.documentsui.dirlist;
 
 import static com.android.documentsui.DevicePolicyResources.Drawables.Style.SOLID_COLORED;
 import static com.android.documentsui.DevicePolicyResources.Drawables.WORK_PROFILE_ICON;
-import static com.android.documentsui.util.FlagUtils.isSingleClickToSelectEnabled;
 import static com.android.documentsui.util.Material3Config.getRes;
 
 import android.app.admin.DevicePolicyManager;
@@ -44,7 +43,6 @@ import com.android.documentsui.base.DocumentInfo;
 import com.android.documentsui.base.Events;
 import com.android.documentsui.base.State;
 import com.android.documentsui.base.UserId;
-import com.android.documentsui.ui.Views;
 import com.android.modules.utils.build.SdkLevel;
 
 import java.util.Map;
@@ -53,10 +51,8 @@ import java.util.Map;
 final class GridDirectoryHolder extends DocumentHolder {
     final TextView mTitle;
 
-    private final ImageView mIconCheck;
     private final ImageView mIconMime;
     private final ImageView mIconBadge;
-    private final View mIconLayout;
 
     private final IconHelper mIconHelper;
 
@@ -64,10 +60,8 @@ final class GridDirectoryHolder extends DocumentHolder {
             Context context, ViewGroup parent, IconHelper iconHelper, ConfigStore configStore) {
         super(context, parent, getRes(R.layout.item_dir_grid), configStore);
 
-        mIconLayout = itemView.findViewById(getRes(R.id.icon));
         mTitle = (TextView) itemView.findViewById(android.R.id.title);
         mIconMime = (ImageView) itemView.findViewById(getRes(R.id.icon_mime_sm));
-        mIconCheck = (ImageView) itemView.findViewById(getRes(R.id.icon_check));
         mIconBadge = (ImageView) itemView.findViewById(getRes(R.id.icon_profile_badge));
         mIconMime.setImageDrawable(
                 IconUtils.loadMimeIcon(context, DocumentsContract.Document.MIME_TYPE_DIR));
@@ -92,16 +86,9 @@ final class GridDirectoryHolder extends DocumentHolder {
 
     @Override
     public void setSelected(boolean selected, boolean animate) {
+        // There is no checkbox in grid mode; selection is shown by the whole item
+        // being boxed. The folder icon is always visible.
         super.setSelected(selected, animate);
-        float checkAlpha = selected ? 1f : 0f;
-
-        if (animate) {
-            fade(mIconCheck, checkAlpha).start();
-            fade(mIconMime, 1f - checkAlpha).start();
-        } else {
-            mIconCheck.setAlpha(checkAlpha);
-            mIconMime.setAlpha(1f - checkAlpha);
-        }
     }
 
     @Override
@@ -129,16 +116,14 @@ final class GridDirectoryHolder extends DocumentHolder {
     @Override
     public int classifySelectionHotspot(MotionEvent event) {
         if (mAction != State.ACTION_BROWSE) {
-            // No-op.
-
-        } else if (Views.isEventOver(event, itemView.getParent(), mIconLayout)) {
-            return ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_MULTI;
-
-        } else if (Events.isMousyEvent(event) && isSingleClickToSelectEnabled()) {
-            return ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_SOLO;
+            return ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
         }
 
-        return ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
+        // Whole item is the selectable box: clicking anywhere on the grid item toggles
+        // its selection. Touch stays as-is to preserve the open/picker behavior.
+        return Events.isMousyEvent(event)
+                ? ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_MULTI
+                : ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
     }
 
     /**

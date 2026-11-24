@@ -52,7 +52,6 @@ final class GridPhotoHolder extends DocumentHolder {
 
     private final ImageView mIconMimeLg;
     private final ImageView mIconThumb;
-    private final ImageView mIconCheck;
     private final IconHelper mIconHelper;
     private final View mPreviewIcon;
     private final View mIconBadge;
@@ -66,7 +65,6 @@ final class GridPhotoHolder extends DocumentHolder {
 
         mIconMimeLg = (ImageView) itemView.findViewById(getRes(R.id.icon_mime_lg));
         mIconThumb = (ImageView) itemView.findViewById(getRes(R.id.icon_thumb));
-        mIconCheck = (ImageView) itemView.findViewById(getRes(R.id.icon_check));
         mIconBadge = itemView.findViewById(getRes(R.id.icon_profile_badge));
         mPreviewIcon = itemView.findViewById(getRes(R.id.preview_icon));
 
@@ -93,15 +91,8 @@ final class GridPhotoHolder extends DocumentHolder {
 
     @Override
     public void setSelected(boolean selected, boolean animate) {
-        // We always want to make sure our check box disappears if we're not selected,
-        // even if the item is disabled. This is because this object can be reused
-        // and this method will be called to setup initial state.
-        float checkAlpha = selected ? 1f : 0f;
-        if (animate) {
-            fade(mIconCheck, checkAlpha).start();
-        } else {
-            mIconCheck.setAlpha(checkAlpha);
-        }
+        // There is no checkbox in the grid/photo grid mode; selection is indicated by
+        // the whole item being boxed/highlighted.
 
         // But it should be an error to be set to selected && be disabled.
         if (!itemView.isEnabled()) {

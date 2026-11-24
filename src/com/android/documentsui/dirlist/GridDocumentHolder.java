@@ -18,7 +18,6 @@ package com.android.documentsui.dirlist;
 
 import static com.android.documentsui.DevicePolicyResources.Drawables.Style.SOLID_COLORED;
 import static com.android.documentsui.DevicePolicyResources.Drawables.WORK_PROFILE_ICON;
-import static com.android.documentsui.util.FlagUtils.isSingleClickToSelectEnabled;
 import static com.android.documentsui.util.FlagUtils.isUseMaterial3FlagEnabled;
 import static com.android.documentsui.util.Material3Config.getRes;
 
@@ -64,13 +63,8 @@ final class GridDocumentHolder extends DocumentHolder {
     // Null when useMaterial3 flag is ON.
     final @Nullable ImageView mIconMimeSm;
     final ImageView mIconThumb;
-    // Non-null only when useMaterial3 flag is ON.
-    final @Nullable ImageView mSelectionCircle;
-    final @Nullable ImageView mIconCheck;
     final ImageView mIconBadge;
     final IconHelper mIconHelper;
-    // Null when useMaterial3 flag is ON.
-    final @Nullable View mIconLayout;
     final View mPreviewIcon;
     boolean mHasSelectionRegion;
     final DocumentsAdapter.Environment mEnv;
@@ -79,7 +73,7 @@ final class GridDocumentHolder extends DocumentHolder {
     private DocumentInfo mDoc = new DocumentInfo();
 
     // Non-null only when useMaterial3 flag is ON.
-    private final @Nullable MaterialCardView mIconWrapper;
+    // private final @Nullable MaterialCardView mIconWrapper;
 
     GridDocumentHolder(
             Context context,
@@ -89,39 +83,20 @@ final class GridDocumentHolder extends DocumentHolder {
             DocumentsAdapter.Environment environment) {
         super(context, parent, getRes(R.layout.item_doc_grid), configStore);
 
-        boolean singleClickToSelect = isSingleClickToSelectEnabled();
-        boolean showSelectionCircle = !singleClickToSelect && isUseMaterial3FlagEnabled();
-        boolean showSelectionCheckmark =
-                !singleClickToSelect
-                        || itemView.getResources().getBoolean(R.bool.show_selection_checkmark);
-
         mEnv = environment;
         if (isUseMaterial3FlagEnabled()) {
             mBullet = itemView.findViewById(getRes(R.id.bullet));
-            mIconWrapper = itemView.findViewById(getRes(R.id.icon_wrapper));
-            mSelectionCircle =
-                    (ImageView)
-                            conditionalView(
-                                    showSelectionCircle,
-                                    itemView.findViewById(getRes(R.id.selection_circle)));
-            mIconLayout = null;
+            // mIconWrapper = itemView.findViewById(getRes(R.id.icon_wrapper));
             mIconMimeSm = null;
         } else {
             mBullet = null;
-            mIconWrapper = null;
-            mSelectionCircle = null;
-            mIconLayout = itemView.findViewById(getRes(R.id.icon));
+            // mIconWrapper = null;
             mIconMimeSm = (ImageView) itemView.findViewById(getRes(R.id.icon_mime_sm));
         }
 
         mTitle = (TextView) itemView.findViewById(android.R.id.title);
         mDate = (TextView) itemView.findViewById(getRes(R.id.date));
         mDetails = (TextView) itemView.findViewById(getRes(R.id.details));
-        mIconCheck =
-                (ImageView)
-                        conditionalView(
-                                showSelectionCheckmark,
-                                itemView.findViewById(getRes(R.id.icon_check)));
         mIconMimeLg = (ImageView) itemView.findViewById(getRes(R.id.icon_mime_lg));
         mIconThumb = (ImageView) itemView.findViewById(getRes(R.id.icon_thumb));
         mIconBadge = (ImageView) itemView.findViewById(getRes(R.id.icon_profile_badge));
@@ -147,46 +122,14 @@ final class GridDocumentHolder extends DocumentHolder {
 
     @Override
     public void setSelected(boolean selected, boolean animate) {
-        boolean showSelectionCheckmark = mIconCheck != null;
-
-        float checkAlpha = selected ? 1f : 0f;
-        float circleAlpha = (selected || !isUseMaterial3FlagEnabled()) ? 0f : 1f;
-        // We always want to make sure our check box disappears if we're not selected,
-        // even if the item is disabled. This is because this object can be reused
-        // and this method will be called to setup initial state.
-        if (!showSelectionCheckmark) {
-            // No-op.
-        } else if (animate) {
-            if (!isUseMaterial3FlagEnabled()) {
-                fade(mIconMimeSm, checkAlpha).start();
-            }
-            if (mHasSelectionRegion && (mSelectionCircle != null)) {
-                fade(mSelectionCircle, circleAlpha).start();
-            }
-            fade(mIconCheck, checkAlpha).start();
-        } else {
-            if (mHasSelectionRegion && (mSelectionCircle != null)) {
-                mSelectionCircle.setAlpha(circleAlpha);
-            }
-            mIconCheck.setAlpha(checkAlpha);
-        }
-
         // But it should be an error to be set to selected && be disabled.
         if (!itemView.isEnabled()) {
             assert (!selected);
         }
 
+        // The checkbox is intentionally not shown. Selection is instead indicated
+        // by the whole item being framed / boxed (see grid_item_selection_box_m3).
         super.setSelected(selected, animate);
-
-        if (!isUseMaterial3FlagEnabled()) {
-            if (!showSelectionCheckmark) {
-                // No-op.
-            } else if (animate) {
-                fade(mIconMimeSm, 1f - checkAlpha).start();
-            } else {
-                mIconMimeSm.setAlpha(1f - checkAlpha);
-            }
-        }
     }
 
     @Override
@@ -251,22 +194,22 @@ final class GridDocumentHolder extends DocumentHolder {
     @Override
     public int classifySelectionHotspot(MotionEvent event) {
         if (!isUseMaterial3FlagEnabled()) {
-            return Views.isEventOver(event, itemView.getParent(), mIconLayout)
+            // Entire grid box is the selection region when the user clicks with a mouse.
+            return Events.isMousyEvent(event)
                     ? ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_MULTI
                     : ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
-
-        } else if (!mHasSelectionRegion) {
-            return ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
-
-        } else if ((mSelectionCircle != null)
-                && Views.isEventOver(event, itemView.getParent(), mSelectionCircle)) {
-            return ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_MULTI;
-
-        } else if (Events.isMousyEvent(event) && isSingleClickToSelectEnabled()) {
-            return ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_SOLO;
         }
 
-        return ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
+        if (!mHasSelectionRegion) {
+            return ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
+        }
+
+        // Whole item is the selectable box: clicking anywhere on the grid item toggles
+        // its selection. Touch stays as-is (tap activates/opens) to preserve the
+        // picker/open behavior.
+        return Events.isMousyEvent(event)
+                ? ItemDetails.SELECTION_HOTSPOT_INSIDE_TOGGLE_MULTI
+                : ItemDetails.SELECTION_HOTSPOT_OUTSIDE;
     }
 
     @Override
@@ -291,10 +234,6 @@ final class GridDocumentHolder extends DocumentHolder {
         mHasSelectionRegion =
                 isUseMaterial3FlagEnabled() && (!mDoc.isDirectory()
                         || mAction == State.ACTION_BROWSE);
-
-        if ((mSelectionCircle != null) && !mHasSelectionRegion) {
-            mSelectionCircle.setVisibility(View.GONE);
-        }
 
         mIconHelper.stopLoading(mIconThumb);
 

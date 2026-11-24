@@ -116,6 +116,15 @@
   <!-- 5% black -->
   <color name="selection_circle_black">#0D000000</color>
 
+  <!--
+    Grid selection highlight that mirrors the Launcher desktop (Launcher3) item selection:
+    UtilitiesKt.getWallpaperComplementColor() falls back to R.color.materialColorPrimaryFixed,
+    which maps to system_primary_fixed_light (#B9CBFF) when no wallpaper color is available.
+    DocumentsUI has no wallpaper color extraction, so we use the same fallback value so the
+    selected grid item looks identical to the Launcher selection highlight.
+  -->
+  <color name="grid_selection_highlight_color">#B9CBFF</color>
+
   <!-- Peek -->
   <!-- Scrim for the overlay. Static color, 80% opacity in black, defined specifically for Peek. -->
   <color name="peek_overlay_scrim">#CC000000</color>

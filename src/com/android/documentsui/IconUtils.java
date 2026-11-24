@@ -24,6 +24,7 @@ import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.provider.DocumentsContract;
 import android.util.TypedValue;
 
 import com.android.documentsui.base.UserId;
@@ -99,6 +100,10 @@ public class IconUtils {
      */
     public static Drawable loadMimeIcon(Context context, String mimeType) {
         if (mimeType == null) return null;
+        // Use the app-local folder icon instead of the framework one.
+        if (DocumentsContract.Document.MIME_TYPE_DIR.equals(mimeType)) {
+            return context.getDrawable(R.drawable.ic_doc_folder).mutate();
+        }
         Icon icon = context.getContentResolver().getTypeInfo(mimeType).getIcon();
         Drawable drawable = icon.loadDrawable(context);
         // TODO(b/400263417): Remove this once RRO mime icons support dynamic colors.

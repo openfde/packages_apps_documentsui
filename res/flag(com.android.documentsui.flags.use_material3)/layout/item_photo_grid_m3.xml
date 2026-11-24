@@ -65,25 +65,6 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="@dimen/button_touch_size_m3"
-            android:layout_height="@dimen/button_touch_size_m3"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:pointerIcon="hand">
-
-            <ImageView
-                android:id="@+id/icon_check"
-                android:src="@drawable/ic_check_circle_m3"
-                android:alpha="0"
-                android:layout_width="@dimen/check_icon_size_m3"
-                android:layout_height="@dimen/check_icon_size_m3"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                android:contentDescription="@null"/>
-
-        </FrameLayout>
-
-        <FrameLayout
             android:id="@+id/preview_icon"
             android:layout_width="@dimen/button_touch_size_m3"
             android:layout_height="@dimen/button_touch_size_m3"
