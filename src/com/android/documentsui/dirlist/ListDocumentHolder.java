@@ -80,7 +80,7 @@ final class ListDocumentHolder extends DocumentHolder {
     private final @Nullable TextView mMetadataView;
     private final ImageView mIconMime;
     private final ImageView mIconThumb;
-    private final @Nullable ImageView mIconCheck;
+    // private final @Nullable ImageView mIconCheck;
     private final ImageView mIconBadge;
     private final View mIconLayout;
     final View mPreviewIcon;
@@ -108,11 +108,11 @@ final class ListDocumentHolder extends DocumentHolder {
         mIconLayout = itemView.findViewById(getRes(R.id.icon));
         mIconMime = (ImageView) itemView.findViewById(getRes(R.id.icon_mime));
         mIconThumb = (ImageView) itemView.findViewById(getRes(R.id.icon_thumb));
-        mIconCheck =
-                (ImageView)
-                        conditionalView(
-                                showSelectionCheckmark,
-                                itemView.findViewById(getRes(R.id.icon_check)));
+        // mIconCheck =
+        //         (ImageView)
+        //                 conditionalView(
+        //                         showSelectionCheckmark,
+        //                         itemView.findViewById(getRes(R.id.icon_check)));
         mIconBadge = (ImageView) itemView.findViewById(getRes(R.id.icon_profile_badge));
         mTitle = (TextView) itemView.findViewById(android.R.id.title);
         mTitleContainer = (View) itemView.findViewById(R.id.title_container);
@@ -153,7 +153,7 @@ final class ListDocumentHolder extends DocumentHolder {
 
     @Override
     public void setSelected(boolean selected, boolean animate) {
-        boolean showSelectionCheckmark = mIconCheck != null;
+        boolean showSelectionCheckmark =  false;//mIconCheck != null;
 
         // We always want to make sure our check box disappears if we're not selected,
         // even if the item is disabled. But it should be an error (see assert below)
@@ -162,9 +162,9 @@ final class ListDocumentHolder extends DocumentHolder {
         if (!showSelectionCheckmark) {
             // No-op.
         } else if (animate) {
-            fade(mIconCheck, checkAlpha).start();
+            // fade(mIconCheck, checkAlpha).start();
         } else {
-            mIconCheck.setAlpha(checkAlpha);
+            // mIconCheck.setAlpha(checkAlpha);
         }
 
         if (!itemView.isEnabled()) {
@@ -261,7 +261,7 @@ final class ListDocumentHolder extends DocumentHolder {
 
     @Override
     public int classifySelectionHotspot(MotionEvent event) {
-        boolean showSelectionCheckmark = mIconCheck != null;
+        boolean showSelectionCheckmark = false;//mIconCheck != null;
 
         if (mDoc.isDirectory() && (mAction != State.ACTION_BROWSE)) {
             // No-op.

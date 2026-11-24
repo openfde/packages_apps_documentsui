@@ -20,7 +20,9 @@
     android:layout_width="@dimen/grid_width_m3"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/grid_item_margin_m3"
+    android:background="@drawable/grid_item_background"
     android:clickable="true"
+    android:padding="@dimen/grid_item_margin_m3"
     android:defaultFocusHighlightEnabled="false"
     android:focusable="true"
     android:focusableInTouchMode="true">
@@ -36,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:duplicateParentState="true">
 
-        <com.google.android.material.card.MaterialCardView
+        <FrameLayout
             android:id="@+id/icon_wrapper"
             app:strokeWidth="0dp"
             app:cardElevation="0dp"
@@ -60,31 +62,7 @@
                 android:contentDescription="@null"
                 android:scaleType="fitCenter" />
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <ImageView
-            android:id="@+id/selection_circle"
-            android:layout_width="@dimen/button_container_size"
-            android:layout_height="@dimen/button_container_size"
-            android:layout_marginStart="@dimen/selection_circle_margin"
-            android:layout_marginTop="@dimen/selection_circle_margin"
-            android:layout_gravity="top|start"
-
-            android:contentDescription="@null"
-            android:elevation="0dp"
-            android:scaleType="center" />
-
-        <ImageView
-            android:id="@+id/icon_check"
-            android:layout_width="@dimen/button_container_size"
-            android:layout_height="@dimen/button_container_size"
-            android:layout_gravity="top|start"
-            android:alpha="0"
-            android:background="@drawable/icon_check_background"
-            android:contentDescription="@null"
-            android:duplicateParentState="true"
-            android:scaleType="center"
-            android:src="@drawable/ic_check_circle_m3" />
+        </FrameLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon_profile_badge"
@@ -96,7 +74,6 @@
             android:layout_gravity="bottom|end"
             android:contentDescription="@string/a11y_work"
             android:gravity="center_vertical"
-            android:background="?attr/colorSurfaceContainerLowest"
             app:shapeAppearance="?attr/shapeAppearanceCornerExtraSmall"
             app:contentPadding="@dimen/briefcase_icon_grid_padding"
             android:src="@drawable/ic_briefcase_m3"
@@ -117,8 +94,7 @@
                 <ImageView
                     android:layout_width="@dimen/preview_icon_circle_size"
                     android:layout_height="@dimen/preview_icon_circle_size"
-                    android:layout_gravity="center"
-                    android:background="@drawable/circle_button_background_m3" />
+                    android:layout_gravity="center" />
 
                 <!-- White eye icon -->
                 <ImageView
@@ -245,7 +221,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/thumbnail"
         android:layout_marginTop="@dimen/grid_item_nameplate_marginTop"
-        android:background="@drawable/grid_nameplate_background"
         android:orientation="vertical"
         android:duplicateParentState="true"
         android:padding="@dimen/grid_item_nameplate_padding">

@@ -14,6 +14,12 @@
      limitations under the License.
 -->
 
+<!--
+    Nameplate background for a grid item. The selected state intentionally adds NO reactive
+    background/fill here: selection is indicated by the whole-item highlight drawn by
+    @drawable/grid_item_selection_box_m3 (matching the Launcher desktop selection), so the
+    label stays plain just like in the Launcher. Only hover / focus feedback is drawn here.
+-->
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="@color/grid_item_ripple_color">
 
@@ -23,111 +29,6 @@
 
     <item>
         <selector>
-            <!-- selected -->
-            <item
-                android:state_focused="true"
-                android:state_hovered="true"
-                android:state_selected="true"
-                android:state_window_focused="true">
-                <layer-list>
-                    <item
-                        android:bottom="@dimen/focus_ring_gap"
-                        android:left="@dimen/focus_ring_gap"
-                        android:right="@dimen/focus_ring_gap"
-                        android:top="@dimen/focus_ring_gap">
-                        <shape>
-                            <corners android:radius="@dimen/grid_item_nameplate_inner_radius" />
-                            <solid android:color="?attr/colorPrimaryContainer" />
-                        </shape>
-                    </item>
-                    <item
-                        android:bottom="@dimen/focus_ring_gap"
-                        android:left="@dimen/focus_ring_gap"
-                        android:right="@dimen/focus_ring_gap"
-                        android:top="@dimen/focus_ring_gap">
-                        <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/grid_item_nameplate_inner_radius" />
-                            <solid android:color="@color/overlay_hover_color_percentage" />
-                        </shape>
-                    </item>
-                    <item>
-                        <shape>
-                            <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                            <stroke
-                                android:width="@dimen/focus_ring_width"
-                                android:color="?attr/colorSecondary" />
-                        </shape>
-                    </item>
-                </layer-list>
-            </item>
-            <item
-                android:state_selected="true"
-                android:state_focused="true"
-                android:state_window_focused="true">
-                <layer-list>
-                    <item
-                        android:bottom="@dimen/focus_ring_gap"
-                        android:left="@dimen/focus_ring_gap"
-                        android:right="@dimen/focus_ring_gap"
-                        android:top="@dimen/focus_ring_gap">
-                        <shape>
-                            <corners android:radius="@dimen/grid_item_nameplate_inner_radius" />
-                            <solid android:color="?attr/colorPrimaryContainer" />
-                        </shape>
-                    </item>
-                    <item>
-                        <shape>
-                            <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                            <stroke
-                                android:width="@dimen/focus_ring_width"
-                                android:color="?attr/colorSecondary" />
-                        </shape>
-                    </item>
-                </layer-list>
-            </item>
-            <item
-                android:state_drag_hovered="true"
-                android:state_selected="true">
-                <layer-list>
-                    <item>
-                        <shape>
-                            <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                            <solid android:color="?attr/colorPrimaryContainer" />
-                        </shape>
-                    </item>
-                    <item>
-                        <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                            <solid android:color="@color/overlay_hover_color_percentage" />
-                        </shape>
-                    </item>
-                </layer-list>
-            </item>
-            <item
-                android:state_hovered="true"
-                android:state_selected="true">
-                <layer-list>
-                    <item>
-                        <shape>
-                            <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                            <solid android:color="?attr/colorPrimaryContainer" />
-                        </shape>
-                    </item>
-                    <item>
-                        <shape android:tint="?attr/colorOnPrimaryContainer">
-                            <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                            <solid android:color="@color/overlay_hover_color_percentage" />
-                        </shape>
-                    </item>
-                </layer-list>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <corners android:radius="@dimen/grid_item_nameplate_radius" />
-                    <solid android:color="?attr/colorPrimaryContainer" />
-                </shape>
-            </item>
-
             <!-- unselected -->
             <item
                 android:state_focused="true"
